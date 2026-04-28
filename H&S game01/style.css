@@ -1,7 +1,0 @@
-body { font-family: sans-serif; text-align: center; background: #222; color: #fff; }
-#game-container { padding: 20px; }
-#log { height: 60px; background: #333; margin: 10px 0; padding: 10px; border-radius: 5px; }
-button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border-radius: 8px; border: none; background: #e74c3c; color: white; }
-#inventory { margin-top: 20px; text-align: left; background: #444; padding: 10px; border-radius: 5px; }
-ul { list-style: none; padding: 0; }
-li { padding: 5px; border-bottom: 1px solid #666; cursor: pointer; }
