@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Hack and Slash</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ハクスラ冒険</title>
 </head>
 <body>
-    <div id="game-container">
-        <div class="status">
-            <p>プレイヤー攻撃力: <span id="player-atk">10</span></p>
-            <p>敵HP: <span id="enemy-hp">50</span></p>
-        </div>
-        <div id="log">敵が現れた！</div>
-        <button id="attack-btn">攻撃する！</button>
-        <div id="inventory">
-            <h3>所持品 (タップで装備)</h3>
-            <ul id="item-list"></ul>
-        </div>
-    </div>
+    <h1>モンスターがあらわれた！</h1>
+    <!-- モンスターの体力を表示する場所 -->
+    <p>モンスターのHP: <span id="hp-text">100</span></p>
+    
+    <!-- 攻撃ボタン -->
+    <button id="attack-button">攻撃する！</button>
+
     <script src="script.js"></script>
 </body>
 </html>
