@@ -1,23 +1,39 @@
-/* 1. 画面全体のデザイン */
+/* 画面全体のデザイン（真っ黒で中央寄せ） */
 body {
-    background-color: #222; /* 背景を暗いグレーに */
-    color: white;           /* 文字を白く */
-    text-align: center;      /* 文字を真ん中に寄せる */
-    font-family: sans-serif; /* カクカクした見やすい文字に */
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'Courier New', Courier, monospace; /* ゲームっぽいフォント */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
 }
 
-/* 2. ボタンのデザイン */
-button {
-    background-color: #cc0000; /* ボタンを赤く */
-    color: white;              /* ボタンの文字を白く */
-    font-size: 20px;           /* 文字を大きく */
-    padding: 10px 20px;        /* ボタンに厚みを出す */
-    border: none;              /* 枠線を消す */
-    border-radius: 5px;        /* 角を少し丸く */
-    cursor: pointer;           /* マウスを乗せたら指マークに */
+/* モンスターを表示する枠 */
+#game-container {
+    border: 2px solid #444;
+    padding: 20px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    text-align: center;
 }
 
-/* 3. ボタンを押した時の反応 */
-button:active {
-    background-color: #ff0000; /* 押した瞬間だけ明るい赤に */
+/* HPゲージの見た目（外枠） */
+#hp-bar-container {
+    width: 200px;
+    height: 20px;
+    background-color: #444;
+    margin: 10px auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* HPゲージの中身（赤いバー） */
+#hp-bar-fill {
+    width: 100%; /* 最初は満タン */
+    height: 100%;
+    background-color: #ff4444;
+    transition: width 0.3s; /* 減る時にアニメーションさせる */
 }

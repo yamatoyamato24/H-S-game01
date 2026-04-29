@@ -7,13 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>モンスターがあらわれた！</h1>
-    <!-- モンスターの体力を表示する場所 -->
-    <p>モンスターのHP: <span id="hp-text">100</span></p>
-    
-    <!-- 攻撃ボタン -->
-    <button id="attack-button">攻撃する！</button>
 
-    <script src="script.js"></script>
+<div id="game-container">
+    <h1>スライムが現れた！</h1>
+    
+    <!-- HPゲージの表示 -->
+    <div id="hp-bar-container">
+        <div id="hp-bar-fill"></div>
+    </div>
+    <p>HP: <span id="hp-text">100</span> / 100</p>
+    
+    <button id="attack-button">剣で斬りつける！</button>
+</div>
+
 </body>
 </html>
