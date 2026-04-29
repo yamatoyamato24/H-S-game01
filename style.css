@@ -1,7 +1,23 @@
-body { font-family: sans-serif; text-align: center; background: #222; color: #fff; }
-#game-container { padding: 20px; }
-#log { height: 60px; background: #333; margin: 10px 0; padding: 10px; border-radius: 5px; }
-button { padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border-radius: 8px; border: none; background: #e74c3c; color: white; }
-#inventory { margin-top: 20px; text-align: left; background: #444; padding: 10px; border-radius: 5px; }
-ul { list-style: none; padding: 0; }
-li { padding: 5px; border-bottom: 1px solid #666; cursor: pointer; }
+/* 1. 画面全体のデザイン */
+body {
+    background-color: #222; /* 背景を暗いグレーに */
+    color: white;           /* 文字を白く */
+    text-align: center;      /* 文字を真ん中に寄せる */
+    font-family: sans-serif; /* カクカクした見やすい文字に */
+}
+
+/* 2. ボタンのデザイン */
+button {
+    background-color: #cc0000; /* ボタンを赤く */
+    color: white;              /* ボタンの文字を白く */
+    font-size: 20px;           /* 文字を大きく */
+    padding: 10px 20px;        /* ボタンに厚みを出す */
+    border: none;              /* 枠線を消す */
+    border-radius: 5px;        /* 角を少し丸く */
+    cursor: pointer;           /* マウスを乗せたら指マークに */
+}
+
+/* 3. ボタンを押した時の反応 */
+button:active {
+    background-color: #ff0000; /* 押した瞬間だけ明るい赤に */
+}
