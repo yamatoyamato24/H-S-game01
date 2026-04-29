@@ -1,46 +1,20 @@
-// ゲームの状態管理
-let playerAtk = 10;
-let enemyHp = 50;
-let baseEnemyHp = 50;
+// 1. 最初、モンスターのHPは100に設定する
+let monsterHP = 100;
 
-const logElement = document.getElementById('log');
-const enemyHpElement = document.getElementById('enemy-hp');
-const playerAtkElement = document.getElementById('player-atk');
-const itemList = document.getElementById('item-list');
+// 2. 画面の「HP表示」と「ボタン」をJavaScriptで扱えるようにする
+const hpText = document.getElementById('hp-text');
+const attackButton = document.getElementById('attack-button');
 
-// 攻撃ボタンの処理
-document.getElementById('attack-btn').onclick = () => {
-    enemyHp -= playerAtk;
+// 3. ボタンが押された時の「攻撃のルール」を決める
+attackButton.onclick = function() {
+    // 10ダメージ与える
+    monsterHP = monsterHP - 10;
     
-    if (enemyHp <= 0) {
-        logElement.innerText = "敵を倒した！アイテムをドロップ！";
-        dropItem();
-        // 敵をリセット（少しずつ強くする）
-        baseEnemyHp += 10;
-        enemyHp = baseEnemyHp;
-    } else {
-        logElement.innerText = `敵に ${playerAtk} のダメージ！`;
+    // 画面の数字を新しいHPに書き換える
+    hpText.innerText = monsterHP;
+
+    // もしHPが0以下になったら
+    if (monsterHP <= 0) {
+        alert("モンスターをたおした！");
     }
-    updateDisplay();
 };
-
-// アイテムドロップ（ハクスラ要素）
-function dropItem() {
-    const rarity = Math.floor(Math.random() * 10) + 1; // 1~10のランダム性能
-    const newItem = document.createElement('li');
-    newItem.innerText = `伝説の剣 (攻撃力 +${rarity})`;
-    
-    // 装備機能
-    newItem.onclick = () => {
-        playerAtk = 10 + rarity; // 基礎攻撃力に加算
-        logElement.innerText = `武器を装備した！攻撃力が ${playerAtk} になった。`;
-        updateDisplay();
-    };
-    
-    itemList.appendChild(newItem);
-}
-
-function updateDisplay() {
-    enemyHpElement.innerText = enemyHp;
-    playerAtkElement.innerText = playerAtk;
-}
