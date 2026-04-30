@@ -33,6 +33,23 @@ attackButton.onclick = function() {
 
     // モンスターを倒したか判定
     if (monsterHP === 0) {
-        alert("モンスターをたおした！");
+        messageText.innerText = "モンスターをたおした！次の敵を待っています...";
+
+         // ボタンを押せなくする（連打でバグらないように）
+        attackButton.disabled = true;
+
+        // 2秒後に復活させる（タイマー機能）
+        setTimeout(function() {
+            // HPを100に戻す
+            monsterHP = 100;
+            // 画面の数字を戻す
+            hpText.innerText = monsterHP;
+            // ゲージの幅を100%に戻す
+            hpBarFill.style.width = "100%";
+            // メッセージを戻す
+            messageText.innerText = "新しいモンスターが現れた！";
+            // ボタンをまた押せるようにする
+            attackButton.disabled = false;
+        }, 2000); // 2000ミリ秒 ＝ 2秒
     }
 };
