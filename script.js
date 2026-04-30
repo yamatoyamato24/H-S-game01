@@ -6,6 +6,7 @@ const maxHP = 100;      // 最大のHP（ゲージの計算用）
 const hpText = document.getElementById('hp-text');
 const hpBarFill = document.getElementById('hp-bar-fill');
 const attackButton = document.getElementById('attack-button');
+const messageText = document.getElementById('message-text');
 
 // --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
@@ -17,9 +18,7 @@ attackButton.onclick = function() {
     monsterHP = monsterHP - damage;
 
     // もしHPがマイナスになったら0で止める
-    if (monsterHP < 0) {
-        monsterHP = 0;
-    }
+    if (monsterHP < 0) {  monsterHP = 0;  }
 
     // 【画面の更新：数字】
     hpText.innerText = monsterHP;
@@ -30,7 +29,7 @@ attackButton.onclick = function() {
     hpBarFill.style.width = hpPercent + "%";
 
     // ダメージをログ（記録）として表示してみる
-    console.log(damage + "のダメージを与えた！");
+     messageText.innerText = damage + " のダメージを与えた！";
 
     // モンスターを倒したか判定
     if (monsterHP === 0) {

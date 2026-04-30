@@ -37,3 +37,9 @@ body {
     background-color: #ff4444;
     transition: width 0.3s; /* 減る時にアニメーションさせる */
 }
+
+#message-text {
+    margin-top: 20px;
+    color: #ffcc00; /* ログを金色っぽくして目立たせる */
+    font-weight: bold;
+}
