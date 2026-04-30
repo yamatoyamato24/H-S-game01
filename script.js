@@ -9,8 +9,12 @@ const attackButton = document.getElementById('attack-button');
 
 // --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
-    // 【攻撃】HPを10減らす
-    monsterHP = monsterHP - 10;
+        // 【新機能】5〜15のダメージをランダムに作る
+    // Math.random() は 0〜1 未満の数字を作ります
+    let damage = Math.floor(Math.random() * 11) + 5;
+
+    // 【攻撃】決まった10ではなく、計算したdamage分を引く
+    monsterHP = monsterHP - damage;
 
     // もしHPがマイナスになったら0で止める
     if (monsterHP < 0) {
@@ -24,6 +28,9 @@ attackButton.onclick = function() {
     // 残りのHPの割合（％）を計算して、赤いバーの幅を変える
     let hpPercent = (monsterHP / maxHP) * 100;
     hpBarFill.style.width = hpPercent + "%";
+
+    // ダメージをログ（記録）として表示してみる
+    console.log(damage + "のダメージを与えた！");
 
     // モンスターを倒したか判定
     if (monsterHP === 0) {
