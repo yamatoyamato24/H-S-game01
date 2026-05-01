@@ -1,74 +1,54 @@
-/* 画面全体のデザイン（真っ黒で中央寄せ） */
-body {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
-    font-family: 'Courier New', Courier, monospace; /* ゲームっぽいフォント */
+/* バトルフィールドを横並びにする */
+#battle-field {
+    display: flex;
+    justify-content: space-between; /* 左右に振り分ける */
+    align-items: flex-end;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.character-side {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh; /* height を min-height に変えるとより安定します */
-    margin: 0;
-    padding: 10px; /* スマホの端にピッタリくっつきすぎないように */
+    width: 45%;
 }
 
-/* モンスターを表示する枠 */
-#game-container {
-    width: 90%; /* スマホ画面の90%を使う */
-    max-width: 400px; /* パソコンで見たときに広がりすぎないように */
-    border: 2px solid #444;
-    padding: 20px;
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    text-align: center;
-    box-sizing: border-box; /* 枠線を含めた計算にする */
+/* キャラクター（仮：絵文字）のサイズ */
+#monster-sprite, #player-sprite {
+    font-size: 60px;
+    margin-bottom: 10px;
 }
 
-/* HPゲージの見た目（外枠） */
-#hp-bar-container {
-    width: 200px;
-    height: 20px;
+/* HPゲージをキャラの下に配置 */
+.hp-bar-container {
+    width: 80px;
+    height: 8px;
     background-color: #444;
-    margin: 10px auto;
-    border-radius: 10px;
+    border-radius: 4px;
     overflow: hidden;
 }
 
-/* HPゲージの中身（赤いバー） */
-#hp-bar-fill {
-    width: 100%; /* 最初は満タン */
-    height: 100%;
-    background-color: #ff4444;
-    transition: width 0.3s; /* 減る時にアニメーションさせる */
-}
-
-#message-text {
-    margin-top: 20px;
-    color: #ffcc00; /* ログを金色っぽくして目立たせる */
+/* ダメージ数字のエフェクト */
+#damage-effect {
+    position: absolute;
+    top: 20px;
+    left: 20%;
+    color: #ff4444;
+    font-size: 30px;
     font-weight: bold;
-}
-button {
-    background-color: #cc0000; /* 前の赤色に戻しました */
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    padding: 20px;
-    width: 100%;
-    max-width: 300px;
-    border: none;
-    border-radius: 10px;      /* 角丸を少し控えめにして前の雰囲気に */
-    cursor: pointer;
-    margin: 20px 0;
-    transition: background-color 0.1s;
+    opacity: 0; /* 最初は隠しておく */
+    pointer-events: none;
 }
 
-/* 押した時の反応 */
-button:active {
-    background-color: #ff0000; /* 押した瞬間に明るい赤になる前の設定 */
+/* ダメージ時のアニメーション */
+.damage-animation {
+    animation: bounce-up 0.6s ease-out;
 }
 
-/* 無効化（待機中）の時の色 */
-button:disabled {
-    background-color: #555;
-    cursor: not-allowed;
+@keyframes bounce-up {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-40px); }
 }

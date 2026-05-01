@@ -11,20 +11,34 @@
 <body>
 
 <div id="game-container">
-        <!-- 追加：レベルと経験値の表示 -->
-    <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
-    <h1>スライムが現れた！</h1>
-    
-    <!-- HPゲージの表示 -->
-    <div id="hp-bar-container">
-        <div id="hp-bar-fill"></div>
+    <!-- バトルフィールド（上画面） -->
+    <div id="battle-field">
+        <!-- 左側：敵（エフェクト表示用の子要素も追加） -->
+        <div class="character-side" id="enemy-side">
+            <div id="damage-effect"></div> <!-- ダメージ数字用 -->
+            <div id="monster-sprite">👾</div>
+            <div class="hp-bar-container">
+                <div id="hp-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- 右側：味方（自分） -->
+        <div class="character-side" id="player-side">
+            <div id="player-sprite">⚔️</div>
+            <!-- 自分のHPが必要ならここに追加できます -->
+        </div>
     </div>
-    <p>HP: <span id="hp-text">100</span> / 100</p>
-    
-    <button id="attack-button">剣で斬りつける！</button>
-    <!-- 追加：メッセージを表示する場所 -->
-    <p id="message-text">冒険がはじまった！</p>
+
+    <!-- ステータスと操作（下画面） -->
+    <div id="status-window">
+        <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
+        <h1 id="monster-name">スライムがあらわれた！</h1>
+        <p id="message-text">冒険がはじまった！</p>
+        <p>敵のHP: <span id="hp-text">100</span></p>
+        <button id="attack-button">剣で斬りつける！</button>
+    </div>
 </div>
+
 
     <script src="script.js"></script>
 
