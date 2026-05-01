@@ -47,3 +47,34 @@ body {
     color: #ffcc00; /* ログを金色っぽくして目立たせる */
     font-weight: bold;
 }
+
+button {
+    background-color: #cc0000;
+    color: white;
+    font-size: 24px;          /* 文字をさらに大きく */
+    font-weight: bold;        /* 文字を太く */
+    padding: 20px;            /* 上下の厚みを増やして大きく */
+    width: 100%;              /* 横幅を画面（game-container）いっぱいに */
+    max-width: 300px;         /* 大きくなりすぎないように制限 */
+    border: none;
+    border-radius: 50px;      /* 角を丸くして「ボタン感」を出す */
+    cursor: pointer;
+    box-shadow: 0 5px 0 #880000; /* 立体感を出してボタンらしく */
+    margin: 20px 0;           /* 上下に隙間を作る */
+    transition: all 0.1s;     /* 押した時の動きを滑らかに */
+}
+
+/* ボタンを押した時の演出（少し凹むように見せる） */
+button:active {
+    transform: translateY(3px); /* 3ピクセル下に下げる */
+    box-shadow: 0 2px 0 #880000; /* 影を薄くする */
+    background-color: #ff0000;
+}
+
+/* ボタンが無効（disabled）の時の色（連打防止中） */
+button:disabled {
+    background-color: #555;
+    box-shadow: none;
+    transform: translateY(3px);
+    cursor: not-allowed;
+}
