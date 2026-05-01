@@ -29,13 +29,24 @@
         </div>
     </div>
 
-    <!-- ステータスと操作（下画面） -->
-    <div id="status-window">
-        <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
-        <h1 id="monster-name">スライムがあらわれた！</h1>
-        <p id="message-text">冒険がはじまった！</p>
-        <p>敵のHP: <span id="hp-text">100</span></p>
-        <button id="attack-button">剣で斬りつける！</button>
+    <!-- 下画面：情報とコマンドの分割 -->
+    <div id="ui-container">
+        <!-- 左側：ログとレベル情報 -->
+        <div id="info-panel">
+            <div id="log-area">
+                <h1 id="monster-name">スライムがあらわれた！</h1>
+                <p id="message-text">冒険がはじまった！</p>
+            </div>
+            <div id="level-area">
+                <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
+            </div>
+        </div>
+
+        <!-- 右側：コマンドボタン（将来的に4つ並べる場所） -->
+        <div id="command-panel">
+            <button id="attack-button">剣で斬りつける</button>
+            <!-- 将来ここにボタンを追加 -->
+        </div>
     </div>
 </div>
 

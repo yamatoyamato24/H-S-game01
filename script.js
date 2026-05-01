@@ -14,7 +14,6 @@ const monsters = [
 let currentMonster = monsters[0];
 
 // --- 2. 部品の取得 ---
-const hpText = document.getElementById('hp-text');
 const hpBarFill = document.getElementById('hp-bar-fill');
 const attackButton = document.getElementById('attack-button');
 const messageText = document.getElementById('message-text');
@@ -44,7 +43,6 @@ attackButton.onclick = function() {
     damageEffect.classList.add('damage-animation');
 
     // 画面更新
-    hpText.innerText = monsterHP;
     hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
     messageText.innerText = damage + " のダメージを与えた！";
 
