@@ -11,22 +11,26 @@ body {
 }
 
 #game-container {
+    /* 100vh ではなく、実際に表示されている高さ（svh）を使うのがコツです */
     width: 100vw;
-    height: 100vh;
+    height: 100svh; /* svhはスマホのメニューバーを除いた「正味の高さ」です */
     max-width: 450px;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 中身がはみ出してもスクロールさせない */
 }
 
 /* --- 2. 上画面：バトルフィールド --- */
 #battle-field {
-    flex: 1; /* 戦場を広く取る */
+    flex: 1.5; /* 戦場をさらに広く取る（ここが伸び縮みして調整してくれます） */
     display: flex;
-    justify-content: space-around;
+    flex-direction: column; /* HPゲージをキャラの下に置くため */
+    justify-content: center;
     align-items: center;
     position: relative;
     background: linear-gradient(to bottom, #111, #444);
     border-bottom: 4px solid #fff;
+    padding: 10px;
 }
 
 .character-side {
@@ -57,10 +61,11 @@ body {
 
 /* --- 3. 下画面：操作パネル --- */
 #ui-container {
-    height: 180px;
+    flex: 1; /* 操作画面の比率を少し抑える */
+    min-height: 160px; /* ボタンが押しにくくならない最低限の高さ */
     display: flex;
     background-color: #222;
-    padding: 15px;
+    padding: 10px;
     box-sizing: border-box;
 }
 
