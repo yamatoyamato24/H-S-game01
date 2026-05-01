@@ -1,4 +1,3 @@
-// --- 1. ゲームの初期設定 ---
 let monsterHP = 100;
 const maxHP = 100;
 let level = 1;
@@ -13,18 +12,16 @@ const monsters = [
 ];
 let currentMonster = monsters[0];
 
-// --- 2. 部品の取得 ---
 const hpBarFill = document.getElementById('hp-bar-fill');
 const attackButton = document.getElementById('attack-button');
 const messageText = document.getElementById('message-text');
 const levelText = document.getElementById('level-text');
 const expText = document.getElementById('exp-text');
 const monsterNameText = document.getElementById('monster-name');
-const monsterSprite = document.getElementById('monster-sprite'); // 追加
+const monsterSprite = document.getElementById('monster-sprite');
 const damageEffect = document.getElementById('damage-effect');
 const enemySide = document.getElementById('enemy-side');
 
-// --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
     let currentPower = attackPower + (level - 1) * 2;
     let damage = Math.floor(Math.random() * 11) + currentPower;
@@ -32,27 +29,32 @@ attackButton.onclick = function() {
     monsterHP -= damage;
     if (monsterHP < 0) { monsterHP = 0; }
 
-    // ダメージエフェクト（数字が飛び出す）
-    damageEffect.innerText = "-" + damage;
-    damageEffect.classList.remove('damage-animation');
-    enemySide.classList.remove('shake-animation');
-    void damageEffect.offsetWidth; 
-    damageEffect.classList.add('damage-animation');
-    enemySide.classList.add('shake-animation');
+    // 演出（ダメージ数字と揺れ）
+    if (damageEffect) {
+        damageEffect.innerText = "-" + damage;
+        damageEffect.classList.remove('damage-animation');
+        void damageEffect.offsetWidth; 
+        damageEffect.classList.add('damage-animation');
+    }
+    if (enemySide) {
+        enemySide.classList.remove('shake-animation');
+        void enemySide.offsetWidth;
+        enemySide.classList.add('shake-animation');
+    }
 
     // 画面更新
-    hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
+    if (hpBarFill) hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
     messageText.innerText = damage + " のダメージを与えた！";
 
     // モンスターを倒したか判定
     if (monsterHP === 0) {
         exp += currentMonster.exp;
-        messageText.innerText = currentMonster.name + "を倒した！" + currentMonster.exp + "の経験値を獲得！";
+        messageText.innerText = currentMonster.name + "を倒した！" + currentMonster.exp + "の経験値獲得！";
         
         if (exp >= 100) {
             level++;
             exp = 0;
-           messageText.innerText = "レベルアップ！ Lv." + level;
+            messageText.innerText = "レベルアップ！ Lv." + level;
         }
 
         levelText.innerText = level;
@@ -63,10 +65,10 @@ attackButton.onclick = function() {
             const randomIndex = Math.floor(Math.random() * monsters.length);
             currentMonster = monsters[randomIndex];
             monsterNameText.innerText = currentMonster.name + "があらわれた！";
-            monsterSprite.innerText = currentMonster.sprite;
+            if (monsterSprite) monsterSprite.innerText = currentMonster.sprite;
             monsterHP = 100;
-            hpBarFill.style.width = "100%";
+            if (hpBarFill) hpBarFill.style.width = "100%";
             attackButton.disabled = false;
         }, 1500);
     }
-}; // ← ここでしっかりボタンの動作を閉じる
+}; // ← ここで onclick の動作が全部終わる（これが大事！）

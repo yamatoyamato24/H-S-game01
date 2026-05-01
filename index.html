@@ -2,36 +2,25 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <!-- ↓ この一行を足してください！スマホの幅に合わせる命令です -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ハクスラ冒険</title>
-    <!-- 下の一行を追加して CSSファイルを読み込みます -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="game-container">
-    <!-- バトルフィールド（上画面） -->
     <div id="battle-field">
-        <!-- 左側：敵（エフェクト表示用の子要素も追加） -->
         <div class="character-side" id="enemy-side">
-            <div id="damage-effect"></div> <!-- ダメージ数字用 -->
+            <div id="damage-effect"></div>
             <div id="monster-sprite">👾</div>
             <div class="hp-bar-container">
                 <div id="hp-bar-fill"></div>
             </div>
         </div>
-
-        <!-- 右側：味方（自分） -->
         <div class="character-side" id="player-side">
             <div id="player-sprite">⚔️</div>
-            <!-- 自分のHPが必要ならここに追加できます -->
         </div>
     </div>
-
-    <!-- 下画面：情報とコマンドの分割 -->
     <div id="ui-container">
-        <!-- 左側：ログとレベル情報 -->
         <div id="info-panel">
             <div id="log-area">
                 <h1 id="monster-name">スライムがあらわれた！</h1>
@@ -41,17 +30,11 @@
                 <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
             </div>
         </div>
-
-        <!-- 右側：コマンドボタン（将来的に4つ並べる場所） -->
         <div id="command-panel">
             <button id="attack-button">剣で斬りつける</button>
-            <!-- 将来ここにボタンを追加 -->
         </div>
     </div>
 </div>
-
-
-    <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
 </html>
