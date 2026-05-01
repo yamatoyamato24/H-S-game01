@@ -95,5 +95,47 @@ button {
     cursor: pointer;
     margin-top: 10px;
 }
+
 button:active { background-color: #ff0000; }
 button:disabled { background-color: #555; }
+
+/* ステータス画面の文字を安定させる */
+#status-window {
+    text-align: center;
+    min-height: 200px; /* 下画面全体の高さを固定して、ガタつきを防ぐ */
+}
+
+/* モンスター名の表示エリアを固定 */
+#monster-name {
+    font-size: 20px;
+    margin: 10px 0;
+    height: 1.5em;      /* 1行分の高さを絶対に確保する */
+    display: flex;      /* 文字を中央に寄せるための設定 */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;   /* 万が一長すぎても枠を壊さない */
+}
+
+/* メッセージ（〇〇のダメージ！など）のエリアも固定 */
+#message-text {
+    height: 3em;        /* 2〜3行分の高さをあらかじめ取っておく */
+    margin: 5px 0;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffcc00;
+}
+
+/* ガクガク揺れるアニメーション */
+.shake-animation {
+    animation: shake 0.2s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}

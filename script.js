@@ -31,6 +31,12 @@ attackButton.onclick = function() {
     monsterHP -= damage;
     if (monsterHP < 0) monsterHP = 0;
     
+    // 【追加】敵をガクガク揺らす演出
+    const enemySide = document.getElementById('enemy-side');
+    enemySide.classList.remove('shake-animation'); // 一度リセット
+    void enemySide.offsetWidth; // おまじない
+    enemySide.classList.add('shake-animation'); // 実行！
+
     // ダメージエフェクト（数字が飛び出す）
     damageEffect.innerText = "-" + damage;
     damageEffect.classList.remove('damage-animation');
