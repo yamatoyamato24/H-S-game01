@@ -49,32 +49,27 @@ body {
 }
 
 button {
-    background-color: #cc0000;
+    background-color: #cc0000; /* 前の赤色に戻しました */
     color: white;
-    font-size: 24px;          /* 文字をさらに大きく */
-    font-weight: bold;        /* 文字を太く */
-    padding: 20px;            /* 上下の厚みを増やして大きく */
-    width: 100%;              /* 横幅を画面（game-container）いっぱいに */
-    max-width: 300px;         /* 大きくなりすぎないように制限 */
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+    width: 100%;
+    max-width: 300px;
     border: none;
-    border-radius: 50px;      /* 角を丸くして「ボタン感」を出す */
+    border-radius: 10px;      /* 角丸を少し控えめにして前の雰囲気に */
     cursor: pointer;
-    box-shadow: 0 5px 0 #880000; /* 立体感を出してボタンらしく */
-    margin: 20px 0;           /* 上下に隙間を作る */
-    transition: all 0.1s;     /* 押した時の動きを滑らかに */
+    margin: 20px 0;
+    transition: background-color 0.1s;
 }
 
-/* ボタンを押した時の演出（少し凹むように見せる） */
+/* 押した時の反応 */
 button:active {
-    transform: translateY(3px); /* 3ピクセル下に下げる */
-    box-shadow: 0 2px 0 #880000; /* 影を薄くする */
-    background-color: #ff0000;
+    background-color: #ff0000; /* 押した瞬間に明るい赤になる前の設定 */
 }
 
-/* ボタンが無効（disabled）の時の色（連打防止中） */
+/* 無効化（待機中）の時の色 */
 button:disabled {
     background-color: #555;
-    box-shadow: none;
-    transform: translateY(3px);
     cursor: not-allowed;
 }
