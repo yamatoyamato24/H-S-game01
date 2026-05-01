@@ -30,14 +30,16 @@ body {
 
 /* --- 2. 上画面：バトルフィールド --- */
 #battle-field {
-    flex: 3;            /* 下画面より大きく場所を取る */
+    flex: 2;            /* 下画面より大きく場所を取る */
     display: flex;
     justify-content: space-around;
     align-items: center;
     position: relative;
     background: linear-gradient(to bottom, #111, #444);
-    border-bottom: 4px solid #fff;
+    border-bottom: 2px solid #fff;
+    padding-top: 20px; /* 少し上に隙間を作る */
 }
+
 
 .character-side {
     text-align: center;
@@ -67,12 +69,13 @@ body {
 
 /* --- 3. 下画面：操作パネル --- */
 #ui-container {
-    flex: 2;            /* 下画面の比率（必要ならここを1にするともっと小さくなります） */
+    flex: 1.2;     /* 下画面の比率（必要ならここを1にするともっと小さくなります） */
     display: flex;
     background-color: #222;
     padding: 10px;
     box-sizing: border-box;
-    border-top: 1px solid #444;
+    /* ボタンが消えないよう、最低限の高さを確保 */
+    min-height: 180px; 
 }
 
 /* 左側：メッセージとレベル（将来の拡張用に高さを固定） */
@@ -80,10 +83,13 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     border-right: 1px solid #444;
     padding-right: 10px;
+    font-size: 14px; /* 全体的に少し文字を小さく */
 }
+
+
 
 #monster-name {
     font-size: 18px;
@@ -106,7 +112,7 @@ body {
 
 /* 右側：コマンドボタン */
 #command-panel {
-    width: 140px;
+    width: 130px;
     display: flex;
     align-items: flex-end; /* 右下に配置 */
     justify-content: center;
@@ -115,14 +121,12 @@ body {
 
 #attack-button {
     width: 100%;
-    height: 60px; /* タップしやすいサイズ */
+    height: 50px; /* タップしやすいサイズ */
     background-color: #cc0000;
     color: white;
-    font-size: 16px;
     font-weight: bold;
     border: 2px solid #fff;
     border-radius: 5px;
-    cursor: pointer;
 }
 
 #attack-button:active { background-color: #ff0000; }
