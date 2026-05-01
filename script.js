@@ -25,22 +25,19 @@ const damageEffect = document.getElementById('damage-effect');
 
 // --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
-    // ダメージ計算
-    let damage = Math.floor(Math.random() * 11) + (attackPower + (level - 1) * 2);
+    let currentPower = attackPower + (level - 1) * 2;
+    let damage = Math.floor(Math.random() * 11) + currentPower;
+
     monsterHP -= damage;
-    if (monsterHP < 0) monsterHP = 0;
-    
-    // 【追加】敵をガクガク揺らす演出
-    const enemySide = document.getElementById('enemy-side');
-    enemySide.classList.remove('shake-animation'); // 一度リセット
-    void enemySide.offsetWidth; // おまじない
-    enemySide.classList.add('shake-animation'); // 実行！
+    if (monsterHP < 0) { monsterHP = 0; }
 
     // ダメージエフェクト（数字が飛び出す）
     damageEffect.innerText = "-" + damage;
     damageEffect.classList.remove('damage-animation');
+    enemySide.classList.remove('shake-animation');
     void damageEffect.offsetWidth; 
     damageEffect.classList.add('damage-animation');
+    enemySide.classList.add('shake-animation');
 
     // 画面更新
     hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
@@ -62,15 +59,11 @@ attackButton.onclick = function() {
         attackButton.disabled = true;
 
         setTimeout(function() {
-            // 次のモンスターをランダムに選ぶ
             const randomIndex = Math.floor(Math.random() * monsters.length);
             currentMonster = monsters[randomIndex];
-            
             monsterNameText.innerText = currentMonster.name + "があらわれた！";
-            // モンスターの見た目も変える
             monsterSprite.innerText = currentMonster.sprite;
             monsterHP = 100;
-            hpText.innerText = monsterHP;
             hpBarFill.style.width = "100%";
             attackButton.disabled = false;
         }, 1500);

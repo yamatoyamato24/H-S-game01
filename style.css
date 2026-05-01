@@ -1,3 +1,4 @@
+/* --- 1. 画面全体の土台 --- */
 body {
     background-color: #1a1a1a;
     color: white;
@@ -7,88 +8,37 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 10px;
 }
 
 #game-container {
-    width: 100%;
-    max-width: 400px;
-    background-color: #2a2a2a;
-    border: 2px solid #444;
-    border-radius: 10px;
-    padding: 20px;
-    box-sizing: border-box;
+    width: 100vw;
+    height: 100vh;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* バトルフィールドを横並びにする */
+/* --- 2. 上画面：バトルフィールド --- */
 #battle-field {
+    flex: 1; /* 戦場を広く取る */
     display: flex;
-    justify-content: space-around; /* 左右に振り分ける */
-    align-items: center; /*中央付近に配置*/
-    height: 250px; /*高さを広げる*/
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(to bottom, #111, #444);
+    border-bottom: 4px solid #fff;
+}
 
-    background: linear-gradient(to bottom, #1a1a1a, #333); /* 地面感 */
-    border-bottom: 3px solid #444;
+.character-side {
+    text-align: center;
     position: relative;
 }
 
-/* 下画面のレイアウトを左右に分割 */
-#ui-container {
-    display: flex;
-    height: 150px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-/* 左側：情報パネル */
-#info-panel {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* 上下に振り分け */
-    text-align: left;
-    border-right: 1px solid #444;
-    padding-right: 10px;
-}
-
-#monster-name { font-size: 18px; margin: 0; color: #fff; }
-#message-text { font-size: 14px; color: #ffcc00; margin: 5px 0; }
-#level-area { font-size: 14px; font-weight: bold; }
-
-/* 右側：コマンドパネル（将来の4ボタン用） */
-#command-panel {
-    width: 40%;
-    display: grid;
-    grid-template-columns: 1fr; /* 今は1列、将来2列にできる */
-    grid-template-rows: 1fr 1fr; /* 2段構えの場所を確保 */
-    gap: 5px;
-    padding-left: 10px;
-}
-
-#attack-button {
-    grid-row: 2; /* 右下に配置するために2段目に設定 */
-    background-color: #cc0000;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    height: 100%;
-}
-
-/* 敵と味方の枠 */
-.character-side {
-    text-align: center;
-    position: relative; /* 敵の頭の上に数字を出すための基準点 */
-}
-
-/* キャラクター（仮：絵文字）のサイズ */
 #monster-sprite, #player-sprite {
     font-size: 70px;
 }
 
-/* HPゲージ（キャラの下） */
+/* キャラの下のHPゲージ */
 .hp-bar-container {
     width: 80px;
     height: 10px;
@@ -105,12 +55,74 @@ body {
     transition: width 0.3s;
 }
 
-/* ダメージ数字（ふわっと飛び出す） */
+/* --- 3. 下画面：操作パネル --- */
+#ui-container {
+    height: 180px;
+    display: flex;
+    background-color: #222;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* 左側：メッセージとレベル（将来の拡張用に高さを固定） */
+#info-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid #444;
+    padding-right: 10px;
+}
+
+#monster-name {
+    font-size: 18px;
+    margin: 0;
+    color: #fff;
+    height: 1.5em;
+}
+
+#message-text {
+    font-size: 14px;
+    color: #ffcc00;
+    margin: 5px 0;
+    height: 3em; /* 複数行になっても崩れないように固定 */
+}
+
+#level-area {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 右側：コマンドボタン */
+#command-panel {
+    width: 140px;
+    display: flex;
+    align-items: flex-end; /* 右下に配置 */
+    justify-content: center;
+    padding-left: 10px;
+}
+
+#attack-button {
+    width: 100%;
+    height: 60px; /* タップしやすいサイズ */
+    background-color: #cc0000;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#attack-button:active { background-color: #ff0000; }
+#attack-button:disabled { background-color: #555; cursor: not-allowed; }
+
+/* --- 4. 演出アニメーション --- */
 #damage-effect {
     position: absolute;
-    top: -30px;      /* キャラより少し上に浮かす */
-    left: 50%;       /* 敵の真ん中に寄せる */
-    transform: translateX(-50%); /* 完全に中央に揃えるおまじない */
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
     color: #ff4444;
     font-size: 30px;
     font-weight: bold;
@@ -118,70 +130,15 @@ body {
     pointer-events: none;
 }
 
-
-/* ダメージ時のアニメーション */
-.damage-animation {
-    animation: bounce-up 0.6s ease-out;
-}
-
+.damage-animation { animation: bounce-up 0.6s ease-out; }
 @keyframes bounce-up {
-    0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-50px); }
+    0% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -50px); }
 }
 
-/* ボタン */
-button {
-    background-color: #cc0000;
-    color: white;
-    font-size: 24px;
-    padding: 15px;
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:active { background-color: #ff0000; }
-button:disabled { background-color: #555; }
-
-/* ステータス画面の文字を安定させる */
-#status-window {
-    text-align: center;
-    min-height: 200px; /* 下画面全体の高さを固定して、ガタつきを防ぐ */
-}
-
-/* モンスター名の表示エリアを固定 */
-#monster-name {
-    font-size: 20px;
-    margin: 10px 0;
-    height: 1.5em;      /* 1行分の高さを絶対に確保する */
-    display: flex;      /* 文字を中央に寄せるための設定 */
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;   /* 万が一長すぎても枠を壊さない */
-}
-
-/* メッセージ（〇〇のダメージ！など）のエリアも固定 */
-#message-text {
-    height: 3em;        /* 2〜3行分の高さをあらかじめ取っておく */
-    margin: 5px 0;
-    font-size: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffcc00;
-}
-
-/* ガクガク揺れるアニメーション */
-.shake-animation {
-    animation: shake 0.2s;
-}
-
+.shake-animation { animation: shake 0.2s; }
 @keyframes shake {
-    0% { transform: translateX(0); }
+    0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(0); }
+    75% { transform: translateX(10px); }
 }
