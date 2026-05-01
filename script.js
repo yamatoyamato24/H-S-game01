@@ -22,6 +22,7 @@ const expText = document.getElementById('exp-text');
 const monsterNameText = document.getElementById('monster-name');
 const monsterSprite = document.getElementById('monster-sprite'); // 追加
 const damageEffect = document.getElementById('damage-effect');
+const enemySide = document.getElementById('enemy-side');
 
 // --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
@@ -49,7 +50,7 @@ attackButton.onclick = function() {
         messageText.innerText = currentMonster.name + "を倒した！" + currentMonster.exp + "の経験値を獲得！";
         
         if (exp >= 100) {
-            level ++;
+            level++;
             exp = 0;
            messageText.innerText = "レベルアップ！ Lv." + level;
         }
