@@ -47,7 +47,6 @@ body {
     color: #ffcc00; /* ログを金色っぽくして目立たせる */
     font-weight: bold;
 }
-
 button {
     background-color: #cc0000; /* 前の赤色に戻しました */
     color: white;
