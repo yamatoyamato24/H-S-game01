@@ -31,17 +31,19 @@
     overflow: hidden;
 }
 
-/* ダメージ数字のエフェクト */
 #damage-effect {
     position: absolute;
-    top: 20px;
-    left: 20%;
+    top: -30px;      /* キャラより少し上に浮かす */
+    left: 50%;       /* 敵の真ん中に寄せる */
+    transform: translateX(-50%); /* 完全に中央に揃えるおまじない */
     color: #ff4444;
     font-size: 30px;
     font-weight: bold;
-    opacity: 0; /* 最初は隠しておく */
+    opacity: 0;
     pointer-events: none;
+    white-space: nowrap; /* 数字が改行されないように */
 }
+
 
 /* ダメージ時のアニメーション */
 .damage-animation {
