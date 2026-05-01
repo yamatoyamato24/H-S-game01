@@ -27,12 +27,10 @@ const damageEffect = document.getElementById('damage-effect');
 // --- 3. ボタンを押した時の動き ---
 attackButton.onclick = function() {
     // ダメージ計算
-    let currentPower = attackPower + (level - 1) * 2;
-    let damage = Math.floor(Math.random() * 11) + currentPower;
-
-    monsterHP = monsterHP - damage;
-    if (monsterHP < 0) { monsterHP = 0; }
-
+    let damage = Math.floor(Math.random() * 11) + (attackPower + (level - 1) * 2);
+    monsterHP -= damage;
+    if (monsterHP < 0) monsterHP = 0;
+    
     // ダメージエフェクト（数字が飛び出す）
     damageEffect.innerText = "-" + damage;
     damageEffect.classList.remove('damage-animation');
@@ -46,13 +44,13 @@ attackButton.onclick = function() {
 
     // モンスターを倒したか判定
     if (monsterHP === 0) {
-        exp = exp + currentMonster.exp;
+        exp += currentMonster.exp;
         messageText.innerText = currentMonster.name + "を倒した！" + currentMonster.exp + "の経験値を獲得！";
         
         if (exp >= 100) {
-            level = level + 1;
+            level ++;
             exp = 0;
-            messageText.innerText = "レベルアップ！ Lv." + level + " になった！";
+           messageText.innerText = "レベルアップ！ Lv." + level;
         }
 
         levelText.innerText = level;
@@ -66,8 +64,7 @@ attackButton.onclick = function() {
             
             monsterNameText.innerText = currentMonster.name + "があらわれた！";
             // モンスターの見た目も変える
-            if(monsterSprite) monsterSprite.innerText = currentMonster.sprite; 
-            
+            monsterSprite.innerText = currentMonster.sprite;
             monsterHP = 100;
             hpText.innerText = monsterHP;
             hpBarFill.style.width = "100%";

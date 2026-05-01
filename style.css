@@ -1,36 +1,65 @@
+body {
+    background-color: #1a1a1a;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 10px;
+}
+
+#game-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #2a2a2a;
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
 /* バトルフィールドを横並びにする */
 #battle-field {
     display: flex;
-    justify-content: space-between; /* 左右に振り分ける */
+    justify-content: space-around; /* 左右に振り分ける */
     align-items: flex-end;
-    width: 100%;
-    height: 200px;
+    height: 180px;
+    border-bottom: 2px solid #444;
     margin-bottom: 20px;
-    position: relative;
+    padding-bottom: 20px;
 }
 
+/* 敵と味方の枠 */
 .character-side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 45%;
+    text-align: center;
+    position: relative; /* 敵の頭の上に数字を出すための基準点 */
 }
 
 /* キャラクター（仮：絵文字）のサイズ */
 #monster-sprite, #player-sprite {
-    font-size: 60px;
-    margin-bottom: 10px;
+    font-size: 70px;
 }
 
-/* HPゲージをキャラの下に配置 */
+/* HPゲージ（キャラの下） */
 .hp-bar-container {
     width: 80px;
-    height: 8px;
+    height: 10px;
     background-color: #444;
-    border-radius: 4px;
+    margin: 10px auto;
+    border-radius: 5px;
     overflow: hidden;
 }
 
+#hp-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: #ff4444;
+    transition: width 0.3s;
+}
+
+/* ダメージ数字（ふわっと飛び出す） */
 #damage-effect {
     position: absolute;
     top: -30px;      /* キャラより少し上に浮かす */
@@ -41,7 +70,6 @@
     font-weight: bold;
     opacity: 0;
     pointer-events: none;
-    white-space: nowrap; /* 数字が改行されないように */
 }
 
 
@@ -52,5 +80,20 @@
 
 @keyframes bounce-up {
     0% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-40px); }
+    100% { opacity: 0; transform: translateY(-50px); }
 }
+
+/* ボタン */
+button {
+    background-color: #cc0000;
+    color: white;
+    font-size: 24px;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+button:active { background-color: #ff0000; }
+button:disabled { background-color: #555; }
