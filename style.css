@@ -1,3 +1,12 @@
+/* 画面全体の設定 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;       /* 全体の高さを100%に固定 */
+    overflow: hidden;   /* 外側でスクロールさせない */
+    background-color: #1a1a1a;
+}
+
 /* --- 1. 画面全体の土台 --- */
 body {
     background-color: #1a1a1a;
@@ -11,26 +20,23 @@ body {
 }
 
 #game-container {
-    /* 100vh ではなく、実際に表示されている高さ（svh）を使うのがコツです */
     width: 100vw;
-    height: 100svh; /* svhはスマホのメニューバーを除いた「正味の高さ」です */
+    height: 100%;       /* 親要素(body)の100%に合わせる */
     max-width: 450px;
+    margin: 0 auto;     /* パソコンで見た時に中央に寄せる */
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* 中身がはみ出してもスクロールさせない */
 }
 
 /* --- 2. 上画面：バトルフィールド --- */
 #battle-field {
-    flex: 1.5; /* 戦場をさらに広く取る（ここが伸び縮みして調整してくれます） */
+    flex: 3;            /* 下画面より大きく場所を取る */
     display: flex;
-    flex-direction: column; /* HPゲージをキャラの下に置くため */
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     position: relative;
     background: linear-gradient(to bottom, #111, #444);
     border-bottom: 4px solid #fff;
-    padding: 10px;
 }
 
 .character-side {
@@ -61,12 +67,12 @@ body {
 
 /* --- 3. 下画面：操作パネル --- */
 #ui-container {
-    flex: 1; /* 操作画面の比率を少し抑える */
-    min-height: 160px; /* ボタンが押しにくくならない最低限の高さ */
+    flex: 2;            /* 下画面の比率（必要ならここを1にするともっと小さくなります） */
     display: flex;
     background-color: #222;
     padding: 10px;
     box-sizing: border-box;
+    border-top: 1px solid #444;
 }
 
 /* 左側：メッセージとレベル（将来の拡張用に高さを固定） */
