@@ -48,7 +48,7 @@ html, body {
     width: 100%;
     height: 60%; /* 上から60%までの範囲 */
     /* 背景の中心を画面の真ん中(50%)に固定します */
-    background-position: center bottom; 
+    background-position: calc(50% - 0.5px) bottom; 
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
@@ -63,16 +63,15 @@ html, body {
     position: absolute;
     top: 60%;      /* 壁の格子が終わる位置（60%）から始める */
     left: 50%;
-    width: 400%;   /* 傾けた時に端が切れないよう横長に */
+    /* 150pxだった遠近感を少し弱めて、ズレを抑えます */
+    transform: translateX(-50%) perspective(200px) rotateX(60deg);
+    width: 500%;   /* 傾けた時に端が切れないよう横長に */
     height: 100%;  /* 十分な長さを確保 */
     background-position: center top;
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
     background-size: 80px 100px; /* 横幅を上と同じ80pxに */
-    
-    /* 遠近感の設定：中心（50%）を軸に、手前へ倒す */
-    transform: translateX(-50%) perspective(150px) rotateX(60deg);
     transform-origin: top; /* 境目を起点にして倒すことで、隙間をなくす */
     z-index: 1; /* 黒い背景より上に */
 }
