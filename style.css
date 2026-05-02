@@ -60,16 +60,16 @@ html, body {
     content: "";
     position: absolute;
     bottom: 0;
-    left: -50%;
-    width: 200%;
-    height: 40%; /* 下から40%の範囲 */
+    /* 左右中央に配置してズレを防ぐ */
+    left: 50%;
+    transform: translateX(-50%) perspective(150px) rotateX(70deg);
+    width: 300%; /* 傾けた時の端切れ防止に広めに設定 */
+    height: 40%;
     background-image: 
         linear-gradient(rgba(150, 150, 150, 0.6) 2px, transparent 2px),
         linear-gradient(90deg, rgba(150, 150, 150, 0.6) 2px, transparent 2px);
-    background-size: 100px 100px; /* 地面の格子はさらに広く */
-    
-    /* 遠近感を強調 */
-    transform: perspective(150px) rotateX(70deg);
+    /* 横幅を上と同じ 80px に合わせる。縦は奥行き感のために 100px に */
+    background-size: 80px 100px; 
     transform-origin: top;
     z-index: 0;
 }
