@@ -37,6 +37,7 @@ html, body {
     padding-bottom: 30px;
     overflow: hidden;
     background-color: #000; /* 背景は真っ黒 */
+    z-index: 0; /* ここを基準にする */
 }
 
 /* 1. 【上画面】垂直な格子状（壁のような背景） */
@@ -48,11 +49,11 @@ html, body {
     width: 100%;
     height: 60%; /* 上から60%までの範囲 */
     background-image: 
-        linear-gradient(rgba(100, 100, 100, 0.5) 1.5px, transparent 1.5px),
-        linear-gradient(90deg, rgba(100, 100, 100, 0.5) 1.5px, transparent 1.5px);
-    background-size: 80px 80px; /* 格子を広めに */
-    border-bottom: 2px solid #666; /* 上下境界の線 */
-    z-index: 0;
+        linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 80px 80px; 
+    border-bottom: 2px solid #fff; /* 境界線を白くハッキリ */
+    z-index: 1; /* 黒い背景より上に */
 }
 
 /* 2. 【下画面】奥行きのある格子（地面） */
@@ -62,21 +63,20 @@ html, body {
     bottom: 0;
     /* 左右中央に配置してズレを防ぐ */
     left: 50%;
-    transform: translateX(-50%) perspective(150px) rotateX(70deg);
-    width: 300%; /* 傾けた時の端切れ防止に広めに設定 */
-    height: 40%;
+    transform: translateX(-50%) perspective(200px) rotateX(70deg);
+    width: 400%; 
+    height: 60%; /* 地面の範囲を少し広げました */
     background-image: 
-        linear-gradient(rgba(150, 150, 150, 0.6) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(150, 150, 150, 0.6) 2px, transparent 2px);
-    /* 横幅を上と同じ 80px に合わせる。縦は奥行き感のために 100px に */
+        linear-gradient(rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px);
     background-size: 80px 100px; 
-    transform-origin: top;
-    z-index: 0;
+    transform-origin: bottom; /* 奥行きの起点を下に */
+    z-index: 1; /* 黒い背景より上に */
 }
 
 /* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
-    z-index: 2;
+    z-index: 10;
     margin-bottom: 20px;
     /* キャラに影をつけて地面に馴染ませる */
     filter: drop-shadow(0 10px 5px rgba(0,0,0,0.8));
