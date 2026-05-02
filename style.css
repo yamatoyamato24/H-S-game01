@@ -32,18 +32,39 @@ html, body {
     flex: 1;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end; /* キャラを地面に立たせるために下寄せに */
     position: relative;
+    padding-bottom: 20px;   /* 地面の少し上にキャラを配置 */
+    overflow: hidden;
 
-    /* 黒い背景に灰色の格子を描く設定 */
-    background-color: #1a1a1a;
+    /* 1. 背景を上下で塗り分ける（上2/3が黒、下1/3が地面の土台） */
+    background: linear-gradient(to bottom, #111 66%, #222 66%);
+}
+
+/* 2. 地面に奥行き（遠近感）をつけるための「床」を擬似的に作る */
+#battle-field::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 200%;           /* 傾けたときに端が切れないよう横長に */
+    height: 34%;           /* 下1/3の高さに合わせる */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px; /* 格子の大きさ（お好みで調整してください） */
-
-    border-bottom: 2px solid #fff;
+    background-size: 50px 50px;
+    
+    /* 遠近感を出す魔法の3行 */
+    transform: perspective(100px) rotateX(60deg);
+    transform-origin: bottom;
+    z-index: 0;
 }
+
+/* キャラクターを地面より前に表示させる */
+.character-side {
+    z-index: 1;
+    margin-bottom: 10px;
+}
+
 
 .character-side { text-align: center; position: relative; }
 #monster-sprite, #player-sprite { font-size: 60px; }
