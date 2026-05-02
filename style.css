@@ -29,47 +29,60 @@ html, body {
 
 /* 2. 上画面：バトルフィールド */
 #battle-field {
-    flex: 1;
+    flex: 1.5;
     display: flex;
     justify-content: space-around;
-    align-items: flex-end; /* キャラを地面に立たせるために下寄せに */
+    align-items: flex-end;
     position: relative;
-    padding-bottom: 20px;   /* 地面の少し上にキャラを配置 */
+    padding-bottom: 30px;
     overflow: hidden;
-
-    /* 1. 背景を上下で塗り分ける（上2/3が黒、下1/3が地面の土台） */
-    background: linear-gradient(to bottom, #111 66%, #222 66%);
+    background-color: #000; /* 背景は真っ黒 */
 }
 
-/* 2. 地面に奥行き（遠近感）をつけるための「床」を擬似的に作る */
+/* 1. 【上画面】垂直な格子状（壁のような背景） */
+#battle-field::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%; /* 上から60%までの範囲 */
+    background-image: 
+        linear-gradient(rgba(100, 100, 100, 0.5) 1.5px, transparent 1.5px),
+        linear-gradient(90deg, rgba(100, 100, 100, 0.5) 1.5px, transparent 1.5px);
+    background-size: 80px 80px; /* 格子を広めに */
+    border-bottom: 2px solid #666; /* 上下境界の線 */
+    z-index: 0;
+}
+
+/* 2. 【下画面】奥行きのある格子（地面） */
 #battle-field::before {
     content: "";
     position: absolute;
     bottom: 0;
-    width: 200%;           /* 傾けたときに端が切れないよう横長に */
-    height: 34%;           /* 下1/3の高さに合わせる */
+    left: -50%;
+    width: 200%;
+    height: 40%; /* 下から40%の範囲 */
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
+        linear-gradient(rgba(150, 150, 150, 0.6) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(150, 150, 150, 0.6) 2px, transparent 2px);
+    background-size: 100px 100px; /* 地面の格子はさらに広く */
     
-    /* 遠近感を出す魔法の3行 */
-    transform: perspective(100px) rotateX(60deg);
-    transform-origin: bottom;
+    /* 遠近感を強調 */
+    transform: perspective(150px) rotateX(70deg);
+    transform-origin: top;
     z-index: 0;
 }
 
-/* キャラクターを地面より前に表示させる */
+/* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
-    z-index: 1;
-    margin-bottom: 10px;
+    z-index: 2;
+    margin-bottom: 20px;
+    /* キャラに影をつけて地面に馴染ませる */
+    filter: drop-shadow(0 10px 5px rgba(0,0,0,0.8));
 }
 
 
-.character-side { text-align: center; position: relative; }
-#monster-sprite, #player-sprite { font-size: 60px; }
-.hp-bar-container { width: 80px; height: 10px; background-color: #444; margin: 5px auto; border-radius: 5px; overflow: hidden; }
-#hp-bar-fill { width: 100%; height: 100%; background-color: #ff4444; transition: width 0.3s; }
 
 /* 3. 下画面：全体を「田の字」4等分にする設定 */
 #ui-container {
