@@ -34,7 +34,14 @@ html, body {
     justify-content: space-around;
     align-items: center;
     position: relative;
-    background: linear-gradient(to bottom, #111, #333);
+
+    /* 黒い背景に灰色の格子を描く設定 */
+    background-color: #1a1a1a;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px; /* 格子の大きさ（お好みで調整してください） */
+
     border-bottom: 2px solid #fff;
 }
 
