@@ -67,13 +67,11 @@ html, body {
 }
 
 #info-panel {
-    width: 60%; 
+    flex: 1; /* 残りのスペースをすべて使う */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-right: 2px solid #444;
     padding-right: 10px;
-    box-sizing: border-box;
 }
 
 #monster-name { font-size: 16px; margin: 0; }
@@ -82,13 +80,13 @@ html, body {
 
 /* 右側：コマンドパネル */
 #command-panel {
-    width: 40%;
+    width: 160px;  /* 横幅を固定 */
+    height: 160px; /* 高さも横幅と同じにして正方形にする */
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 横に2つ並べる */
-    grid-template-rows: 1fr 1fr;    /* 縦に2つ並べる */
-    gap: 5px; /* ボタン同士の隙間 */
-    padding-left: 10px;
-    box-sizing: border-box;
+    grid-template-columns: 1fr 1fr; /* 2列 */
+    grid-template-rows: 1fr 1fr;    /* 2段 */
+    gap: 6px;      /* ボタン同士の隙間 */
+    flex-shrink: 0; /* 画面が狭くなっても絶対に縮ませない */
 }
 
 /* 全てのボタン共通の設定 */
@@ -104,6 +102,22 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* ボタンのデザイン（田の字の中を埋める） */
+#command-panel button, .empty-slot {
+    width: 100%;
+    height: 100%;
+    background-color: #cc0000;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 #attack-button {
@@ -139,6 +153,6 @@ html, body {
 
 /* 空きスロットの見た目（開発中のガイドとして） */
 .empty-slot {
-    border: 1px dashed #444; /* 点線の枠 */
-    border-radius: 4px;
+    background-color: #333; /* 空き場所は暗い色に */
+    border: 1px dashed #555;
 }
