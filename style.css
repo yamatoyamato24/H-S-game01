@@ -1,4 +1,4 @@
-/* 1. 画面全体を固定（はみ出し禁止） */
+/* 1. 画面全体の設定 */
 html, body {
     margin: 0;
     padding: 0;
@@ -10,7 +10,6 @@ html, body {
     font-family: sans-serif;
 }
 
-/* 2. ゲーム全体のコンテナ */
 #game-container {
     width: 100%;
     height: 100%;
@@ -20,9 +19,9 @@ html, body {
     flex-direction: column;
 }
 
-/* 3. 上画面：バトルフィールド（高さを自動計算） */
+/* 2. 上画面：バトルフィールド */
 #battle-field {
-    flex: 1; /* 余ったスペースを全部使う */
+    flex: 1;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -31,128 +30,67 @@ html, body {
     border-bottom: 2px solid #fff;
 }
 
-.character-side {
-    text-align: center;
-    position: relative;
+.character-side { text-align: center; position: relative; }
+#monster-sprite, #player-sprite { font-size: 60px; }
+.hp-bar-container { width: 80px; height: 10px; background-color: #444; margin: 5px auto; border-radius: 5px; overflow: hidden; }
+#hp-bar-fill { width: 100%; height: 100%; background-color: #ff4444; transition: width 0.3s; }
+
+/* 3. 下画面：全体を「田の字」4等分にする設定 */
+#ui-container {
+    height: 200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 横2等分 */
+    grid-template-rows: 1fr 1fr;    /* 縦2等分 */
+    background-color: #222;
+    border-top: 2px solid #fff;
 }
 
-#monster-sprite, #player-sprite {
-    font-size: 60px;
-}
-
-/* HPゲージ */
-.hp-bar-container {
-    width: 80px;
-    height: 10px;
-    background-color: #444;
-    margin: 5px auto;
-    border-radius: 5px;
+/* 4つの枠（スロット）共通の見た目 */
+.ui-slot {
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
-#hp-bar-fill {
-    width: 100%;
-    height: 100%;
-    background-color: #ff4444;
-    transition: width 0.3s;
-}
-
-/* 4. 下画面：操作パネル（高さを固定してボタンを保護） */
-#ui-container {
-    height: 180px; /* ここの高さを固定することでボタンが隠れないようにします */
-    display: flex;
-    background-color: #222;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-#info-panel {
-    flex: 1; /* 残りのスペースをすべて使う */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-right: 10px;
-}
-
-#monster-name { font-size: 16px; margin: 0; }
-#message-text { font-size: 13px; color: #ffcc00; margin: 5px 0; height: 3em; }
-#level-area { font-size: 14px; font-weight: bold; }
-
-/* 右側：コマンドパネル */
-#command-panel {
-    width: 160px;  /* 横幅を固定 */
-    height: 160px; /* 高さも横幅と同じにして正方形にする */
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* 2列 */
-    grid-template-rows: 1fr 1fr;    /* 2段 */
-    gap: 6px;      /* ボタン同士の隙間 */
-    flex-shrink: 0; /* 画面が狭くなっても絶対に縮ませない */
-}
-
-/* 全てのボタン共通の設定 */
-#command-panel button {
-    width: 100%;
-    height: 100%; /* 4等分の枠いっぱいに広げる */
-    background-color: #cc0000;
-    color: white;
-    font-size: 12px; /* 4つ並ぶので少し文字を小さく */
-    font-weight: bold;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* ボタンのデザイン（田の字の中を埋める） */
-#command-panel button, .empty-slot {
-    width: 100%;
-    height: 100%;
-    background-color: #cc0000;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-}
-
+/* 攻撃ボタンの設定（枠いっぱいに広げる） */
 #attack-button {
     width: 100%;
-    height: 50px;
+    height: 100%;
     background-color: #cc0000;
     color: white;
+    font-size: 18px;
     font-weight: bold;
     border: 2px solid #fff;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 #attack-button:active { background-color: #ff0000; }
 #attack-button:disabled { background-color: #555; }
 
-/* 5. 演出アニメーション */
-#damage-effect {
-    position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
-    color: #ff4444; font-size: 30px; font-weight: bold; opacity: 0; pointer-events: none;
-}
-.damage-animation { animation: bounce-up 0.6s ease-out; }
-@keyframes bounce-up {
-    0% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -40px); }
-}
-.shake-animation { animation: shake 0.2s; }
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
+/* 空きスロットのデザイン */
+.empty-slot {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    border: 1px dashed #555;
+    color: #555;
+    font-size: 12px;
 }
 
-/* 空きスロットの見た目（開発中のガイドとして） */
-.empty-slot {
-    background-color: #333; /* 空き場所は暗い色に */
-    border: 1px dashed #555;
-}
+/* テキスト類の調整 */
+#monster-name { font-size: 16px; margin: 0; }
+#message-text { font-size: 12px; color: #ffcc00; margin: 5px 0; text-align: center; }
+#level-area p { margin: 2px 0; font-size: 14px; text-align: center; }
+
+/* 4. 演出アニメーション（変更なし） */
+#damage-effect { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #ff4444; font-size: 30px; font-weight: bold; opacity: 0; pointer-events: none; }
+.damage-animation { animation: bounce-up 0.6s ease-out; }
+@keyframes bounce-up { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -40px); } }
+.shake-animation { animation: shake 0.2s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }

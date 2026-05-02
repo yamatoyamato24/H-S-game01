@@ -21,22 +21,24 @@
         </div>
     </div>
     <div id="ui-container">
-        <div id="info-panel">
-            <div id="log-area">
-                <h1 id="monster-name">スライムがあらわれた！</h1>
-                <p id="message-text">冒険がはじまった！</p>
-            </div>
-            <div id="level-area">
-                <p>Lv: <span id="level-text">1</span> (Exp: <span id="exp-text">0</span>)</p>
-            </div>
+        <!-- 1. 左上：モンスター名とログ -->
+        <div class="ui-slot" id="log-slot">
+            <h1 id="monster-name">スライム</h1>
+            <p id="message-text">冒険開始！</p>
         </div>
-    <!-- 将来的にボタンが4つ並ぶ場所 -->
-    <div id="command-panel">
-        <button id="attack-button">攻撃</button>
-        <div class="empty-slot"></div> <!-- 2つ目（右上）の空き -->
-        <div class="empty-slot"></div> <!-- 3つ目（左下）の空き -->
-        <div class="empty-slot"></div> <!-- 4つ目（右下）の空き -->
+
+        <!-- 2. 右上：将来の魔法ボタンなど（今は空き） -->
+        <div class="ui-slot empty-slot">（空き）</div>
+
+        <!-- 3. 左下：レベル情報 -->
+        <div class="ui-slot" id="level-slot">
+            <p>Lv: <span id="level-text">1</span></p>
+            <p>Exp: <span id="exp-text">0</span></p>
         </div>
+
+        <!-- 4. 右下：メインコマンド -->
+        <div class="ui-slot">
+            <button id="attack-button">剣で斬る</button>
     </div>
 </div>
 <script src="script.js"></script>
