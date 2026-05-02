@@ -5,10 +5,10 @@ let exp = 0;
 let attackPower = 10;
 
 const monsters = [
-    { name: "スライム", exp: 30, sprite: "👾" },
-    { name: "ゴブリン", exp: 50, sprite: "👹" },
-    { name: "スケルトン", exp: 70, sprite: "💀" },
-    { name: "ドラゴン", exp: 150, sprite: "🐲" }
+    { name: "クモ", exp: 30, sprite: "assets/enemy.png" },
+    { name: "おじさん", exp: 50, sprite: "assets/uncle.png" },
+    { name: "幽霊", exp: 70, sprite: "assets/ghost.png" },
+    { name: "無", exp: 150, sprite: "assets/nothing.png" }
 ];
 let currentMonster = monsters[0];
 
@@ -65,7 +65,7 @@ attackButton.onclick = function() {
             const randomIndex = Math.floor(Math.random() * monsters.length);
             currentMonster = monsters[randomIndex];
             monsterNameText.innerText = currentMonster.name + "があらわれた！";
-            if (monsterSprite) monsterSprite.innerText = currentMonster.sprite;
+            if (monsterSprite) monsterSprite.src = currentMonster.sprite;
             monsterHP = 100;
             if (hpBarFill) hpBarFill.style.width = "100%";
             attackButton.disabled = false;

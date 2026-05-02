@@ -11,8 +11,11 @@ html, body {
 }
 
 #monster-sprite, #player-sprite {
-    width: 100px;  /* 画像の横幅を好きなサイズに固定 */
-    height: auto;   /* 高さは自動で調整 */
+    width: 120px;       /* 好きな横幅（px）に調整してください */
+    height: 120px;      /* 縦幅も指定して正方形に揃えると安定します */
+    object-fit: contain; /* 縦横比を保ったまま枠に収める魔法の言葉 */
+    display: block;      /* 余計な隙間を消す設定 */
+    margin: 0 auto;     /* 真ん中に寄せる */
 }
 
 #game-container {
