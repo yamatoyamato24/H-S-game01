@@ -1,45 +1,35 @@
-/* 画面全体の設定 */
+/* 1. 画面全体を固定（はみ出し禁止） */
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;       /* 全体の高さを100%に固定 */
-    overflow: hidden;   /* 外側でスクロールさせない */
-    background-color: #1a1a1a;
-}
-
-/* --- 1. 画面全体の土台 --- */
-body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
     background-color: #1a1a1a;
     color: white;
     font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
 }
 
+/* 2. ゲーム全体のコンテナ */
 #game-container {
-    width: 100vw;
-    height: 100%;       /* 親要素(body)の100%に合わせる */
+    width: 100%;
+    height: 100%;
     max-width: 450px;
-    margin: 0 auto;     /* パソコンで見た時に中央に寄せる */
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
-/* --- 2. 上画面：バトルフィールド --- */
+/* 3. 上画面：バトルフィールド（高さを自動計算） */
 #battle-field {
-    flex: 2;            /* 下画面より大きく場所を取る */
+    flex: 1; /* 余ったスペースを全部使う */
     display: flex;
     justify-content: space-around;
     align-items: center;
     position: relative;
-    background: linear-gradient(to bottom, #111, #444);
+    background: linear-gradient(to bottom, #111, #333);
     border-bottom: 2px solid #fff;
-    padding-top: 20px; /* 少し上に隙間を作る */
 }
-
 
 .character-side {
     text-align: center;
@@ -47,15 +37,15 @@ body {
 }
 
 #monster-sprite, #player-sprite {
-    font-size: 70px;
+    font-size: 60px;
 }
 
-/* キャラの下のHPゲージ */
+/* HPゲージ */
 .hp-bar-container {
     width: 80px;
     height: 10px;
     background-color: #444;
-    margin: 10px auto;
+    margin: 5px auto;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -67,90 +57,61 @@ body {
     transition: width 0.3s;
 }
 
-/* --- 3. 下画面：操作パネル --- */
+/* 4. 下画面：操作パネル（高さを固定してボタンを保護） */
 #ui-container {
-    flex: 1.2;     /* 下画面の比率（必要ならここを1にするともっと小さくなります） */
+    height: 160px; /* ここの高さを固定することでボタンが隠れないようにします */
     display: flex;
     background-color: #222;
     padding: 10px;
     box-sizing: border-box;
-    /* ボタンが消えないよう、最低限の高さを確保 */
-    min-height: 180px; 
 }
 
-/* 左側：メッセージとレベル（将来の拡張用に高さを固定） */
 #info-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     border-right: 1px solid #444;
     padding-right: 10px;
-    font-size: 14px; /* 全体的に少し文字を小さく */
 }
 
+#monster-name { font-size: 16px; margin: 0; }
+#message-text { font-size: 13px; color: #ffcc00; margin: 5px 0; height: 3em; }
+#level-area { font-size: 14px; font-weight: bold; }
 
-
-#monster-name {
-    font-size: 18px;
-    margin: 0;
-    color: #fff;
-    height: 1.5em;
-}
-
-#message-text {
-    font-size: 14px;
-    color: #ffcc00;
-    margin: 5px 0;
-    height: 3em; /* 複数行になっても崩れないように固定 */
-}
-
-#level-area {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* 右側：コマンドボタン */
+/* 右側：コマンドパネル */
 #command-panel {
-    width: 130px;
+    width: 120px;
     display: flex;
-    align-items: flex-end; /* 右下に配置 */
+    align-items: flex-end; /* ボタンを下（右下）に配置 */
     justify-content: center;
     padding-left: 10px;
 }
 
 #attack-button {
     width: 100%;
-    height: 50px; /* タップしやすいサイズ */
+    height: 50px;
     background-color: #cc0000;
     color: white;
     font-weight: bold;
     border: 2px solid #fff;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 #attack-button:active { background-color: #ff0000; }
-#attack-button:disabled { background-color: #555; cursor: not-allowed; }
+#attack-button:disabled { background-color: #555; }
 
-/* --- 4. 演出アニメーション --- */
+/* 5. 演出アニメーション */
 #damage-effect {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #ff4444;
-    font-size: 30px;
-    font-weight: bold;
-    opacity: 0;
-    pointer-events: none;
+    position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+    color: #ff4444; font-size: 30px; font-weight: bold; opacity: 0; pointer-events: none;
 }
-
 .damage-animation { animation: bounce-up 0.6s ease-out; }
 @keyframes bounce-up {
     0% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -50px); }
+    100% { opacity: 0; transform: translate(-50%, -40px); }
 }
-
 .shake-animation { animation: shake 0.2s; }
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
