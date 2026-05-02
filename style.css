@@ -10,6 +10,11 @@ html, body {
     font-family: sans-serif;
 }
 
+#monster-sprite, #player-sprite {
+    width: 100px;  /* 画像の横幅を好きなサイズに固定 */
+    height: auto;   /* 高さは自動で調整 */
+}
+
 #game-container {
     width: 100%;
     height: 100%;
