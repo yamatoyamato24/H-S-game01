@@ -10,14 +10,6 @@ html, body {
     font-family: sans-serif;
 }
 
-#monster-sprite, #player-sprite {
-    width: 120px;       /* 好きな横幅（px）に調整してください */
-    height: 120px;      /* 縦幅も指定して正方形に揃えると安定します */
-    object-fit: contain; /* 縦横比を保ったまま枠に収める魔法の言葉 */
-    display: block;      /* 余計な隙間を消す設定 */
-    margin: 0 auto;     /* 真ん中に寄せる */
-}
-
 #game-container {
     width: 100%;
     height: 100%;
@@ -78,28 +70,27 @@ html, body {
 
 /* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
-    z-index: 10;       /* 確実に格子の手前に出す */
+    position: relative;
+    z-index: 100;      /* 格子より絶対に手前に出す */
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 50px; /* 位置をグッと上に持ち上げる */
+    margin-bottom: 70px; /* ここを大きくすると二人とも上に上がります */
 }
 
 /* 2. 左側：敵モンスターの設定 */
 #monster-sprite {
-    width: 100px;       /* 敵を少し大きく（お好みで120pxなどに調整） */
+    width: 150px;      /* 敵を大きくしました */
     height: auto;
-    object-fit: contain;
-    /* 影をつけて格子から浮き上がらせる */
-    filter: drop-shadow(0 0 10px rgba(0,0,0,1));
+    margin-bottom: -20px; /* 【重要】画像の下の隙間を削ってゲージに近づける */
+    filter: drop-shadow(0 0 10px rgba(0,0,0,1)); /* 線と重なっても見やすく */
 }
 
 /* 3. 右側：自分のキャラの設定 */
 #player-sprite {
-    width: 150px;       /* でかすぎる場合はここを120pxなどに小さくする */
+    width: 140px;      /* 自分を少しコンパクトに */
     height: auto;
-    object-fit: contain;
-    /* 影をつけて格子から浮き上がらせる */
+    margin-top: -100px; /* 【重要】頭の上の余白を削って、グッと上に引っ張り上げる */
     filter: drop-shadow(0 0 10px rgba(0,0,0,1));
 }
 
@@ -108,10 +99,10 @@ html, body {
     width: 80px;
     height: 10px;
     background-color: #444;
-    margin: 5px auto;
     border-radius: 5px;
     overflow: hidden;
-    z-index: 11;       /* ゲージも格子の手前に出す */
+    position: relative;
+    z-index: 101;      /* ゲージも格子の手前に */
 }
 
 /* 3. 下画面：全体を「田の字」4等分にする設定 */
