@@ -79,7 +79,7 @@ html, body {
 /* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
     z-index: 10;      /* 格子（z-index: 1）よりも大きな数字にして手前に出す */
-    margin-bottom: 40px; /* 数字を大きくして、キャラを上に持ち上げる（お好みで調整） */
+    margin-bottom: 10px; /* 数字を大きくして、キャラを上に持ち上げる（お好みで調整） */
     position: relative; /* z-indexを有効にするために必要です */
     display: flex;
     flex-direction: column;
