@@ -81,11 +81,26 @@ html, body {
 
 /* 右側：コマンドパネル */
 #command-panel {
-    width: 120px;
-    display: flex;
-    align-items: flex-end; /* ボタンを下（右下）に配置 */
-    justify-content: center;
+    flex: 1; /* 左側(info)と右側(command)で画面を分け合う */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 横に2つ並べる */
+    grid-template-rows: 1fr 1fr;    /* 縦に2つ並べる */
+    gap: 8px; /* ボタン同士の隙間 */
     padding-left: 10px;
+}
+
+/* 全てのボタン共通の設定 */
+#command-panel button {
+    width: 100%;
+    height: 100%; /* 4等分の枠いっぱいに広げる */
+    background-color: #cc0000;
+    color: white;
+    font-size: 14px; /* 4つ並ぶので少し文字を小さく */
+    font-weight: bold;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0; /* 中の余白をリセット */
 }
 
 #attack-button {
@@ -117,4 +132,10 @@ html, body {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-10px); }
     75% { transform: translateX(10px); }
+}
+
+/* 空きスロットの見た目（開発中のガイドとして） */
+.empty-slot {
+    border: 1px dashed #444; /* 点線の枠 */
+    border-radius: 5px;
 }
