@@ -78,10 +78,20 @@ html, body {
 
 /* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
-    z-index: 10;
-    margin-bottom: 10px;
-    /* キャラに影をつけて地面に馴染ませる */
-    filter: drop-shadow(0 10px 5px rgba(0,0,0,0.8));
+    z-index: 10;      /* 格子（z-index: 1）よりも大きな数字にして手前に出す */
+    margin-bottom: 40px; /* 数字を大きくして、キャラを上に持ち上げる（お好みで調整） */
+    position: relative; /* z-indexを有効にするために必要です */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* もし画像（img）を使っている場合のサイズと影の調整 */
+#monster-sprite, #player-sprite {
+    width: 100px;
+    height: auto;
+    /* キャラに影をつけて、格子より浮いている感じを出す（任意） */
+    filter: drop-shadow(0 0 5px rgba(0,0,0,1)); 
 }
 
 /* 3. 下画面：全体を「田の字」4等分にする設定 */
