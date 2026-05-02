@@ -65,6 +65,7 @@ html, body {
     left: 50%;
     width: 400%;   /* 傾けた時に端が切れないよう横長に */
     height: 100%;  /* 十分な長さを確保 */
+    background-position: center top;
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
