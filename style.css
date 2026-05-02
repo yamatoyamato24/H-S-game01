@@ -59,7 +59,7 @@ html, body {
 
 /* 4. 下画面：操作パネル（高さを固定してボタンを保護） */
 #ui-container {
-    height: 160px; /* ここの高さを固定することでボタンが隠れないようにします */
+    height: 180px; /* ここの高さを固定することでボタンが隠れないようにします */
     display: flex;
     background-color: #222;
     padding: 10px;
@@ -67,12 +67,13 @@ html, body {
 }
 
 #info-panel {
-    flex: 1;
+    width: 60%; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-right: 1px solid #444;
+    border-right: 2px solid #444;
     padding-right: 10px;
+    box-sizing: border-box;
 }
 
 #monster-name { font-size: 16px; margin: 0; }
@@ -81,12 +82,13 @@ html, body {
 
 /* 右側：コマンドパネル */
 #command-panel {
-    flex: 1; /* 左側(info)と右側(command)で画面を分け合う */
+    width: 40%;
     display: grid;
     grid-template-columns: 1fr 1fr; /* 横に2つ並べる */
     grid-template-rows: 1fr 1fr;    /* 縦に2つ並べる */
-    gap: 8px; /* ボタン同士の隙間 */
+    gap: 5px; /* ボタン同士の隙間 */
     padding-left: 10px;
+    box-sizing: border-box;
 }
 
 /* 全てのボタン共通の設定 */
@@ -95,12 +97,13 @@ html, body {
     height: 100%; /* 4等分の枠いっぱいに広げる */
     background-color: #cc0000;
     color: white;
-    font-size: 14px; /* 4つ並ぶので少し文字を小さく */
+    font-size: 12px; /* 4つ並ぶので少し文字を小さく */
     font-weight: bold;
     border: 2px solid #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 0; /* 中の余白をリセット */
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #attack-button {
@@ -137,5 +140,5 @@ html, body {
 /* 空きスロットの見た目（開発中のガイドとして） */
 .empty-slot {
     border: 1px dashed #444; /* 点線の枠 */
-    border-radius: 5px;
+    border-radius: 4px;
 }
