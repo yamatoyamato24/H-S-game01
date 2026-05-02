@@ -47,9 +47,11 @@ html, body {
     left: 0;
     width: 100%;
     height: 60%; /* 上から60%までの範囲 */
+    /* 背景の中心を画面の真ん中(50%)に固定します */
+    background-position: center bottom; 
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
     background-size: 80px 80px; 
     border-bottom: 2px solid #fff; /* 境界線を白くハッキリ */
     z-index: 1; /* 黒い背景より上に */
@@ -59,14 +61,14 @@ html, body {
 #battle-field::before {
     content: "";
     position: absolute;
- top: 60%;      /* 壁の格子が終わる位置（60%）から始める */
+    top: 60%;      /* 壁の格子が終わる位置（60%）から始める */
     left: 50%;
     width: 400%;   /* 傾けた時に端が切れないよう横長に */
     height: 100%;  /* 十分な長さを確保 */
     background-image: 
         linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
-    background-size: 80px 100px; 
+    background-size: 80px 100px; /* 横幅を上と同じ80pxに */
     
     /* 遠近感の設定：中心（50%）を軸に、手前へ倒す */
     transform: translateX(-50%) perspective(150px) rotateX(60deg);
