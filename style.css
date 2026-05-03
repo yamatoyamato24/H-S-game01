@@ -71,26 +71,28 @@ html, body {
 /* キャラクターが格子の後ろに隠れないようにする */
 .character-side {
     position: relative;
-    z-index: 100;      /* 格子より絶対に手前に出す */
+    z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 30px; /* ここを大きくすると二人とも上に上がります */
+    margin-bottom: 20px; /* 足元の位置調整 */
+    /* 遠近感の影響をリセットし、常に同じ大きさに見えるようにする */
+    transform: perspective(none) rotateX(0deg) !important;
 }
 
 /* 2. 左側：敵モンスターの設定 */
 #monster-sprite {
-    width: 120px;      /* 敵を大きくしました */
-    transform: scale(1.5); /* 1.5倍にする */
-    transform-origin: bottom; /* 足元を基準に大きくする */
+    width: 200px !important; /* 思い切って大きく */
+    height: auto !important;
+    transform: scale(1.2);    /* それでも小さければここを 1.5 などに */
+    margin-bottom: 0px;
 }
 
 /* 3. 右側：自分のキャラの設定 */
 #player-sprite {
-    width: 120px;      /* 自分を少しコンパクトに */
-    height: auto;
-    filter: drop-shadow(0 0 10px rgba(0,0,0,1));
-    margin-top: 0;  /* 強制的な引っ張り上げを解除 */
+    width: 150px !important; /* 敵より少し小さめに設定 */
+    height: auto !important;
+    margin-top: 0 !important;
 }
 
 /* 敵キャラの下のHPゲージも一緒に上に移動するように調整 */
