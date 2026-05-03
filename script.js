@@ -20,7 +20,32 @@ const expText = document.getElementById('exp-text');
 const monsterNameText = document.getElementById('monster-name');
 const monsterSprite = document.getElementById('monster-sprite');
 const damageEffect = document.getElementById('damage-effect');
-const enemySide = document.getElementById('enemy-side');
+const playerSprite = document.getElementById('player-sprite');
+
+// モンスター出現の処理を関数として独立させる（最初も次もこれを呼ぶ）
+function spawnMonster() {
+    const randomIndex = Math.floor(Math.random() * monsters.length);
+    currentMonster = monsters[randomIndex];
+    
+    monsterNameText.innerText = currentMonster.name + "があらわれた！";
+    if (monsterSprite) {
+        monsterSprite.src = currentMonster.sprite;
+        // JSでのサイズ・余白指定を削除し、すべてCSSに任せる（スッキリ！）
+        monsterSprite.style.width = ""; 
+        monsterSprite.style.height = "";
+        monsterSprite.style.marginBottom = ""; 
+    }
+    
+    monsterHP = 100;
+    if (hpBarFill) hpBarFill.style.width = "100%";
+    attackButton.disabled = false;
+}
+
+
+
+
+// ゲーム起動時に1回実行して、最初の敵をランダムにセットする
+spawnMonster();
 
 attackButton.onclick = function() {
     let currentPower = attackPower + (level - 1) * 2;
@@ -29,21 +54,39 @@ attackButton.onclick = function() {
     monsterHP -= damage;
     if (monsterHP < 0) { monsterHP = 0; }
 
-    // 演出（ダメージ数字と揺れ）
+    // 演出：ダメージ数字
     if (damageEffect) {
         damageEffect.innerText = "-" + damage;
         damageEffect.classList.remove('damage-animation');
         void damageEffect.offsetWidth; 
         damageEffect.classList.add('damage-animation');
     }
-    if (enemySide) {
-        enemySide.classList.remove('shake-animation');
-        void enemySide.offsetWidth;
-        enemySide.classList.add('shake-animation');
+
+    // 演出：プレイヤーを揺らす（画像側にアニメーションを適用）
+    if (playerSprite) {
+        playerSprite.classList.remove('player-shake-effect');
+        void playerSprite.offsetWidth; 
+        playerSprite.classList.add('player-shake-effect');
     }
 
-    // 画面更新
-    if (hpBarFill) hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
+    const hit = document.createElement('div');
+    hit.className = 'hit-effect';
+    
+    // 敵キャラの中央付近に表示されるように調整
+    const enemyRect = monsterSprite.getBoundingClientRect();
+    const fieldRect = document.getElementById('battle-field').getBoundingClientRect();
+    
+    hit.style.left = (enemyRect.left - fieldRect.left + enemyRect.width / 2 - 50) + 'px';
+    hit.style.top = (enemyRect.top - fieldRect.top + enemyRect.height / 2 - 50) + 'px';
+    
+    document.getElementById('battle-field').appendChild(hit);
+
+    setTimeout(() => { hit.remove(); }, 300);
+
+    // HPバーの更新
+    if (hpBarFill) {
+        hpBarFill.style.width = (monsterHP / maxHP) * 100 + "%";
+    }
     messageText.innerText = damage + " のダメージを与えた！";
 
     // モンスターを倒したか判定
@@ -61,14 +104,7 @@ attackButton.onclick = function() {
         expText.innerText = exp;
         attackButton.disabled = true;
 
-        setTimeout(function() {
-            const randomIndex = Math.floor(Math.random() * monsters.length);
-            currentMonster = monsters[randomIndex];
-            monsterNameText.innerText = currentMonster.name + "があらわれた！";
-            if (monsterSprite) monsterSprite.src = currentMonster.sprite;
-            monsterHP = 100;
-            if (hpBarFill) hpBarFill.style.width = "100%";
-            attackButton.disabled = false;
-        }, 1500);
+        // 次のモンスターを出す
+        setTimeout(spawnMonster, 1500);
     }
-}; // ← ここで onclick の動作が全部終わる（これが大事！）
+};
