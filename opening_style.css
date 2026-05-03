@@ -15,7 +15,7 @@ body {
 .opening-container {
     width: 100%;
     max-width: 450px;
-    height: 100vh;
+    height: 100dvh;
     background: linear-gradient(to bottom, #000 0%, #222 100%);
     display: flex;
     flex-direction: column;

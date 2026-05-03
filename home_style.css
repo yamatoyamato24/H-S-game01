@@ -21,7 +21,7 @@ h1, h2, p, span {
 .game-screen-container {
     width: 100%;
     max-width: 450px;
-    height: 100vh;
+    height: 100dvh;
     position: relative;
     background-color: #1a1a1a; /* 背景画像がない時の色 */
     display: flex;
@@ -44,7 +44,7 @@ body::before {
 .home-container {
     width: 100%;
     max-width: 450px;
-    height: 100vh; /* 高さを画面ぴったりに固定 */
+    height: 100dvh; /* 高さを画面ぴったりに固定 */
     position: relative; /* これが重要！中の絶対配置の基準になります */
     overflow: hidden;   /* はみ出たものを隠してスクロールを禁止する */
     display: flex;
