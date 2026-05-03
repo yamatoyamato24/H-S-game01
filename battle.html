@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>バトル画面</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="battle_style.css">
 </head>
 <body>
 <div id="game-container">
@@ -19,6 +19,9 @@
         <div class="character-side" id="player-side">
             <img src="assets/player.png" id="player-sprite" alt="プレイヤー">
         </div>
+            <button id="home-return-button" onclick="location.href='home.html'" style="display: none;">
+        拠点へ戻る
+    </button>
     </div>
     <div id="ui-container">
         <!-- 1. 左上：モンスター名とログ -->
@@ -41,6 +44,6 @@
             <button id="attack-button">攻撃</button>
     </div>
 </div>
-<script src="script.js"></script>
+<script src="battle.js"></script>
 </body>
 </html>

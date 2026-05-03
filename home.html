@@ -2,19 +2,36 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム拠点</title>
     <link rel="stylesheet" href="home_style.css">
 </head>
 <body>
+    <!-- クラス名を home-container にするとCSSのサイズ設定が効きます -->
     <div class="home-container">
+        <!-- ★追加：右上の設定ボタン -->
+        <div id="home-menu-wrapper">
+            <button id="gear-button">⚙️</button>
+            <!-- 初期状態は隠しておくメニュー -->
+            <div id="home-menu-list" style="display: none;">
+                <button onclick="location.href='opening.html'">タイトルへ戻る</button>
+                <p style="font-size: 10px; color: #888;">(追加予定の項目...)</p>
+            </div>
+        </div>
         <h2>拠点</h2>
-        
         <div class="player-preview">
-            <img src="assets/player.png" style="width: 150px; filter: drop-shadow(0 0 5px rgb(255, 255, 255));">
+            <img src="assets/player.png" style="width: 120px; filter: drop-shadow(0 0 10px gold);">
+        </div>
+
+        <div class="status-window">
+            <p>レベル: <span id="home-level">1</span></p>
+            <p>攻撃力: <span id="home-atk">10</span></p>
         </div>
 
         <button class="battle-start-btn" onclick="location.href='battle.html'">
-            戦場へ向かう
+            出撃する
         </button>
     </div>
+    <script src="home.js"></script>
 </body>
+</html>

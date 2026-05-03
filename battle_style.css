@@ -1,0 +1,267 @@
+/* 1. 画面全体の設定 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    color: white;
+    font-family: sans-serif;
+}
+
+/* 上画面の右上にボタンを浮かせる設定 */
+#home-return-button {
+    position: absolute; /* 親要素(#battle-field)を基準に配置 */
+    top: 10px;          /* 上から10px */
+    right: 10px;        /* 右から10px */
+    z-index: 1000;      /* キャラクターよりも手前に出す */
+    
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.7); /* 少し透けた黒 */
+    color: #ffcc00;     /* ハクスラらしい金文字 */
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#home-return-button:hover {
+    background-color: #ffcc00;
+    color: #000;
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. 上画面：バトルフィールド */
+#battle-field {
+    flex: 1.5;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end; /* キャラを地面に立たせる */
+    position: relative;
+    padding-bottom: 20px;
+    overflow: hidden;
+    background-color: #000; /* 背景は真っ黒 */
+}
+
+/* 打撃エフェクトの本体 */
+.hit-effect {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-image: radial-gradient(circle, #ffffff 40%, #ff0000 80%, transparent 70%);
+    pointer-events: none; /* クリックの邪魔をしない */
+    z-index: 999;
+    animation: hit-anim 0.3s ease-out forwards;
+    mix-blend-mode: screen; /* 発光しているような効果 */
+}
+
+@keyframes hit-anim {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+
+/* 1. 【上画面】垂直な格子状（壁のような背景） */
+#battle-field::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%; /* 上から60%までの範囲 */
+    /* 背景の中心を画面の真ん中(50%)に固定します */
+    background-position: calc(50% - 0.5px) bottom; 
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 80px 80px; 
+    border-bottom: 2px solid #fff; /* 境界線を白くハッキリ */
+    z-index: 1; /* 黒い背景より上に */
+}
+
+/* 2. 【下画面】奥行きのある格子（地面） */
+#battle-field::before {
+    content: "";
+    position: absolute;
+    top: 60%;      /* 壁の格子が終わる位置（60%）から始める */
+    left: 50%;
+    /* 150pxだった遠近感を少し弱めて、ズレを抑えます */
+    transform: translateX(-50%) perspective(200px) rotateX(60deg);
+    width: 500%;   /* 傾けた時に端が切れないよう横長に */
+    height: 100%;  /* 十分な長さを確保 */
+    background-position: center top;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 80px 100px; /* 横幅を上と同じ80pxに */
+    transform-origin: top; /* 境目を起点にして倒すことで、隙間をなくす */
+    z-index: 1; /* 黒い背景より上に */
+}
+
+/* キャラクターが格子の後ろに隠れないようにする */
+.character-side {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px; /* 足元の位置調整 */
+    /* 遠近感の影響をリセットし、常に同じ大きさに見えるようにする */
+    transform: perspective(none) rotateX(0deg) !important;
+}
+
+/* 2. 左側：敵モンスターの設定 */
+#monster-sprite {
+    width: 120px !important; /* 少し大きくしました */
+    height: 120px !important;
+    object-fit: contain;
+    object-position: bottom; /* どんな画像も下端に合わせる */
+    margin-bottom: 5px;      /* バーとの絶妙な隙間 */
+    display: block;
+}
+
+/* --- プレイヤーが揺れるように修正 --- */
+/* 枠(side)ではなく、画像(sprite)にアニメーションをかけます */
+.player-shake-effect {
+    animation: shake-player-anim 0.2s ease-in-out;
+}
+
+/* 3. 右側：自分のキャラの設定 */
+#player-sprite {
+    width: 40px !important;   /* 数値を小さくして、手前でも巨大化しないようにしました */
+    max-width: 25vw;
+    height: auto !important;
+    margin-top: 0 !important;
+    z-index: 20;
+}
+
+/* 敵キャラの下のHPゲージも一緒に上に移動するように調整 */
+.hp-bar-container {
+    width: 100px; /* バーを少し長くして見やすく */
+    height: 12px;
+    background-color: #444;
+    border: 1px solid #000; /* 縁取り */
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* HPバーの中身（実際に減る赤い部分） */
+#hp-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: #ff0000; /* ここで赤色を指定 */
+    transition: width 0.2s ease-out;
+}
+
+/* 3. 下画面：全体を「田の字」4等分にする設定 */
+#ui-container {
+    height: 200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 横2等分 */
+    grid-template-rows: 1fr 1fr;    /* 縦2等分 */
+    background-color: #222;
+    border-top: 2px solid #fff;
+}
+
+/* 4つの枠（スロット）共通の見た目 */
+.ui-slot {
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* 攻撃ボタンの設定（枠いっぱいに広げる） */
+#attack-button {
+    width: 100%;
+    height: 100%;
+    background-color: #cc0000;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+#attack-button:active { background-color: #ff0000; }
+#attack-button:disabled { background-color: #555; }
+
+/* 空きスロットのデザイン */
+.empty-slot {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    border: 1px dashed #555;
+    color: #555;
+    font-size: 12px;
+}
+
+#enemy-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 左右中央に */
+    justify-content: flex-end; /* 下に寄せる */
+    margin-bottom: 70px; /* 地面との位置調整 */
+}
+
+#player-side {
+    margin-bottom: 30px; /* 数値を小さくすると手前（下）に来ます */
+}
+
+/* テキスト類の調整 */
+#monster-name { font-size: 16px; margin: 0; }
+#message-text { font-size: 12px; color: #ffcc00; margin: 5px 0; text-align: center; }
+#level-area p { margin: 2px 0; font-size: 14px; text-align: center; }
+
+/* 4. 演出アニメーション（変更なし） */
+#damage-effect { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #ff4444; font-size: 30px; font-weight: bold; opacity: 0; pointer-events: none; }
+.damage-animation { animation: bounce-up 0.6s ease-out; }
+@keyframes bounce-up { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -40px); } }
+.shake-animation { animation: shake 0.2s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+/* 画面幅が480px以下（主にスマホ）の場合の設定 */
+@media screen and (max-width: 480px) {
+    #monster-sprite {
+        width: 120px !important; /* スマホで見やすいサイズに微調整 */
+    }
+    #player-sprite {
+        width: 70px !important;  /* スマホで見やすいサイズに微調整 */
+    }
+    .character-side {
+        margin-bottom: 20px;     /* 地面の高さもスマホ用に微調整 */
+    }
+}
+
+/* プレイヤーを揺らすアニメーション */
+.player-shake {
+    animation: shake-player 0.2s ease-in-out;
+}
+
+@keyframes shake-player {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-15px); } /* 少し大きめに揺らします */
+    75% { transform: translateX(15px); }
+}
+
+@keyframes shake-player-anim {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-15px); }
+    75% { transform: translateX(15px); }
+}

@@ -4,17 +4,31 @@
 body {
     margin: 0;
     padding: 0;
-    height: 100vh;
-    width: 100vw;
-    display:flex;
-    justify-content: center; /* 左右中央に寄せる */
-    overflow: hidden;
-    background-color: #1a1a1a; /* 画像がない時の予備色 */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #000; /* 枠の外は真っ黒 */
+    color: white;           /* ★全ての文字を白に固定 */
+    display: flex;
+    justify-content: center;
     font-family: sans-serif;
-    color: white;
+}
+
+/* 文字を絶対に見えるようにする */
+h1, h2, p, span {
+    color: white !important;
+    z-index: 10;
+}
+
+/* ★これを使えばどの画面もスマホサイズになります */
+.game-screen-container {
+    width: 100%;
+    max-width: 450px;
+    height: 100vh;
+    position: relative;
+    background-color: #1a1a1a; /* 背景画像がない時の色 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid #333;
 }
 
 /* 2. 背景を少し暗くするオーバーレイ */
@@ -26,22 +40,46 @@ body::before {
     z-index: 0;
 }
 
-/* 3. コンテンツの配置 */
+/* 既存の .home-container を少し修正 */
 .home-container {
     width: 100%;
-    max-width: 450px; /* ここで横幅を制限 */
-    height: 100%;
-    position: relative;
-    background-image: url('assets/home_bg01.png'); /* 背景画像はここに入れる */
-    background-size: cover;
-    background-position: center;
+    max-width: 450px;
+    height: 100vh; /* 高さを画面ぴったりに固定 */
+    position: relative; /* これが重要！中の絶対配置の基準になります */
+    overflow: hidden;   /* はみ出たものを隠してスクロールを禁止する */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     box-sizing: border-box;
-    border-left: 1px solid #333; /* 境界線を薄く入れるとPCで綺麗 */
-    border-right: 1px solid #333;
+}
+
+/* 歯車の配置を「絶対配置」にして浮かせます */
+#home-menu-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* 一番手前に出す */
+    text-align: right;
+}
+
+#gear-button {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+#home-menu-list {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid #555;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    width: 120px;
 }
 
 /* 3. 背景を少し暗くする（容器の中だけ） */
@@ -53,10 +91,10 @@ body::before {
     z-index: 0;
 }
 
-/* 4. 中身（文字やボタン）を前面に */
-h2, .player-preview, .battle-start-btn {
+/* 4. 中身（文字やボタン）を前面に。ここを強化します */
+h2, .player-preview, .battle-start-btn, .status-window {
     position: relative;
-    z-index: 1;
+    z-index: 10 !important; /* 暗い膜(z-index:0)より確実に手前に出す */
 }
 
 /* 5. 出撃ボタン */
@@ -74,4 +112,21 @@ h2, .player-preview, .battle-start-btn {
 
 .battle-start-btn:active {
     transform: scale(0.95);
+}
+
+/* ステータスを表示する枠の設定（文字を確実に見せる） */
+.status-window {
+    background: rgba(0, 0, 0, 0.6); /* 数字の後ろを少し暗くして読みやすくする */
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    text-align: center;
+    width: 60%;
+}
+
+.status-window p {
+    margin: 5px 0;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #ffffff !important; /* 絶対に白 */
 }

@@ -1,0 +1,117 @@
+/* opening_style.css */
+
+/* 1. 全体の土台（home_style.cssと共通の考え方） */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-family: 'serif', sans-serif;
+}
+
+/* 2. スマホサイズの容器（battle画面やhome画面と統一） */
+.opening-container {
+    width: 100%;
+    max-width: 450px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #000 0%, #222 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* 上下に要素を分散 */
+    padding: 60px 20px;
+    box-sizing: border-box;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+/* 3. タイトルロゴ風の文字 */
+.title-logo {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.title-logo h1 {
+    font-size: 3rem;
+    margin: 0;
+    color: #cc0000; /* ハクスラらしい赤 */
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5), 2px 2px 2px #fff;
+    letter-spacing: 5px;
+}
+
+.title-logo p {
+    font-size: 1rem;
+    color: #888;
+    margin-top: 10px;
+}
+
+/* 4. スタートボタン */
+.start-button {
+    width: 100%;
+    max-width: 250px;
+    padding: 20px;
+    background-color: transparent;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: 2px solid white;
+    border-radius: 50px; /* 丸みのあるボタン */
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 100px;
+}
+
+/* ボタンにマウスを乗せた時（またはタップした時）の光る演出 */
+.start-button:hover, .start-button:active {
+    background-color: white;
+    color: black;
+    box-shadow: 0 0 30px white;
+}
+
+/* 右上のメニュー全体の配置 */
+#home-menu-wrapper {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+    text-align: right;
+}
+
+/* 歯車ボタン */
+#gear-button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-size: 24px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* メニューリスト */
+#home-menu-list {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #fff;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+    width: 120px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#home-menu-list button {
+    width: 100%;
+    background: #444;
+    color: white;
+    border: none;
+    padding: 8px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#home-menu-list button:hover {
+    background: #666;
+}
