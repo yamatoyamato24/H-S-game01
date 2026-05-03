@@ -75,23 +75,22 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 70px; /* ここを大きくすると二人とも上に上がります */
+    margin-bottom: 30px; /* ここを大きくすると二人とも上に上がります */
 }
 
 /* 2. 左側：敵モンスターの設定 */
 #monster-sprite {
-    width: 150px;      /* 敵を大きくしました */
-    height: auto;
-    margin-bottom: -20px; /* 【重要】画像の下の隙間を削ってゲージに近づける */
-    filter: drop-shadow(0 0 10px rgba(0,0,0,1)); /* 線と重なっても見やすく */
+    width: 120px;      /* 敵を大きくしました */
+    transform: scale(1.5); /* 1.5倍にする */
+    transform-origin: bottom; /* 足元を基準に大きくする */
 }
 
 /* 3. 右側：自分のキャラの設定 */
 #player-sprite {
-    width: 140px;      /* 自分を少しコンパクトに */
+    width: 120px;      /* 自分を少しコンパクトに */
     height: auto;
-    margin-top: -100px; /* 【重要】頭の上の余白を削って、グッと上に引っ張り上げる */
     filter: drop-shadow(0 0 10px rgba(0,0,0,1));
+    margin-top: 0;  /* 強制的な引っ張り上げを解除 */
 }
 
 /* 敵キャラの下のHPゲージも一緒に上に移動するように調整 */
