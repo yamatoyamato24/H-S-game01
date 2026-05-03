@@ -75,7 +75,7 @@ body {
     position: absolute;
     top: 15px;
     right: 15px;
-    z-index: 100;
+    z-index: 1000;
     text-align: right;
 }
 
@@ -114,4 +114,17 @@ body {
 
 #home-menu-list button:hover {
     background: #666;
+}
+
+#home-menu-wrapper {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+}
+
+/* リセットボタンを目立たせる（任意） */
+#reset-button {
+    background-color: #aa0000 !important;
+    border-radius: 3px;
 }

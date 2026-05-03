@@ -7,9 +7,17 @@
     <link rel="stylesheet" href="opening_style.css">
     <!-- <style>タグの中身は opening_style.css に移したので削除してスッキリさせました -->
 </head>
-<body>
+<body>    
     <!-- クラス名を opening-container に変更してCSSと連動させます -->
     <div class="opening-container">
+        <!-- ★ここから追加：歯車メニューのHTML -->
+        <div id="home-menu-wrapper">
+            <button id="gear-button">⚙</button>
+            <div id="home-menu-list" style="display: none;">
+                <button id="reset-button">データリセット</button>
+        </div>
+    </div>
+    
         <div class="title-logo">
             <h1>練習用冒険</h1>
             <p>~ はじまりの地 ~</p>
@@ -19,5 +27,9 @@
             冒険を始める
         </button>
     </div>
+
+    <!-- リセット処理用のスクリプトを追加 -->
+    <script src="opening.js"></script>
+
 </body>
 </html>
