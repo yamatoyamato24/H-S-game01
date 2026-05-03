@@ -82,15 +82,17 @@ html, body {
 
 /* 2. 左側：敵モンスターの設定 */
 #monster-sprite {
-    width: 200px !important; /* 思い切って大きく */
+    width: 25vw !important;  /* 画面幅の25%に固定（px指定より安定します） */
+    max-width: 120px;        /* 大きくなりすぎない上限 */
     height: auto !important;
-    transform: scale(1.2);    /* それでも小さければここを 1.5 などに */
-    margin-bottom: 0px;
+    transform: scale(1) !important; /* scaleは一旦1に戻して基準を作ります */
+    margin-bottom: 0;
 }
 
 /* 3. 右側：自分のキャラの設定 */
 #player-sprite {
-    width: 150px !important; /* 敵より少し小さめに設定 */
+    width: 20vw !important;  /* 敵(25vw)より小さい20vwに設定 */
+    max-width: 100px;        /* 大きくなりすぎない上限 */
     height: auto !important;
     margin-top: 0 !important;
 }
