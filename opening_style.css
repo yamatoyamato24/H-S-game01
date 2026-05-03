@@ -128,3 +128,48 @@ body {
     background-color: #aa0000 !important;
     border-radius: 3px;
 }
+
+/* モーダルの背景（画面全体を覆う） */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* ポップアップの箱 */
+.modal-content {
+    background: #222;
+    padding: 20px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+}
+
+.modal-content h3 { color: #ff4444; margin-top: 0; }
+.modal-content p { font-size: 14px; margin-bottom: 20px; }
+
+/* ボタンの並び */
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+}
+
+#modal-cancel { background: #666; color: white; }
+#modal-confirm { background: #aa0000; color: white; }
