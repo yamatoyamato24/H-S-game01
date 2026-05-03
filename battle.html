@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バトル画面</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="game-container">
+    <div id="battle-field">
+        <div class="character-side" id="enemy-side">
+            <div id="damage-effect"></div>
+            <img src="assets/enemy.png" id="monster-sprite" alt="モンスター">
+            <div class="hp-bar-container">
+                <div id="hp-bar-fill"></div>
+            </div>
+        </div>
+        <div class="character-side" id="player-side">
+            <img src="assets/player.png" id="player-sprite" alt="プレイヤー">
+        </div>
+    </div>
+    <div id="ui-container">
+        <!-- 1. 左上：モンスター名とログ -->
+        <div class="ui-slot" id="log-slot">
+            <h1 id="monster-name">スライム</h1>
+            <p id="message-text">冒険開始！</p>
+        </div>
+
+        <!-- 2. 右上：将来の魔法ボタンなど（今は空き） -->
+        <div class="ui-slot empty-slot">（空き）</div>
+
+        <!-- 3. 左下：レベル情報 -->
+        <div class="ui-slot" id="level-slot">
+            <p>Lv: <span id="level-text">1</span></p>
+            <p>Exp: <span id="exp-text">0</span></p>
+        </div>
+
+        <!-- 4. 右下：メインコマンド -->
+        <div class="ui-slot">
+            <button id="attack-button">攻撃</button>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

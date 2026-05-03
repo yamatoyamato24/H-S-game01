@@ -1,0 +1,77 @@
+/* home_style.css */
+
+/* 1. 画面全体の設定 */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display:flex;
+    justify-content: center; /* 左右中央に寄せる */
+    overflow: hidden;
+    background-color: #1a1a1a; /* 画像がない時の予備色 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: sans-serif;
+    color: white;
+}
+
+/* 2. 背景を少し暗くするオーバーレイ */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 暗さの調整 */
+    z-index: 0;
+}
+
+/* 3. コンテンツの配置 */
+.home-container {
+    width: 100%;
+    max-width: 450px; /* ここで横幅を制限 */
+    height: 100%;
+    position: relative;
+    background-image: url('assets/home_bg01.png'); /* 背景画像はここに入れる */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    box-sizing: border-box;
+    border-left: 1px solid #333; /* 境界線を薄く入れるとPCで綺麗 */
+    border-right: 1px solid #333;
+}
+
+/* 3. 背景を少し暗くする（容器の中だけ） */
+.home-container::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+/* 4. 中身（文字やボタン）を前面に */
+h2, .player-preview, .battle-start-btn {
+    position: relative;
+    z-index: 1;
+}
+
+/* 5. 出撃ボタン */
+.battle-start-btn {
+    width: 80%;
+    padding: 20px;
+    background: linear-gradient(to bottom, #cc0000, #800000);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.battle-start-btn:active {
+    transform: scale(0.95);
+}
