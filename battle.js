@@ -45,7 +45,13 @@ function spawnMonster() {
         monsterSprite.style.width = ""; 
         monsterSprite.style.height = "";
         monsterSprite.style.marginBottom = ""; 
+
+        // ★ここから追加：アニメーションを再生させる処理
+        monsterSprite.classList.remove('enemy-appear'); // 一旦リセット
+        void monsterSprite.offsetWidth;                // 再描画（おまじない）
+        monsterSprite.classList.add('enemy-appear');    // アニメーション開始！
     }
+
     
     monsterHP = 100;
     if (hpBarFill) hpBarFill.style.width = "100%";

@@ -265,3 +265,20 @@ html, body {
     25% { transform: translateX(-15px); }
     75% { transform: translateX(15px); }
 }
+
+/* 登場アニメーションの定義（右からスライド） */
+@keyframes slide-in-enemy {
+    0% {
+        transform: translateX(300px); /* 画面の右外からスタート */
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);     /* 元の位置へ */
+        opacity: 1;
+    }
+}
+
+/* アニメーションを適用するクラス */
+.enemy-appear {
+    animation: slide-in-enemy 0.6s ease-out forwards;
+}
