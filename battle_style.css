@@ -269,7 +269,7 @@ html, body {
 /* 登場アニメーションの定義（右からスライド） */
 @keyframes slide-in-enemy {
     0% {
-        transform: translateX(-300px); /* 画面の右外からスタート */
+        transform: translateX(-300px); /* 画面の左外からスタート */
         opacity: 0;
     }
     100% {
