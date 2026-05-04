@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #000; /* 枠の外は真っ黒 */
+    background-image: url('assets/home_bg01.png');
     color: white;           /* ★全ての文字を白に固定 */
     display: flex;
     justify-content: center;
