@@ -8,7 +8,9 @@
 </head>
 <body>
 <div id="game-container">
+    <!-- 上半分：バトルフィールド -->
     <div id="battle-field">
+        <!-- 敵サイド -->
         <div class="character-side" id="enemy-side">
             <div id="damage-effect"></div>
             <img src="assets/enemy.png" id="monster-sprite" alt="モンスター">
@@ -16,33 +18,51 @@
                 <div id="hp-bar-fill"></div>
             </div>
         </div>
+
+        <!-- プレイヤーサイド -->
         <div class="character-side" id="player-side">
+            <div class="hp-bar-container">
+                <div id="player-hp-bar-fill" style="background-color: #0088ff; width: 100%;"></div>
+            </div>
             <img src="assets/player.png" id="player-sprite" alt="プレイヤー">
+            <div id="player-damage-effect"></div>
         </div>
-            <button id="home-return-button" onclick="location.href='home.html'" style="display: none;">
-        拠点へ戻る
-    </button>
+
+        <!-- 帰還ボタン（フィールド内に浮かせる） -->
+        <button id="home-return-button" onclick="location.href='home.html'" style="display: none;">
+            拠点へ戻る
+        </button>
     </div>
+
+    <!-- 下半分：UIコンテナ -->
     <div id="ui-container">
-        <!-- 1. 左上：モンスター名とログ -->
+        <!-- 1. 左上 -->
         <div class="ui-slot" id="log-slot">
-            <h1 id="monster-name">スライム</h1>
+            <h1 id="monster-name">モンスター</h1>
             <p id="message-text">冒険開始！</p>
         </div>
-
-        <!-- 2. 右上：将来の魔法ボタンなど（今は空き） -->
+        <!-- 2. 右上 -->
         <div class="ui-slot empty-slot">（空き）</div>
-
-        <!-- 3. 左下：レベル情報 -->
+        <!-- 3. 左下 -->
         <div class="ui-slot" id="level-slot">
             <p>Lv: <span id="level-text">1</span></p>
             <p>Exp: <span id="exp-text">0</span></p>
         </div>
-
-        <!-- 4. 右下：メインコマンド -->
+        <!-- 4. 右下 -->
         <div class="ui-slot">
             <button id="attack-button">攻撃</button>
+        </div>
     </div>
+    <!-- battle.html の game-container の中（最後の方）に追加 -->
+    <div id="gameover-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2 style="color: #ff0000;">GAME OVER</h2>
+            <p>力尽きてしまった...</p>
+            <button onclick="location.href='home.html'" style="padding: 10px 20px; cursor: pointer;">拠点へ戻る</button>
+        </div>
+    </div>
+
+
 </div>
 <script src="battle.js"></script>
 </body>

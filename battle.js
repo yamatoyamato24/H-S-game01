@@ -4,6 +4,9 @@ const maxHP = 100;
 let level = 1;
 let exp = 0;
 let attackPower = 10;
+let playerHP = 100;
+const maxPlayerHP = 100;
+let enemyAttackTimer = null; // タイマー保存用
 
 // 1. 【読み込み】保存データがあれば復元
 const savedData = localStorage.getItem('hacksla_data');
@@ -17,11 +20,12 @@ if (savedData) {
 }
 
 const monsters = [
-    { name: "クモ", exp: 30, sprite: "assets/enemy.png" },
-    { name: "おじさん", exp: 50, sprite: "assets/uncle.png" },
-    { name: "幽霊", exp: 70, sprite: "assets/ghost.png" },
-    { name: "無", exp: 150, sprite: "assets/nothing.png" }
+    { name: "クモ", exp: 30, sprite: "assets/enemy.png", speed: 1500 },     // 1.5秒（速い）
+    { name: "おじさん", exp: 50, sprite: "assets/uncle.png", speed: 4000 }, // 4秒（遅い）
+    { name: "幽霊", exp: 70, sprite: "assets/ghost.png", speed: 3000 },     // 3秒
+    { name: "無", exp: 150, sprite: "assets/nothing.png", speed: 2000 }      // 2秒
 ];
+
 let currentMonster = monsters[0];
 
 const hpBarFill = document.getElementById('hp-bar-fill');
@@ -34,33 +38,7 @@ const monsterSprite = document.getElementById('monster-sprite');
 const damageEffect = document.getElementById('damage-effect');
 const playerSprite = document.getElementById('player-sprite');
 
-// 2. 【共通関数】モンスター出現
-function spawnMonster() {
-    const randomIndex = Math.floor(Math.random() * monsters.length);
-    currentMonster = monsters[randomIndex];
-    
-    monsterNameText.innerText = currentMonster.name + "があらわれた！";
-    if (monsterSprite) {
-        monsterSprite.src = currentMonster.sprite;
-        monsterSprite.style.width = ""; 
-        monsterSprite.style.height = "";
-        monsterSprite.style.marginBottom = ""; 
-
-        // ★ここから追加：アニメーションを再生させる処理
-        monsterSprite.classList.remove('enemy-appear'); // 一旦リセット
-        void monsterSprite.offsetWidth;                // 再描画（おまじない）
-        monsterSprite.classList.add('enemy-appear');    // アニメーション開始！
-    }
-
-    
-    monsterHP = 100;
-    if (hpBarFill) hpBarFill.style.width = "100%";
-    attackButton.disabled = false;
-    // 次の敵が出たらボタンを隠す
-    if (homeReturnButton) homeReturnButton.style.display = "none";
-}
-
-// 3. 【共通関数】保存
+// 2. 【共通関数】保存
 function saveGameData() {
     const gameData = {
         level: level,
@@ -68,6 +46,84 @@ function saveGameData() {
         attackPower: attackPower
     };
     localStorage.setItem('hacksla_data', JSON.stringify(gameData));
+}
+
+// 敵の攻撃処理
+function enemyAttack() {
+    if (monsterHP <= 0 || playerHP <= 0) return; 
+
+    // 演出：敵が揺れる
+    monsterSprite.classList.remove('shake-animation');
+    void monsterSprite.offsetWidth;
+    monsterSprite.classList.add('shake-animation');
+
+    // プレイヤーへのダメージ計算
+    let damage = Math.floor(Math.random() * 11) + 5;
+    playerHP -= damage;
+    if (playerHP < 0) playerHP = 0;
+
+    // プレイヤーHPバー更新
+    document.getElementById('player-hp-bar-fill').style.width = (playerHP / maxPlayerHP) * 100 + "%";
+    
+    // プレイヤーダメージ数字演出
+    const pDamageEffect = document.getElementById('player-damage-effect');
+    if (pDamageEffect) {
+        pDamageEffect.innerText = "-" + damage;
+        pDamageEffect.classList.remove('damage-animation');
+        void pDamageEffect.offsetWidth;
+        pDamageEffect.classList.add('damage-animation');
+    }
+
+    messageText.innerText = currentMonster.name + " の攻撃！ " + damage + " 受けた！";
+
+    if (playerHP <= 0) {
+        playerHP = 0;
+        messageText.innerText = "敗北してしまった…";
+        attackButton.disabled = true;
+        clearInterval(enemyAttackTimer); // 敵の攻撃を止める
+
+        // GAME OVERのポップアップを表示
+        const goModal = document.getElementById('gameover-modal');
+        if (goModal) {
+            goModal.style.display = "flex";
+        }
+    }
+}
+
+// 3. 【共通関数】モンスター出現
+function spawnMonster() {
+    const randomIndex = Math.floor(Math.random() * monsters.length);
+    currentMonster = monsters[randomIndex];
+    
+    monsterNameText.innerText = currentMonster.name + "があらわれた！";
+    if (monsterSprite) {
+        monsterSprite.src = currentMonster.sprite;
+        monsterSprite.classList.remove('enemy-appear');
+        void monsterSprite.offsetWidth;
+        monsterSprite.classList.add('enemy-appear');
+    }
+    
+    monsterHP = 100;
+    if (hpBarFill) hpBarFill.style.width = "100%";
+    attackButton.disabled = false;
+    if (homeReturnButton) homeReturnButton.style.display = "none";
+
+    // 敵の攻撃タイマー開始（3秒おき）
+    clearInterval(enemyAttackTimer);
+    
+    enemyAttackTimer = setInterval(enemyAttack, 3000);
+
+    attackButton.disabled = false;
+    if (homeReturnButton) homeReturnButton.style.display = "none";
+
+    const pBar = document.getElementById('player-hp-bar-fill');
+
+    // 敵の攻撃タイマー開始
+    clearInterval(enemyAttackTimer);
+    // 次にやる「モンスターごとの速度」を反映しやすいようにしておきます
+    const speed = currentMonster.speed || 3000; 
+    enemyAttackTimer = setInterval(enemyAttack, speed);
+
 }
 
 // 最初の起動
@@ -89,7 +145,7 @@ attackButton.onclick = function() {
         damageEffect.classList.add('damage-animation');
     }
 
-    // 演出：プレイヤー揺れ
+    // 演出：プレイヤー揺れ（自分が叩いた時）
     if (playerSprite) {
         playerSprite.classList.remove('player-shake-effect');
         void playerSprite.offsetWidth; 
@@ -112,7 +168,7 @@ attackButton.onclick = function() {
 
     // 5. 【判定】敵を倒したとき
     if (monsterHP === 0) {
-        // ★ボタンを表示
+        clearInterval(enemyAttackTimer); // 攻撃を止める
         if (homeReturnButton) homeReturnButton.style.display = "block";
 
         exp += currentMonster.exp;
@@ -128,10 +184,7 @@ attackButton.onclick = function() {
         expText.innerText = exp;
         attackButton.disabled = true;
 
-        // ★セーブする
         saveGameData();
-
-        // 3秒待ってから次の敵へ
         setTimeout(spawnMonster, 3000);
     }
 };
