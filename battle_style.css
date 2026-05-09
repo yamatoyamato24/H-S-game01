@@ -212,12 +212,12 @@ html, body {
     font-size: 12px;
 }
 
+/* 敵サイドの基本配置（画像が上、バーが下） */
 #enemy-side {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* 左右中央に */
-    justify-content: flex-end; /* 下に寄せる */
-    margin-bottom: 70px; /* 地面との位置調整 */
+    flex-direction: column !important; /* 元の順序（縦並び）に戻す */
+    align-items: center;
+    justify-content: flex-end;
 }
 
 #player-side {
@@ -325,4 +325,42 @@ html, body {
     border: 2px solid #f00;
     border-radius: 10px;
     text-align: center;
+}
+
+/* ラスボス専用のスタイル */
+.boss-giant {
+    width: 350px !important;
+    height: 350px !important;
+    /* 位置を下にずらす（攻撃の揺れと干渉しないよう margin で調整） */
+    margin-bottom: -50px !important; 
+    z-index: 100;
+}
+
+/* 画像の拡大と位置調整 */
+.boss-giant-mode {
+    width: 300px !important; 
+    height: 300px !important;
+    /* 大きくなった分、少し位置を下げたい場合はここを調整 */
+    margin-bottom: 5px !important; 
+    object-fit: contain;
+}
+
+/* HPバーが被らないように「画像の上」へ移動させる */
+.character-side#enemy-side {
+    display: flex;
+    flex-direction: column-reverse; /* 下から「画像→HPバー」の順に並べる */
+    align-items: center;
+}
+
+/* 3. ラスボスの時のHPバー（画像の下にそのまま表示） */
+.boss-giant-mode + .hp-bar-container {
+    width: 280px !important; /* ボスに合わせて長くする */
+    margin-top: 5px;
+}
+
+/* #enemy-side の中にある #monster-sprite という非常に具体的な指定にします */
+#enemy-side #monster-sprite.boss-giant-mode {
+    width: 280px !important;  /* 確実に大きくする */
+    height: 280px !important;
+    max-width: none !important; /* スマホ用制限なども解除 */
 }

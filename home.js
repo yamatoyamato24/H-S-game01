@@ -1,38 +1,31 @@
 // home.js
 window.onload = function() {
-    // --- 1. 保存データの読み込みと表示 ---
     const savedData = localStorage.getItem('hacksla_data');
-
     if (savedData) {
         const data = JSON.parse(savedData);
         
-        // ホーム画面の「レベル」と「攻撃力」の数字を書き換える
+        // 各要素が存在するか確認してから代入する（エラー防止）
         const levelElement = document.getElementById('home-level');
         const atkElement = document.getElementById('home-atk');
 
-        if (levelElement) {
+        if (levelElement && data.level !== undefined) {
             levelElement.innerText = data.level;
         }
-        if (atkElement) {
-            // バトル画面と同じ計算式で攻撃力を表示
-            const currentAtk = data.attackPower + (data.level - 1) * 2;
+        if (atkElement && data.attackPower !== undefined) {
+            // 攻撃力の計算
+            const currentAtk = Number(data.attackPower) + (Number(data.level) - 1) * 2;
             atkElement.innerText = currentAtk;
         }
     }
+    // ★重要：ここに「localStorage.setItem」を絶対に書かないでください！
+    // 拠点画面は「見るだけ」に徹することで、上書きミスを防ぎます。
 
-    // --- 2. 歯車メニューの開閉処理 ---
+    // 歯車メニューの処理（ここは変更なしでOK）
     const gearBtn = document.getElementById('gear-button');
     const menuList = document.getElementById('home-menu-list');
-
     if (gearBtn && menuList) {
         gearBtn.onclick = function() {
-            // 現在の状態を見て表示・非表示を切り替える
-            // (初期状態が空欄""の場合もあるので、none以外なら表示するという書き方にしています)
-            if (menuList.style.display === "none" || menuList.style.display === "") {
-                menuList.style.display = "block";
-            } else {
-                menuList.style.display = "none";
-            }
+            menuList.style.display = (menuList.style.display === "none" || menuList.style.display === "") ? "block" : "none";
         };
     }
 };

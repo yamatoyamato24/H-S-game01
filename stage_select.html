@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ステージ選択</title>
+    <link rel="stylesheet" href="stage_select_style.css">
+</head>
+<body>
+    <div class="stage-container">
+        <!-- 3D回転カーソル本体 -->
+        <div id="selection-cursor">
+            <div class="layer layer1"></div>
+            <div class="layer layer2"></div>
+            <div class="layer layer3"></div>
+        </div>
+
+        <!-- UIエリア -->
+        <div class="stage-ui-wrapper">
+            <div id="stage-info">ステージを選択してください</div>
+            <div class="stage-buttons">
+                <button id="prev-btn" class="stage-btn">↓ 戻る</button>
+                <button id="decide-btn" class="stage-btn">決定</button>
+                <button id="next-btn" class="stage-btn">↑ 次へ</button>
+            </div>
+        </div>
+    </div>
+    <script src="stage_select.js"></script>
+</body>
+</html>
