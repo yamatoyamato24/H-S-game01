@@ -9,17 +9,19 @@ body {
     max-width: 450px;
     height: 100dvh;
     position: relative;
-    /* 背景画像の設定変更 */
-    background-image: url('assets/stage_select.png');
-    background-size: contain; /* 画像を全体が表示されるサイズに縮小 */
-    background-repeat: no-repeat;
-    background-position: center; /* 画面中央に配置 */
-    background-color: #000; /* 画像の外側は黒で埋める */
     
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
-    box-sizing: border-box;
+    /* 892x1536に最適化 */
+    background-image: url('assets/stage_select.png');
+    background-size: cover; 
+    background-position: center; /* 上下のバランスを中央に */
+    background-repeat: no-repeat;
+    
+    /* 中身がはみ出さないようにガード */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
+
 
 /* マップの明るさ調整（画像が中央に寄るため、疑似要素の範囲も調整） */
 .stage-container::before {
