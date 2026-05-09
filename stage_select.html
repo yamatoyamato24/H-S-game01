@@ -15,8 +15,7 @@
             <div class="layer layer3"></div>
         </div>
 
-        <!-- 【重要】ステージ番号を識別するための非表示/配置用エリア -->
-        <!-- JSでここにあるボタンの座標を拾ってカーソルを移動させます -->
+        <!-- 非表示のノードエリア -->
         <div class="stage-nodes-container" style="display:none;">
             <div class="stage-node" data-stage-id="1"></div>
             <div class="stage-node" data-stage-id="2"></div>
@@ -27,21 +26,21 @@
 
         <!-- UIエリア（操作パネル） -->
         <div class="stage-ui-wrapper">
+            <!-- ステージ情報表示 -->
             <div id="stage-info">
                 <span id="stage-title">ステージ 1</span><br>
                 <small id="stage-description">はじまりの草原</small>
             </div>
             
+            <!-- ボタン並び： ←戻る 決定 次へ→ -->
             <div class="stage-buttons">
-                <!-- クラス名を整理してCSSと合わせます -->
-                <button id="prev-btn" class="stage-btn control-btn">◀ 戻る</button>
-                <button id="next-btn" class="stage-btn control-btn">次へ ▶</button>
+                <button id="prev-btn" class="stage-btn control-btn">←戻る</button>
+                <button id="decide-btn" class="stage-btn">決定</button>
+                <button id="next-btn" class="stage-btn control-btn">次へ→</button>
             </div>
+        </div> <!-- ui-wrapper 閉じ -->
+    </div> <!-- stage-container 閉じ -->
 
-            <!-- 決定ボタンを独立させて押しやすく -->
-            <button id="decide-btn" class="stage-btn">出撃！</button>
-        </div>
-    </div>
     <script src="stage_select.js"></script>
 </body>
 </html>
