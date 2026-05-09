@@ -1,10 +1,10 @@
 // 1. 各ステージの座標とデータ
 const stages = [
-    { id: 1, name: "はじまりの地", x: 14, y: 82, color: "#4ade80" },
-    { id: 2, name: "雷の草原",     x: 59, y: 65, color: "#facc15" },
-    { id: 3, name: "火の山麓",     x: 13, y: 43, color: "#f87171" },
-    { id: 4, name: "ドクロ火山",   x: 70, y: 24, color: "#b91c1c" },
-    { id: 5, name: "最果ての地",   x: 15, y: 5,  color: "#a855f7" }
+    { id: 1, name: "はじまりの地", x: 50, y: 75, color: "#4ade80" },
+    { id: 2, name: "雷の草原",     x: 30, y: 60, color: "#facc15" },
+    { id: 3, name: "火の山麓",     x: 70, y: 45, color: "#f87171" },
+    { id: 4, name: "ドクロ火山",   x: 40, y: 30, color: "#b91c1c" },
+    { id: 5, name: "最果ての地",   x: 50, y: 15,  color: "#a855f7" }
 ];
 
 // ★修正ポイント：保存データから現在の解放状況を読み込む
@@ -42,6 +42,7 @@ function updateSelection() {
         stageInfo.innerText = "？？？ (ボスを倒して解放)";
         decideBtn.disabled = true;
         cursor.style.filter = "grayscale(100%) brightness(40%)"; 
+        cursor.style.opacity = "0.5";
     }
 }
 
