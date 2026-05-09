@@ -11,7 +11,7 @@ body {
     position: relative;
     
     /* 892x1536に最適化 */
-    background-image: url('assets/stage_select.png');
+    background-image: url('assets/stage_select01.png');
     background-size: cover; 
     background-position: center; /* 上下のバランスを中央に */
     background-repeat: no-repeat;
