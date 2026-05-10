@@ -129,3 +129,26 @@ body {
     opacity: 0.8;
     transform: scale(0.96);
 }
+
+#home-return-button {
+    position: absolute;
+    top: 20px;
+    right: 20px; /* 左上に配置 */
+    z-index: 110; /* UIより前面に */
+    
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border: 1px solid #ff4500;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+#home-return-button:active {
+    transform: scale(0.95);
+    background: rgba(80, 80, 80, 0.8);
+}

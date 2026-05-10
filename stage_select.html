@@ -8,23 +8,19 @@
 </head>
 <body>
     <div class="stage-container">
-        <!-- 3D回転カーソル本体 -->
+        <!-- 1. 拠点へ戻るボタン（左上に配置） -->
+        <button id="home-return-button" onclick="location.href='home.html'">
+            ◀ 拠点へ
+        </button>
+
+        <!-- 2. 3D回転カーソル（魔法陣） -->
         <div id="selection-cursor">
             <div class="layer layer1"></div>
             <div class="layer layer2"></div>
             <div class="layer layer3"></div>
         </div>
 
-        <!-- 非表示のノードエリア -->
-        <div class="stage-nodes-container" style="display:none;">
-            <div class="stage-node" data-stage-id="1"></div>
-            <div class="stage-node" data-stage-id="2"></div>
-            <div class="stage-node" data-stage-id="3"></div>
-            <div class="stage-node" data-stage-id="4"></div>
-            <div class="stage-node" data-stage-id="5"></div>
-        </div>
-
-        <!-- UIエリア（操作パネル） -->
+        <!-- 3. UIエリア（下部に中央寄せで配置） -->
         <div class="stage-ui-wrapper">
             <!-- ステージ情報表示 -->
             <div id="stage-info">
@@ -38,7 +34,7 @@
                 <button id="decide-btn" class="stage-btn">決定</button>
                 <button id="next-btn" class="stage-btn control-btn">次へ→</button>
             </div>
-        </div> <!-- ui-wrapper 閉じ -->
+        </div> 
     </div> <!-- stage-container 閉じ -->
 
     <script src="stage_select.js"></script>
