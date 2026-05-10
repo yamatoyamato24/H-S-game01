@@ -151,3 +151,77 @@ h2, .player-preview, .battle-start-btn, .status-window {
     font-size: 1.1rem;
     color: #ffffff !important; /* 絶対に白 */
 }
+
+/* カバンを開くボタン */
+.inventory-open-btn {
+    width: 60%;
+    margin-top: 15px;
+    padding: 10px;
+    background: #444;
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* インベントリ用モーダル */
+.inventory-content {
+    background: #1a1a1a;
+    width: 90%;
+    max-width: 380px;
+    height: 70%;
+    border: 2px solid #ffcc00;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.inventory-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.inventory-tabs button {
+    flex: 1;
+    padding: 8px;
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+/* アイテムが並ぶエリア */
+#item-list-area {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2列で並べる */
+    gap: 10px;
+    padding: 5px;
+}
+
+/* アイテムひとつひとつの枠 */
+.item-card {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.item-card.equipped {
+    border-color: #ffcc00;
+    background: #3a331a;
+}
+
+.close-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background: #888;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}

@@ -364,3 +364,35 @@ html, body {
     height: 280px !important;
     max-width: none !important; /* スマホ用制限なども解除 */
 }
+
+/* プレイヤーがレベルアップで光る演出 */
+.player-lvup-flash {
+    animation: player-glow 1s ease-out forwards;
+}
+
+@keyframes player-glow {
+    0% { filter: brightness(1) drop-shadow(0 0 0px #00ff88); transform: scale(1); }
+    20% { filter: brightness(2) drop-shadow(0 0 20px #00ff88); transform: scale(1.1); }
+    100% { filter: brightness(1) drop-shadow(0 0 0px #00ff88); transform: scale(1); }
+}
+
+/* レベルアップ文字（中央に大きく） */
+.lvup-float {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffcc00;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #fff, 2px 2px 2px #000;
+    pointer-events: none;
+    z-index: 2000;
+    animation: lvup-anim 1.2s ease-out forwards;
+}
+
+@keyframes lvup-anim {
+    0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -20px) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -60px) scale(1); }
+}

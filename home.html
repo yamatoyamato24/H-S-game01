@@ -28,6 +28,25 @@
             <p>攻撃力: <span id="home-atk">10</span></p>
         </div>
 
+        <button class="inventory-open-btn" onclick="openInventory()">
+            💼 カバンを確認
+        </button>
+
+        <!-- インベントリ画面（最初は非表示） -->
+        <div id="inventory-modal" class="modal-overlay" style="display: none;">
+            <div class="inventory-content">
+                <h3>持ち物リスト</h3>
+                <div class="inventory-tabs">
+                    <button onclick="showTab('weapons')">武器</button>
+                    <button onclick="showTab('armors')">防具</button>
+                </div>
+                <div id="item-list-area">
+                    <!-- ここに JS でアイテムが並びます -->
+                </div>
+                <button class="close-btn" onclick="closeInventory()">閉じる</button>
+            </div>
+        </div>
+
         <button class="battle-start-btn" onclick="location.href='stage_select.html'">
             出撃する
         </button>
