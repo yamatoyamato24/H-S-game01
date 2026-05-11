@@ -165,63 +165,189 @@ h2, .player-preview, .battle-start-btn, .status-window {
     z-index: 10;
 }
 
-/* インベントリ用モーダル */
-.inventory-content {
-    background: #1a1a1a;
-    width: 90%;
-    max-width: 380px;
-    height: 70%;
-    border: 2px solid #ffcc00;
-    border-radius: 15px;
+/* ヘッダー：タイトルと装備中を横に並べる */
+.inventory-header {
     display: flex;
-    flex-direction: column;
-    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
 }
 
-.inventory-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+.inventory-header h3 {
+    margin: 0;
+    font-size: 18px;
 }
 
-.inventory-tabs button {
-    flex: 1;
-    padding: 8px;
-    background: #333;
-    color: white;
-    border: 1px solid #555;
+/* 右側の装備中ミニスロット */
+#equipped-mini-slot {
+    flex: 0 0 160px; /* 幅を固定 */
 }
 
-/* アイテムが並ぶエリア */
+/* アイテムリスト：2列でスクロール */
 #item-list-area {
     flex: 1;
     overflow-y: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2列で並べる */
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr); /* 2列 */
+    gap: 8px;
     padding: 5px;
 }
 
-/* アイテムひとつひとつの枠 */
+/* インベントリ用モーダル：枠の定義 */
+.inventory-content {
+    background: #1a1a1a;
+    width: 95%;
+    max-width: 420px;
+    height: 75%; 
+    border: 2px solid #ffcc00;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* ヘッダー：タイトルと装備中を横に並べる */
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+    margin-bottom: 5px;
+}
+
+.inventory-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: white !important;
+}
+
+/* 右側の装備中ミニスロット（幅を固定して安定させる） */
+#equipped-mini-slot {
+    flex: 0 0 160px;
+}
+
+/* 装備中のカード（ヘッダー内） */
+.item-card.equipped-style {
+    border: 1px solid #ffcc00;
+    background: #332b12;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+/* 下部のアイテムリスト：ここを2列にします */
+#item-list-area {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* ★ここを 1fr から 2列に変更 */
+    grid-auto-rows: min-content;
+    gap: 8px;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+/* 拾ったアイテムのカード（2列用） */
 .item-card {
     background: #2a2a2a;
     border: 1px solid #444;
-    padding: 10px;
-    font-size: 12px;
-    text-align: center;
+    padding: 6px;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.item-card.equipped {
-    border-color: #ffcc00;
-    background: #3a331a;
-}
-
+/* 閉じるボタン */
 .close-btn {
-    margin-top: 15px;
+    margin-top: 10px;
     padding: 10px;
-    background: #888;
+    background: #444;
     color: white;
-    border: none;
+    border: 1px solid #fff;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+/* キャラと装備の横並びコンテナ */
+.equipment-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin: 20px 0;
+    z-index: 10;
+}
+
+/* 装備枠（左右共通） */
+.equip-slot {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #444;
+    padding: 10px 5px;
+    text-align: center;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 110px;
+}
+
+.slot-label {
+    font-size: 10px;
+    color: #aaa;
+}
+
+.equipped-item-name {
+    font-size: 13px;
+    font-weight: bold;
+    min-height: 2.5em; /* 2行分確保してガタつき防止 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* 中央のキャラ微調整 */
+.player-preview {
+    flex: 0 0 100px;
+}
+
+/* home_style.css 内の .modal-overlay を修正 */
+.modal-overlay {
+    position: absolute; /* fixed から absolute に変更（親要素の中に固定） */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* 全ての要素より手前に表示 */
+}
+
+.item-card.equipped-style {
+    border-color: #ffcc00;
+    background: #332b12;
+    flex-direction: row; /* 装備中だけ横並びで見やすく */
+    justify-content: space-between;
+    padding: 5px 10px;
+    font-size: 12px;
 }

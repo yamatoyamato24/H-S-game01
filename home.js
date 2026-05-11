@@ -1,82 +1,127 @@
 // home.js
 
-// 1. ステータス表示の更新（装備・レベル補正を合算）
+// 1. インベントリを開く
+function openInventory(type) {
+    const modal = document.getElementById('inventory-modal');
+    const title = document.getElementById('inventory-title');
+    if (modal) modal.style.display = 'flex';
+    if (title) title.innerText = (type === 'weapons' ? '武器リスト' : '防具リスト');
+    
+    showTab(type); 
+}
+
+// 2. インベントリを閉じる
+function closeInventory() {
+    const modal = document.getElementById('inventory-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+// 3. ステータス表示の更新（装備・レベル・装備名すべてを更新）
 function refreshStatusDisplay(data) {
     const level = Number(data.level) || 1;
     const baseAtk = Number(data.attackPower) || 10;
     
-    // 装備による加算値を計算
     let equipAtk = 0;
-    if (data.equipment && data.equipment.weapon) {
-        // items.js のデータから ATK を取得
-        equipAtk = itemData.weapons[data.equipment.weapon]?.atk || 0;
+    let weaponName = "なし";
+    let armorName = "なし";
+
+    if (data.equipment) {
+        if (data.equipment.weapon) {
+            const wItem = itemData.weapons[data.equipment.weapon];
+            equipAtk = wItem?.atk || 0;
+            weaponName = wItem?.name || "なし";
+        }
+        if (data.equipment.armor) {
+            const aItem = itemData.armors[data.equipment.armor];
+            armorName = aItem?.name || "なし";
+        }
     }
 
-    // 各要素への反映
+    // 各表示場所(HTML)への反映
     const levelElement = document.getElementById('home-level');
     const atkElement = document.getElementById('home-atk');
+    const weaponDisplay = document.getElementById('current-weapon-name');
+    const armorDisplay = document.getElementById('current-armor-name');
 
     if (levelElement) levelElement.innerText = level;
     if (atkElement) {
-        // 攻撃力の計算: (基礎値) + (レベル補正) + (装備補正)
         const levelBonus = (level - 1) * 2;
         const totalAtk = baseAtk + levelBonus + equipAtk;
-        
-        // 装備補正がある場合は (+5) のように表示
         atkElement.innerText = equipAtk > 0 ? `${totalAtk} (+${equipAtk})` : totalAtk;
     }
+    if (weaponDisplay) weaponDisplay.innerText = weaponName;
+    if (armorDisplay) armorDisplay.innerText = armorName;
 }
 
-// 2. インベントリ画面の表示制御
-function openInventory() {
-    document.getElementById('inventory-modal').style.display = 'flex';
-    showTab('weapons');
-}
-
-function closeInventory() {
-    document.getElementById('inventory-modal').style.display = 'none';
-}
-
-// 3. インベントリ内のアイテムリスト生成
+// 4. インベントリ内のアイテムリスト生成
 function showTab(type) {
     const listArea = document.getElementById('item-list-area');
-    if (!listArea) return;
+    const miniSlot = document.getElementById('equipped-mini-slot');
+    if (!listArea || !miniSlot) return;
+
     listArea.innerHTML = "";
+    miniSlot.innerHTML = "";
 
     const savedData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
     const inventory = savedData.inventory || { weapons: [], armors: [] };
     const equipped = savedData.equipment || { weapon: null, armor: null };
 
+    const currentId = (type === 'weapons') ? equipped.weapon : equipped.armor;
     const itemIds = inventory[type] || [];
 
-    if (itemIds.length === 0) {
-        listArea.innerHTML = `<p style="grid-column: 1/3; color: #888; text-align:center;">なし</p>`;
+    // --- ① ヘッダー右側の「装備中」表示（変更なし） ---
+    // (省略しますが、先ほどのコードをそのまま使用します)
+    // --- 装備中の表示ロジック ---
+    if (currentId) {
+        const item = itemData[type][currentId];
+        miniSlot.innerHTML = `
+            <div class="item-card equipped-style">
+                <div style="text-align:left;">
+                    <div style="font-weight:bold;">${item.name}</div>
+                    <div style="font-size:10px; color:#ffcc00;">${type==='weapons'?'ATK':'DEF'}+${type==='weapons'?item.atk:item.def}</div>
+                </div>
+                <div style="font-size:10px; color:#aaa; writing-mode: vertical-rl;">装備中</div>
+            </div>
+        `;
+    } else {
+        miniSlot.innerHTML = `<div class="item-card equipped-style" style="color:#666; justify-content:center; align-items:center; display:flex;">なし</div>`;
+    }
+
+    // --- ② 【ここが重要】同じアイテムをカウントする ---
+    const counts = {};
+    itemIds.forEach(id => {
+        counts[id] = (counts[id] || 0) + 1;
+    });
+
+    // ユニークなIDのリスト（装備中のものは除く）
+    const uniqueIds = Object.keys(counts).filter(id => id !== currentId);
+
+    if (uniqueIds.length === 0) {
+        listArea.innerHTML = `<p style="grid-column:1/3; color:#666; text-align:center; font-size:12px; margin-top:20px;">なし</p>`;
         return;
     }
 
-    itemIds.forEach((id) => {
+    // カウントした結果を元にカードを作成
+    uniqueIds.forEach((id) => {
         const item = itemData[type][id];
-        const isEquipped = (type === 'weapons' && equipped.weapon === id) || 
-                           (type === 'armors' && equipped.armor === id);
-        
+        const count = counts[id]; // 個数
         const card = document.createElement('div');
-        card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
+        card.className = 'item-card';
         card.innerHTML = `
-            <div style="font-weight:bold; color:white;">${item.name}</div>
-            <div style="font-size:10px; color:#aaa; margin:5px 0;">
-                ${type === 'weapons' ? 'ATK +' + item.atk : 'DEF +' + item.def}
+            <div style="display:flex; justify-content:space-between;">
+                <div style="font-weight:bold; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px;">${item.name}</div>
+                <div style="font-size:10px; color:#ffcc00;">×${count}</div>
             </div>
-            <button onclick="equipItem('${type}', '${id}')" 
-                    style="cursor:pointer; width:100%;" 
-                    ${isEquipped ? 'disabled' : ''}>
-                ${isEquipped ? '装備中' : '装備する'}
-            </button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:10px; color:#aaa;">${type==='weapons'?'ATK':'DEF'}+${type==='weapons'?item.atk:item.def}</span>
+                <button onclick="equipItem('${type}', '${id}')" style="padding:2px 5px; font-size:10px; cursor:pointer;">装備</button>
+            </div>
         `;
         listArea.appendChild(card);
     });
 }
 
-// 4. 装備の変更（ここだけ localStorage を更新）
+// 5. 装備の変更
 function equipItem(type, id) {
     const savedData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
     if (!savedData.equipment) savedData.equipment = { weapon: null, armor: null };
@@ -86,8 +131,8 @@ function equipItem(type, id) {
 
     localStorage.setItem('hacksla_data', JSON.stringify(savedData));
     
-    refreshStatusDisplay(savedData); // 即座に画面に反映
-    showTab(type); // リストのボタン状態を更新
+    refreshStatusDisplay(savedData); // 拠点の表示を更新
+    showTab(type); // インベントリの表示を更新
 }
 
 // --- 初期化 ---
@@ -98,7 +143,6 @@ window.onload = function() {
         refreshStatusDisplay(data);
     }
 
-    // 歯車メニュー
     const gearBtn = document.getElementById('gear-button');
     const menuList = document.getElementById('home-menu-list');
     if (gearBtn && menuList) {

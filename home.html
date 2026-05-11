@@ -7,50 +7,70 @@
     <link rel="stylesheet" href="home_style.css">
 </head>
 <body>
-    <!-- クラス名を home-container にするとCSSのサイズ設定が効きます -->
     <div class="home-container">
-        <!-- ★追加：右上の設定ボタン -->
+        <!-- 1. 右上の設定メニュー -->
         <div id="home-menu-wrapper">
             <button id="gear-button">⚙️</button>
-            <!-- 初期状態は隠しておくメニュー -->
             <div id="home-menu-list" style="display: none;">
                 <button onclick="location.href='opening.html'">タイトルへ戻る</button>
-                <p style="font-size: 10px; color: #888;">(追加予定の項目...)</p>
             </div>
         </div>
+
         <h2>拠点</h2>
-        <div class="player-preview">
-            <img src="assets/player.png" style="width: 120px; filter: drop-shadow(0 0 10px gold);">
+
+        <!-- 2. 中央の装備レイアウト -->
+        <div class="equipment-layout">
+            <div class="equip-slot" id="weapon-slot">
+                <span class="slot-label">手のそうび</span>
+                <div class="equipped-item-name" id="current-weapon-name">なし</div>
+                <button class="change-btn" onclick="openInventory('weapons')">変える</button>
+            </div>
+
+            <div class="player-preview">
+                <img src="assets/player.png" style="width: 100px; filter: drop-shadow(0 0 10px gold);">
+            </div>
+
+            <div class="equip-slot" id="armor-slot">
+                <span class="slot-label">体のそうび</span>
+                <div class="equipped-item-name" id="current-armor-name">なし</div>
+                <button class="change-btn" onclick="openInventory('armors')">変える</button>
+            </div>
         </div>
 
+        <!-- 3. ステータス表示 -->
         <div class="status-window">
             <p>レベル: <span id="home-level">1</span></p>
             <p>攻撃力: <span id="home-atk">10</span></p>
         </div>
 
-        <button class="inventory-open-btn" onclick="openInventory()">
-            💼 カバンを確認
+        <!-- 4. 出撃ボタン -->
+        <button class="battle-start-btn" onclick="location.href='stage_select.html'">
+            出撃する
         </button>
 
-        <!-- インベントリ画面（最初は非表示） -->
+        <!-- 5. インベントリ・モーダル（スマホ枠の内側に配置） -->
         <div id="inventory-modal" class="modal-overlay" style="display: none;">
             <div class="inventory-content">
-                <h3>持ち物リスト</h3>
-                <div class="inventory-tabs">
-                    <button onclick="showTab('weapons')">武器</button>
-                    <button onclick="showTab('armors')">防具</button>
+                <div class="inventory-header">
+                    <h3 id="inventory-title">持ち物リスト</h3>
+                    <div id="equipped-mini-slot">
+                        <!-- JSでここに「装備中の武器」等が入る -->
+                    </div>
                 </div>
+                
+                <hr style="border: 0; border-top: 1px solid #444; margin: 5px 0 10px 0;">
+
                 <div id="item-list-area">
-                    <!-- ここに JS でアイテムが並びます -->
+                    <!-- JSでここに2列のリストが入る -->
                 </div>
+                
                 <button class="close-btn" onclick="closeInventory()">閉じる</button>
             </div>
         </div>
 
-        <button class="battle-start-btn" onclick="location.href='stage_select.html'">
-            出撃する
-        </button>
-    </div>
+    </div> <!-- ★ここ！ home-container の閉じタグが重要です -->
+
+    <script src="items.js"></script>
     <script src="home.js"></script>
 </body>
 </html>
