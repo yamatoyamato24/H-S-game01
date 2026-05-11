@@ -160,17 +160,18 @@ function saveGameData() {
 function spawnMonster() {
     if (isProcessingDefeat) return;
 
-    const stage = stageMonsterData[currentStageId]; 
+    const stage = stageMonsterData[currentStageId];
     const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0) || (currentStageId === 5);
-    
     const battleField = document.getElementById('battle-field');
-    
-    // --- 格子演出の切り替え ---
+
+    // --- 背景とカーテンの制御 ---
     if (currentStageId === 5) {
-        // ステージ5なら「左半分の線」だけ隠す
         battleField.classList.add('boss-clean-half');
+        battleField.style.backgroundColor = "#000"; // ステージ5は常に黒
     } else {
         battleField.classList.remove('boss-clean-half');
+        // ステージ1～4は各ステージの色を正しくセット
+        battleField.style.backgroundColor = stage.color || "#166534"; 
     }
 
     // --- (以下、名前の表示や画像セットの処理) ---
