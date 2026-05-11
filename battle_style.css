@@ -93,15 +93,28 @@ html, body {
 #battle-field::before {
     content: "";
     position: absolute;
-    top: 0; left: 0; width: 50%; height: 100%;
-    background-color: #000; /* 真っ黒 */
-    z-index: 5;             /* 格子(z-index:1)より上で、キャラ(z-index:100)より下 */
-    display: none;          /* 普段は見せない */
+    top: 60%; left: 50%;
+    transform: translateX(-50%) perspective(200px) rotateX(60deg);
+    width: 500%; height: 100%;
+    background-position: center top;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+    background-size: 80px 100px;
+    transform-origin: top;
+    z-index: 1;
+    display: block; /* 常に表示 */
 }
 
-/* 2. ステージ5の時だけカーテンを表示 */
-#battle-field.boss-clean-half::before {
-    display: block;
+/* 3. 【新設】左半分を隠す黒いカーテンの設定 */
+#boss-curtain {
+    position: absolute;
+    top: 0; left: 0;
+    width: 50%; height: 100%;
+    background-color: #000;
+    z-index: 5; /* 格子(1)より上で、キャラ(100)より下 */
+    pointer-events: none;
+    display: none; /* JSで切り替える */
 }
 
 /* キャラクターが格子の後ろに隠れないようにする */

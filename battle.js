@@ -163,15 +163,17 @@ function spawnMonster() {
     const stage = stageMonsterData[currentStageId];
     const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0) || (currentStageId === 5);
     const battleField = document.getElementById('battle-field');
+    const curtain = document.getElementById('boss-curtain');
 
     // --- 背景とカーテンの制御 ---
     if (currentStageId === 5) {
-        battleField.classList.add('boss-clean-half');
-        battleField.style.backgroundColor = "#000"; // ステージ5は常に黒
+        if (curtain) curtain.style.display = "block"; // ステージ5ならカーテン表示
+        battleField.style.backgroundColor = "#000";
+        monsterSprite.classList.add('boss-giant-mode');
     } else {
-        battleField.classList.remove('boss-clean-half');
-        // ステージ1～4は各ステージの色を正しくセット
-        battleField.style.backgroundColor = stage.color || "#166534"; 
+        if (curtain) curtain.style.display = "none";  // それ以外は非表示
+        battleField.style.backgroundColor = stage.color || "#166534";
+        monsterSprite.classList.remove('boss-giant-mode');
     }
 
     // --- (以下、名前の表示や画像セットの処理) ---

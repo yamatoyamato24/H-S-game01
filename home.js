@@ -134,6 +134,26 @@ function showTab(type) {
     });
 }
 
+// --- 歯車メニューの開閉ロジック ---
+document.addEventListener('DOMContentLoaded', () => {
+    const gearBtn = document.getElementById('gear-button');
+    const menuList = document.getElementById('home-menu-list');
+
+    if (gearBtn && menuList) {
+        gearBtn.addEventListener('click', (e) => {
+            // イベントの伝播を止めて、メニュー自体がすぐ閉じるのを防ぐ
+            e.stopPropagation();
+            const isHidden = menuList.style.display === 'none';
+            menuList.style.display = isHidden ? 'block' : 'none';
+        });
+
+        // メニュー以外をクリックした時に閉じる（おまけの親切機能）
+        document.addEventListener('click', () => {
+            menuList.style.display = 'none';
+        });
+    }
+});
+
 // 5. 装備の変更
 function equipItem(type, id) {
     const savedData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
