@@ -47,7 +47,7 @@ const stageMonsterData = {
     2: { name: "青い湖", color: "#1e3a8a", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "なにこれ？", exp: 60, hp: 50, damage: 15, def: 5, sprite: "assets/marisaku03.png", speed: 700 }, { name: "手のようかい", exp: 90, hp: 150, damage: 35, def: 5, sprite: "assets/marisaku04.png", speed: 500 }, { name: "おばけかな？", exp: 100, hp: 200, damage: 25, def: 5, sprite: "assets/marisaku05.png", speed: 1000 }], boss: { name: "戦艦くん", exp: 1000, hp: 1200, damage: 60, def: 20, sprite: "assets/sorasaku01.png", speed: 2000 } },
     3: { name: "いなずまのとりで", color: "#854d0e", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "ネコもどき", exp: 120, hp: 120, damage: 30, def: 15, sprite: "assets/sorasaku02.png", speed: 1000 }, { name: "そっぽむき お化け", exp: 180, hp: 300, damage: 50, def: 15, sprite: "assets/sorasaku04.png", speed: 1600 }], boss: { name: "これでも船", exp: 2500, hp: 3000, damage: 100, def: 30, sprite: "assets/ship.png", speed: 2200 } },
     4: { name: "燃え盛る火山", color: "#7f1d1d", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "ニセ姫ブルー", exp: 350, hp: 800, damage: 90, def: 25, sprite: "assets/marisaku02blue.png", speed: 2500 }, { name: "ニセ姫グリーン", exp: 250, hp: 400, damage: 60, def: 25, sprite: "assets/marisaku02green.png", speed: 900 }, { name: "ニセ姫イエロー", exp: 300, hp: 600, damage: 70, def: 25, sprite: "assets/marisaku02yellow.png", speed: 1500 }], boss: { name: "ニセ姫BOSS", exp: 6000, hp: 7000, damage: 180, def: 40, sprite: "assets/marisaku02.png", speed: 3000 } },
-    5: { name: "最果ての地", color: "#000000", potionDropRate: 5, equipDropRate: 30, boss: { name: "ラスボス", exp: 20000, hp: 50000, damage: 500, def: 50, sprite: "assets/boss_image.png", speed: 3500 } }
+    5: { name: "最果ての地", color: "#000000", potionDropRate: 5, equipDropRate: 30, boss: { name: "ラスボス", exp: 20000, hp: 20000, damage: 500, def: 50, sprite: "assets/boss_image.png", speed: 3500 } }
 };
 
 // --- 4. 要素の取得 ---
@@ -140,7 +140,7 @@ updateHealUI();
 
 // 経験値UI更新
 function updateExpUI() {
-    const nextExp = level * 30;
+    const nextExp = level * 50;
     const percent = Math.min((exp / nextExp) * 100, 100);
     const bar = document.getElementById('exp-bar-fill');
     if (bar) bar.style.width = percent + "%";
@@ -160,48 +160,34 @@ function saveGameData() {
 
 // 敵の出現（スライド登場復活版）
 function spawnMonster() {
-    defeatCount++;
-    const stage = stageMonsterData[currentStageId]; 
-    const isBoss = (defeatCount % BOSS_INTERVAL === 0) || (currentStageId === 5);
-    
-    // 背景設定などはそのまま
-    const battleField = document.getElementById('battle-field');
-    if (battleField && stage.color) {
-        battleField.style.backgroundColor = stage.color;
-        battleField.style.backgroundImage = `linear-gradient(to bottom, rgba(0,0,0,0.7), ${stage.color})`;
-    }
+    if (isProcessingDefeat) return;
 
+    const stage = stageMonsterData[currentStageId]; 
+    // ★ 判定：次のカウントが 10, 20... ならボス。
+    const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0) || (currentStageId === 5);
+    
+    // （背景設定・名称表示などはそのまま）
     if (isBoss) {
         currentMonster = stage.boss;
         monsterNameText.innerText = (currentStageId === 5 ? "【ラスボス】" : "【ボス】") + currentMonster.name;
+        messageText.innerHTML = "<span style='color:#ff4444;'>強大な気配を感じる...！</span>";
     } else {
         currentMonster = stage.enemies[Math.floor(Math.random() * stage.enemies.length)];
         monsterNameText.innerText = currentMonster.name;
+        const rem = BOSS_INTERVAL - ((defeatCount + 1) % BOSS_INTERVAL);
+        messageText.innerText = `Bossまであと ${rem} 体`;
     }
 
-    // ★★★ ここが修正ポイント：スライド登場を100%発生させる手順 ★★★
-    
-    // 1. まずアニメーションクラスを消し、アニメーション自体を一時停止
+    // --- 演出リセット：ここがスライド登場に必須 ---
     monsterSprite.classList.remove('enemy-appear'); 
-    monsterSprite.style.animation = 'none'; 
-    
-    // 2. 「void」でおまじないをかけ、ブラウザに「リセットされた」と確信させる
+    monsterSprite.style.animation = ''; 
+    monsterSprite.style.display = "none"; 
     void monsterSprite.offsetWidth; 
 
-    // 3. 画像をセット（enemy.pngが連続しても大丈夫になります）
     monsterSprite.src = currentMonster.sprite;
-
-    // 4. アニメーションを有効に戻し、クラスを付け直して実行！
-    monsterSprite.style.animation = ''; 
+    monsterSprite.style.display = "block";
     monsterSprite.classList.add('enemy-appear');
-
-    // ----------------------------------------------------------
-
-    if (currentStageId === 5) { monsterSprite.classList.add('boss-giant-mode'); } 
-    else { monsterSprite.classList.remove('boss-giant-mode'); }
-
-    const hpBarContainer = monsterSprite.nextElementSibling;
-    if (hpBarContainer) { hpBarContainer.style.width = (currentStageId === 5) ? "280px" : "100px"; }
+    // ------------------------------------------
 
     monsterHP = currentMonster.hp;
     currentMaxHP = currentMonster.hp;
@@ -212,21 +198,22 @@ function spawnMonster() {
     enemyAttackTimer = setInterval(enemyAttack, currentMonster.speed);
 }
 
-// 敵の攻撃
-// --- 敵の攻撃処理（防御力を反映） ---
+// --- 敵の攻撃（敗北時のセーブ処理を修正） ---
 function enemyAttack() {
-    if (monsterHP <= 0 || playerHP <= 0) return; 
-    monsterSprite.classList.remove('shake-animation');
-    void monsterSprite.offsetWidth;
-    monsterSprite.classList.add('shake-animation');
+    if (monsterHP <= 0 || playerHP <= 0) return;
+    
+    // --- 修正ポイント：出現アニメーション中は揺らさない ---
+    // もし敵がまだスライド登場中（enemy-appearクラスがある間）なら、揺れ演出をスキップする
+    if (!monsterSprite.classList.contains('enemy-appear')) {
+        monsterSprite.classList.remove('shake-animation');
+        void monsterSprite.offsetWidth; // 揺れのための再描画
+        monsterSprite.classList.add('shake-animation');
+    }
 
-    // 💡 防御力計算：(敵の攻撃力) - (プレイヤーの防御力)
     let levelDef = (level - 1) * 2;
     let totalDef = defensePower + levelDef + equipDef;
-    let baseDamage = currentMonster.damage; 
-
-    let damage = (Math.floor(Math.random() * 5) + baseDamage) - totalDef;
-    // 最低1ダメージを保証
+    
+    let damage = (Math.floor(Math.random() * 5) + currentMonster.damage) - totalDef;
     if (damage < 1) damage = 1;
 
     playerHP -= damage;
@@ -234,7 +221,6 @@ function enemyAttack() {
     
     document.getElementById('player-hp-bar-fill').style.width = (playerHP / maxPlayerHP) * 100 + "%";
     
-    // ダメージ数字のポップアップ演出
     const pDamageEffect = document.getElementById('player-damage-effect');
     if (pDamageEffect) {
         pDamageEffect.innerText = "-" + damage;
@@ -247,12 +233,16 @@ function enemyAttack() {
         messageText.innerText = "敗北してしまった…";
         attackButton.disabled = true;
         clearInterval(enemyAttackTimer);
-        saveGameData(); 
+
+        let currentData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
+        currentData.potionCount = potionCount;
+        localStorage.setItem('hacksla_data', JSON.stringify(currentData));
+
         setTimeout(() => { document.getElementById('gameover-modal').style.display = "flex"; }, 1000);
     }
 }
 
-// --- 攻撃ボタンクリック（HP全回復なし版） ---
+// --- 攻撃ボタンクリック（完全修正版） ---
 attackButton.onclick = function() {
     if (monsterHP <= 0 || playerHP <= 0 || (typeof isProcessingDefeat !== 'undefined' && isProcessingDefeat)) return;
 
@@ -267,7 +257,7 @@ attackButton.onclick = function() {
     monsterHP -= damage;
     if (monsterHP < 0) monsterHP = 0;
 
-    // 演出：ダメージ数字ポップアップ
+    // 演出：ダメージ数字
     const dEffect = document.getElementById('damage-effect');
     if (dEffect) {
         dEffect.innerText = "-" + damage;
@@ -276,7 +266,7 @@ attackButton.onclick = function() {
         dEffect.classList.add('damage-animation');
     }
 
-    // 演出：プレイヤーの揺れと打撃エフェクト
+    // 演出：プレイヤー揺れとヒットエフェクト
     playerSprite.classList.remove('player-shake-effect');
     void playerSprite.offsetWidth; 
     playerSprite.classList.add('player-shake-effect');
@@ -292,26 +282,24 @@ attackButton.onclick = function() {
 
     hpBarFill.style.width = (monsterHP / currentMaxHP) * 100 + "%";
     
-    // 敵のHPが0になった時の処理
+    // --- 敵のHPが0になった時の処理 ---
     if (monsterHP === 0) {
         isProcessingDefeat = true; 
         clearInterval(enemyAttackTimer);
         attackButton.disabled = true;
 
         setTimeout(() => {
+            // 経験値・レベルアップ処理
             exp += currentMonster.exp;
             let lvUpTriggered = false;
-            const nextExp = level * 30;
-
+            const nextExp = level * 50;
             if (exp >= nextExp) {
                 level++;
                 exp -= nextExp;
                 attackPower += 3;
                 defensePower += 1; 
                 lvUpTriggered = true;
-                // ★HP全回復の処理を削除しました
             }
-
             updateExpUI();
 
             // ドロップ判定
@@ -320,18 +308,13 @@ attackButton.onclick = function() {
             let savedDataObj = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
             if (!savedDataObj.inventory) savedDataObj.inventory = { weapons: [], armors: [] };
 
-            // 1. 回復薬（上限9個）
             if (Math.random() * 100 < (currentStage.potionDropRate || 5)) {
                 if (potionCount < 9) {
                     potionCount++;
                     updateHealUI();
-                    dropMsg += `<br><span style="color:#00ff88;">★${itemData.potions.p01.name}を拾った！</span>`;
-                } else {
-                    dropMsg += `<br><span style="color:#888;">（回復薬が満タンです）</span>`;
+                    dropMsg += `<br><span style="color:#00ff88;">★回復薬を拾った！</span>`;
                 }
             }
-
-            // 2. 装備品
             if (Math.random() * 100 < (currentStage.equipDropRate || 30)) {
                 const possibleItems = dropTable[currentStageId];
                 const equipPool = possibleItems.filter(id => id.startsWith('w') || id.startsWith('a'));
@@ -339,17 +322,13 @@ attackButton.onclick = function() {
                     const droppedId = equipPool[Math.floor(Math.random() * equipPool.length)];
                     const itemType = droppedId.startsWith('w') ? 'weapons' : 'armors';
                     savedDataObj.inventory[itemType].push(droppedId);
-                    const itemName = itemData[itemType][droppedId].name;
-                    dropMsg += `<br><span style="color:#ffcc00;">★${itemName}を拾った！</span>`;
+                    dropMsg += `<br><span style="color:#ffcc00;">★${itemData[itemType][droppedId].name}を拾った！</span>`;
                 }
             }
 
             // レベルアップ演出
             if (lvUpTriggered) {
-                playerSprite.classList.remove('player-lvup-flash');
-                void playerSprite.offsetWidth; 
                 playerSprite.classList.add('player-lvup-flash');
-
                 const lvDisplay = document.createElement('div');
                 lvDisplay.className = 'lvup-float';
                 lvDisplay.innerText = "LEVEL UP!";
@@ -357,36 +336,35 @@ attackButton.onclick = function() {
                 setTimeout(() => lvDisplay.remove(), 1200);
             }
 
-            // 保存
+            // カウント更新とボス判定
+            defeatCount++; 
+            const isJustDefeatedBoss = (defeatCount % BOSS_INTERVAL === 0) || (currentStageId === 5);
+
             savedDataObj.level = level;
             savedDataObj.exp = exp;
             savedDataObj.attackPower = attackPower;
             savedDataObj.defensePower = defensePower; 
             savedDataObj.potionCount = potionCount;
 
-            if (defeatCount % BOSS_INTERVAL === 0) {
-                // ボス撃破
+            if (isJustDefeatedBoss) {
+                // ボス撃破：新エリア解放して帰還
                 let unlocked = Number(savedDataObj.unlockedStage) || 1;
                 if (Number(currentStageId) >= unlocked) {
                     savedDataObj.unlockedStage = Number(currentStageId) + 1;
                 }
                 savedDataObj.currentStageId = Number(currentStageId) + 1; 
                 localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
-
-                let lvUpMsg = lvUpTriggered ? "<br><span style='color:#ffcc00; font-weight:bold;'>LEVEL UP!</span>" : "";
-                messageText.innerHTML = `${currentMonster.name}撃破！${lvUpMsg}${dropMsg}<br>新エリア解放！帰還します...`;
+                messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
                 setTimeout(() => { window.location.href = 'home.html'; }, 3000);
             } else {
-                // ザコ撃破
+                // ザコ撃破：次の敵へ
                 localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
-                let lvUpMsg = lvUpTriggered ? "<span style='color:#ffcc00; font-weight:bold;'>LEVEL UP!</span><br>" : "";
                 const rem = BOSS_INTERVAL - (defeatCount % BOSS_INTERVAL);
-                messageText.innerHTML = `${lvUpMsg}Bossまであと ${rem} 体${dropMsg}`;
+                messageText.innerHTML = `Bossまであと ${rem} 体${dropMsg}`;
                 homeReturnButton.style.display = "block";
-                
                 setTimeout(() => {
-                    isProcessingDefeat = false; 
-                    spawnMonster();
+                    isProcessingDefeat = false;
+                    spawnMonster(); 
                 }, 2000);
             }
         }, 1000);

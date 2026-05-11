@@ -121,14 +121,15 @@ h2, .player-preview, .battle-start-btn, .status-window {
 /* 5. 出撃ボタン */
 .battle-start-btn {
     width: 80%;
-    padding: 20px;
+    padding: 12px;         /* 20pxから12pxへ縮小 */
     background: linear-gradient(to bottom, #cc0000, #800000);
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     border: 2px solid #fff;
     border-radius: 10px;
     cursor: pointer;
+    margin: 10px 0;        /* 上下の余白を調整 */
 }
 
 .battle-start-btn:active {
@@ -137,19 +138,20 @@ h2, .player-preview, .battle-start-btn, .status-window {
 
 /* ステータスを表示する枠の設定（文字を確実に見せる） */
 .status-window {
-    background: rgba(0, 0, 0, 0.6); /* 数字の後ろを少し暗くして読みやすくする */
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px;           /* 15pxから8pxへ縮小 */
     border-radius: 10px;
     border: 1px solid #555;
     text-align: center;
-    width: 60%;
+    width: 65%;
+    margin: 5px 0;         /* 外側の余白も詰める */
 }
 
 .status-window p {
-    margin: 5px 0;
+    margin: 2px 0;         /* 行間の余白を5pxから2pxへ */
     font-weight: bold;
-    font-size: 1.1rem;
-    color: #ffffff !important; /* 絶対に白 */
+    font-size: 1.0rem;     /* 少しだけサイズ調整 */
+    color: #ffffff !important;
 }
 
 /* カバンを開くボタン */
@@ -288,8 +290,8 @@ h2, .player-preview, .battle-start-btn, .status-window {
 /* 装備枠（左右共通） */
 .equip-slot {
     flex: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #444;
+    background: rgba(50, 50, 50, 0.9); /* 濃いグレー（透過あり） */
+    border: 1px solid #777;            /* 枠線を少し明るく */
     padding: 10px 5px;
     text-align: center;
     border-radius: 8px;
@@ -297,6 +299,7 @@ h2, .player-preview, .battle-start-btn, .status-window {
     flex-direction: column;
     gap: 5px;
     max-width: 110px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 浮き出し効果 */
 }
 
 .slot-label {

@@ -40,7 +40,7 @@ function updateSelection() {
             
             // ★追加：クリア済み（現在の解放ステージより前のID）なら★を付ける
             if (stage.id < unlocked) {
-                decideBtn.innerText = "★ 出撃！"; 
+                decideBtn.innerText = "★ もう一度"; 
             } else {
                 decideBtn.innerText = "決定"; 
             }

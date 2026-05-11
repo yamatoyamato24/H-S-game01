@@ -18,36 +18,49 @@ function closeInventory() {
 
 // 3. ステータス表示の更新（装備・レベル・装備名すべてを更新）
 function refreshStatusDisplay(data) {
+    if (!data) return;
+
+    // 基本値の取得
     const level = Number(data.level) || 1;
-    const baseAtk = Number(data.attackPower) || 10;
+    const baseAtk = Number(data.attackPower) || 8;
+    const baseDef = Number(data.defensePower) || 2;
     
     let equipAtk = 0;
+    let equipDef = 0;
     let weaponName = "なし";
     let armorName = "なし";
 
+    // 装備データの取得
     if (data.equipment) {
-        if (data.equipment.weapon) {
+        if (data.equipment.weapon && itemData.weapons[data.equipment.weapon]) {
             const wItem = itemData.weapons[data.equipment.weapon];
-            equipAtk = wItem?.atk || 0;
-            weaponName = wItem?.name || "なし";
+            equipAtk = wItem.atk;
+            weaponName = wItem.name;
         }
-        if (data.equipment.armor) {
+        if (data.equipment.armor && itemData.armors[data.equipment.armor]) {
             const aItem = itemData.armors[data.equipment.armor];
-            armorName = aItem?.name || "なし";
+            equipDef = aItem.def;
+            armorName = aItem.name;
         }
     }
 
-    // 各表示場所(HTML)への反映
+    // 計算（バトル画面の計算式に統一）
+    const totalAtk = baseAtk + (level - 1) * 3 + equipAtk;
+    const totalDef = baseDef + (level - 1) * 1 + equipDef;
+
+    // HTML要素を取得して反映
     const levelElement = document.getElementById('home-level');
     const atkElement = document.getElementById('home-atk');
+    const defElement = document.getElementById('home-def');
     const weaponDisplay = document.getElementById('current-weapon-name');
     const armorDisplay = document.getElementById('current-armor-name');
 
     if (levelElement) levelElement.innerText = level;
     if (atkElement) {
-        const levelBonus = (level - 1) * 2;
-        const totalAtk = baseAtk + levelBonus + equipAtk;
         atkElement.innerText = equipAtk > 0 ? `${totalAtk} (+${equipAtk})` : totalAtk;
+    }
+    if (defElement) {
+        defElement.innerText = equipDef > 0 ? `${totalDef} (+${equipDef})` : totalDef;
     }
     if (weaponDisplay) weaponDisplay.innerText = weaponName;
     if (armorDisplay) armorDisplay.innerText = armorName;
@@ -140,14 +153,6 @@ window.onload = function() {
     const savedDataStr = localStorage.getItem('hacksla_data');
     if (savedDataStr) {
         const data = JSON.parse(savedDataStr);
-        refreshStatusDisplay(data);
-    }
-
-    const gearBtn = document.getElementById('gear-button');
-    const menuList = document.getElementById('home-menu-list');
-    if (gearBtn && menuList) {
-        gearBtn.onclick = function() {
-            menuList.style.display = (menuList.style.display === "none" || menuList.style.display === "") ? "block" : "none";
-        };
+        refreshStatusDisplay(data); // 起動時に必ず実行
     }
 };
