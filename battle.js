@@ -341,7 +341,7 @@ attackButton.onclick = function() {
                     const droppedId = equipPool[Math.floor(Math.random() * equipPool.length)];
                     const itemType = droppedId.startsWith('w') ? 'weapons' : 'armors';
                     savedDataObj.inventory[itemType].push(droppedId);
-                    dropMsg += `<br><span style="color:#004cff;">★${itemData[itemType][droppedId].name}を拾った！</span>`;
+                    dropMsg += `<br><span style="color:#ffffff;">★${itemData[itemType][droppedId].name}を拾った！</span>`;
                 }
             }
 
