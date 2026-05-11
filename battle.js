@@ -101,25 +101,23 @@ healButton.onclick = function() {
     const healAmount = potionInfo.heal;
 
     // 1. 【正常に回復できる場合】
-    if (potionCount > 0 && playerHP < maxPlayerHP) {
-        potionCount--; // 1個消費
-        
-        playerHP += healAmount;
-        if (playerHP > maxPlayerHP) playerHP = maxPlayerHP;
+if (potionCount > 0 && playerHP < maxPlayerHP) {
+    potionCount--; // 1個消費
+    
+    playerHP += healAmount;
+    if (playerHP > maxPlayerHP) playerHP = maxPlayerHP;
 
-        // UI（バーと残数）更新
-        updateHealUI();
-        document.getElementById('player-hp-bar-fill').style.width = (playerHP / maxPlayerHP) * 100 + "%";
-        
-        messageText.innerText = `${potionInfo.name}を使用した！ HPが${healAmount}回復！`;
-        messageText.style.color = "#00ff88"; 
-        setTimeout(() => {
-            messageText.style.color = "#ffcc00"; 
-        }, 1000);
-        
-        saveGameData(); 
+    // UI更新
+    updateHealUI();
+    document.getElementById('player-hp-bar-fill').style.width = (playerHP / maxPlayerHP) * 100 + "%";
+    
+    messageText.innerText = `${potionInfo.name}を使用した！ HPが${healAmount}回復！`;
 
-    // 2. 【HPがすでに満タンの場合】
+    // ★重要：ここを書き換え！既存のインベントリや装備を壊さずに保存します
+    let currentData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
+    currentData.potionCount = potionCount; // 減った後の数を反映
+    localStorage.setItem('hacksla_data', JSON.stringify(currentData));
+
     } else if (playerHP >= maxPlayerHP) {
         messageText.innerText = "HPは満タンです！";
     } else {
@@ -163,9 +161,27 @@ function spawnMonster() {
     if (isProcessingDefeat) return;
 
     const stage = stageMonsterData[currentStageId]; 
-    // ★ 判定：次のカウントが 10, 20... ならボス。
     const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0) || (currentStageId === 5);
     
+    const battleField = document.getElementById('battle-field');
+    
+    // --- 格子演出の切り替え ---
+    if (currentStageId === 5) {
+        // ステージ5なら「左半分の線」だけ隠す
+        battleField.classList.add('boss-clean-half');
+    } else {
+        battleField.classList.remove('boss-clean-half');
+    }
+
+    // --- (以下、名前の表示や画像セットの処理) ---
+    // ここで画像にクラスを付けることで大きさが変わります
+    if (currentStageId === 5) {
+        monsterSprite.classList.add('boss-giant-mode');
+    } else {
+        monsterSprite.classList.remove('boss-giant-mode');
+    }
+    
+
     // （背景設定・名称表示などはそのまま）
     if (isBoss) {
         currentMonster = stage.boss;

@@ -396,3 +396,20 @@ html, body {
     20% { opacity: 1; transform: translate(-50%, -20px) scale(1.2); }
     100% { opacity: 0; transform: translate(-50%, -60px) scale(1); }
 }
+
+#battle-field.boss-clean-half::after {
+    /* 左半分を黒く塗りつぶして線を隠す（右半分は透明で線が見える） */
+    background-image: 
+        linear-gradient(to right, #000 50%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px) !important;
+}
+
+/* ラスボスの巨大化設定（ID指定を重ねて優先順位を最大に） */
+#game-container #battle-field #enemy-side img#monster-sprite.boss-giant-mode {
+    width: 300px !important;  /* さらに大きくしました */
+    height: 300px !important;
+    max-width: none !important;
+    margin-bottom: -30px !important; /* 足元を調整 */
+    transform: none !important; /* 他のアニメーション干渉をリセット */
+}
