@@ -406,7 +406,7 @@ attackButton.onclick = function() {
                     messageText.innerHTML = `<span style="color:gold; font-weight:bold;">ラスボス撃破！！<br>世界が光に包まれる...</span>`;
                     
                     setTimeout(() => { 
-                        window.location.href = 'ending.html?v=2'; 
+                        window.location.href = 'ending.html?v=3'; 
                     }, 3000);
                 } else {
                     // ステージ1〜4のボス撃破の場合

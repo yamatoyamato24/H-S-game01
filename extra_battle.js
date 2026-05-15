@@ -395,7 +395,7 @@ attackButton.onclick = function() {
                     messageText.innerHTML = `<span style="color:gold; font-weight:bold;">異界の支配者 撃破！！<br>世界に真の平和が訪れる...</span>`;
                     
                     setTimeout(() => { 
-                        window.location.href = 'ending.html?v=2'; 
+                        window.location.href = 'ending.html?v=3'; 
                     }, 3000);
                 } else {
                     // 裏ステージ6, 7のボス撃破の場合：次の裏エリアを解放して一度拠点へ帰還
