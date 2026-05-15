@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ステージ選択</title>
+    <!-- 1. 元のCSSを読み込みます -->
+    <link rel="stylesheet" href="stage_select_style.css">
+    
+    <style>
+        /* 2. PC表示用：外側を真っ黒にする設定のみ（配置を壊すflexは使いません） */
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #000000 !important;
+            height: 100dvh !important;
+            overflow: hidden !important;
+        }
+
+        /* 3. スマホ枠固定 ＋ あなたが用意した裏の背景画像を設置 */
+        .stage-container {
+            width: 100% !important;
+            max-width: 450px !important; 
+            height: 100dvh !important;   
+            position: relative !important; /* ボタンを下部固定するための基準点 */
+            box-sizing: border-box !important;
+            border-left: 1px solid #333 !important;  
+            border-right: 1px solid #333 !important;
+            overflow: hidden !important;
+            
+            /* PC画面で中央に寄せるための設定 */
+            margin: 0 auto !important; 
+
+            /* 手前の通常画像を完全に消し去り、裏画像を貼る */
+            background-color: #100000 !important;
+            background-image: url('extra/extra_stage.png') !important; 
+            background-size: cover !important;
+            background-position: center !important;
+        }
+
+        /* 4. スマホ枠の中だけに「赤暗い霧」をかける */
+        .stage-container::before {
+            content: "" !important;
+            position: absolute !important;
+            top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important;
+            background: rgba(40, 0, 0, 0.4) !important; 
+            pointer-events: none !important;
+            z-index: 1 !important;
+        }
+
+        /* 5. 「拠点へ」ボタン：スマホ枠の右上にピタッと固定し、通常と同じサイズ・位置にする */
+            /* 5. 右上のボタンエリア：2つのボタンを縦に綺麗に並べる */
+        /* 5. 右上のボタンエリア：重なりを完全に解消し、右端に美しく縦整列させる */
+        #extra-nav-buttons {
+            position: absolute !important;
+            top: 15px !important;
+            right: 15px !important;
+            display: flex !important;
+            flex-direction: column !important; /* 確実に縦並びにする */
+            gap: 8px !important;               /* ボタン同士の上下のスキマ */
+            align-items: flex-end !important;  /* 右端のラインを完全に揃える */
+            z-index: 10 !important;
+            width: auto !important;
+        }
+
+        /* 2つのボタン共通：古いCSSの干渉をすべて遮断し、サイズを完全に統一する */
+        #home-return-button, #gensei-return-button {
+            /* ★最重要：古いCSSの配置ルールを完全にリセットして枠の中に閉じ込める */
+            position: static !important; 
+            
+            /* ★最重要：ボタンの横幅を「90px」に統一し、ガタつきと重なりを100%防止 */
+            width: 105px !important; 
+            height: auto !important;
+            padding: 8px 0 !important;   /* 上下の押しやすさを保ちつつ、横は文字を中央寄せ */
+            text-align: center !important;
+            margin: 0 !important;        /* 古いCSSの余白の残骸をクリア */
+            font-size: 13px !important; 
+            font-weight: bold !important;
+            border-radius: 5px !important; 
+            cursor: pointer !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 拠点へボタン：赤黒いデザイン */
+        #home-return-button {
+            background: #400 !important;
+            color: #f44 !important;
+            border: 1px solid #f44 !important;
+        }
+
+        /* 現世に戻るボタン：ダークグレーデザイン */
+        #gensei-return-button {
+            background: #222 !important;
+            color: #aaa !important;
+            border: 1px solid #555 !important;
+        }
+
+
+
+        /* 6. 決定・戻るボタンのエリアを画面の最下部に強制ピン留め */
+        .stage-ui-wrapper {
+            position: absolute !important;
+            bottom: 40px !important;  /* 画面の一番底から40px浮かせた位置に固定 */
+            left: 50% !important;
+            transform: translateX(-50%) !important; /* 横方向の完全ど真ん中寄せ */
+            width: 90% !important;   
+            max-width: 400px !important;
+            text-align: center !important;
+            z-index: 10 !important;
+        }
+
+        /* 7. ボタン同士の横並びを綺麗に保る */
+        .stage-buttons {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 10px !important; 
+            margin-top: 12px !important;
+            width: 100% !important;
+        }
+
+        /* 8. ボタン自体の色を裏仕様に微調整 */
+        .stage-btn {
+            background: #200 !important;
+            color: #fff !important;
+            border: 1px solid #444 !important;
+        }
+        #decide-btn {
+            background: #400 !important;
+            color: #f44 !important;
+            border: 1px solid #f44 !important;
+        }
+
+        /* 魔法陣（カーソル）も霧より手前へ出す */
+        #selection-cursor {
+            position: relative !important;
+            z-index: 5 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stage-container">
+        <!-- ★「拠点へ」の行き先を home.html に変更し、その下に「現世に戻る」を追加 -->
+        <div id="extra-nav-buttons">
+            <button id="home-return-button" onclick="location.href='home.html'">
+                ◀ 拠点へ
+            </button>
+            <button id="gensei-return-button">
+                現世に戻る
+            </button>
+        </div>
+
+        <!-- 2. 3D回転カーソル（魔法陣） -->
+        <div id="selection-cursor">
+            <div class="layer layer1"></div>
+            <div class="layer layer2"></div>
+            <div class="layer layer3"></div>
+        </div>
+
+        <!-- 3. UIエリア（下部に中央寄せで配置） -->
+        <div class="stage-ui-wrapper">
+            <!-- ステージ情報表示 -->
+            <div id="stage-info">
+                <span id="stage-title">ステージ 6</span><br>
+                <small id="stage-description">裏・はじまりの地</small>
+            </div>
+            
+            <!-- ボタン並び： ←戻る 決定 次へ→ -->
+            <div class="stage-buttons">
+                <button id="prev-btn" class="stage-btn control-btn">←戻る</button>
+                <button id="decide-btn" class="stage-btn">決定</button>
+                <button id="next-btn" class="stage-btn control-btn">次へ→</button>
+            </div>
+        </div> 
+    </div> <!-- stage-container 閉じ -->
+
+    <script src="extra_stage_select.js"></script>
+</body>
+</html>

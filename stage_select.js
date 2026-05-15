@@ -91,12 +91,50 @@ document.getElementById('prev-btn').onclick = () => {
     updateSelection();
 };
 
+// --- 決定ボタンの処理（統合版） ---
 decideBtn.onclick = () => {
     const data = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
     data.currentStageId = stages[currentIndex].id;
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-    window.location.href = 'battle.html';
+
+    if (window.isGoingToExtra) {
+        // 裏モードなら隠しステージへ
+        window.location.href = 'extra_stage.html';
+    } else {
+        // 通常モードならいつものバトルへ
+        window.location.href = 'battle.html';
+    }
 };
+
+// --- 隠しステージ選択画面へのジャンプ処理 ---
+document.addEventListener('DOMContentLoaded', () => {
+    const savedData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
+    const extraContainer = document.getElementById('extra-switch-container');
+    const extraBtn = document.getElementById('toggle-extra-mode');
+
+    // 1. ステージ5をクリアしていたらスイッチを表示
+    if (savedData.isCleared) {
+        if (extraContainer) extraContainer.style.display = 'block';
+    }
+
+    // 2. 「異界の門を開く」ボタンを押したら、裏の選択画面へ直接ジャンプさせる
+    extraBtn?.addEventListener('click', () => {
+        window.location.href = 'extra_stage_select.html';
+    });
+});
+
+// 3. 決定ボタンの処理を少し改造（既存の決定処理のあたりを書き換えてください）
+// もし決定ボタンの onclick が JS内にあるなら、以下のように書き換えます
+document.getElementById('decide-btn')?.addEventListener('click', () => {
+    if (window.isGoingToExtra) {
+        // 裏モードなら隠しステージへ
+        location.href = 'extra_stage_select.html';
+    } else {
+        // 通常モードならいつものバトルへ
+        location.href = 'battle.html';
+    }
+});
+
 
 // 起動時に初期化を実行
 window.onload = init;

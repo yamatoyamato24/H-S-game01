@@ -82,9 +82,7 @@ function showTab(type) {
     const currentId = (type === 'weapons') ? equipped.weapon : equipped.armor;
     const itemIds = inventory[type] || [];
 
-    // --- ① ヘッダー右側の「装備中」表示（変更なし） ---
-    // (省略しますが、先ほどのコードをそのまま使用します)
-    // --- 装備中の表示ロジック ---
+    // --- ① ヘッダー右側の「装備中」表示 ---
     if (currentId) {
         const item = itemData[type][currentId];
         miniSlot.innerHTML = `
@@ -100,7 +98,7 @@ function showTab(type) {
         miniSlot.innerHTML = `<div class="item-card equipped-style" style="color:#666; justify-content:center; align-items:center; display:flex;">なし</div>`;
     }
 
-    // --- ② 【ここが重要】同じアイテムをカウントする ---
+    // --- ② 同じアイテムをカウントする ---
     const counts = {};
     itemIds.forEach(id => {
         counts[id] = (counts[id] || 0) + 1;
@@ -141,13 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (gearBtn && menuList) {
         gearBtn.addEventListener('click', (e) => {
-            // イベントの伝播を止めて、メニュー自体がすぐ閉じるのを防ぐ
             e.stopPropagation();
             const isHidden = menuList.style.display === 'none';
             menuList.style.display = isHidden ? 'block' : 'none';
         });
 
-        // メニュー以外をクリックした時に閉じる（おまけの親切機能）
         document.addEventListener('click', () => {
             menuList.style.display = 'none';
         });
@@ -168,11 +164,33 @@ function equipItem(type, id) {
     showTab(type); // インベントリの表示を更新
 }
 
+// 🔥【新規実装】「冒険に出る」ボタン押下時の進行度に応じた自動分岐分岐処理
+function startAdventure() {
+    const savedDataStr = localStorage.getItem('hacksla_data');
+    if (savedDataStr) {
+        const data = JSON.parse(savedDataStr);
+        // 裏ステージ解放フラグが true であれば裏の選択画面へ直接遷移
+        if (data.isExtraUnlocked === true) {
+            location.href = 'extra_stage_select.html';
+            return;
+        }
+    }
+    // データがない、または通常進行中であれば通常の選択画面へ
+    location.href = 'stage_select.html';
+}
+
 // --- 初期化 ---
 window.onload = function() {
     const savedDataStr = localStorage.getItem('hacksla_data');
     if (savedDataStr) {
         const data = JSON.parse(savedDataStr);
         refreshStatusDisplay(data); // 起動時に必ず実行
+    }
+
+    // 🔥【新規実装】HTML側の「冒険に出る」ボタンとイベントを安全に紐付け
+    // HTMLのボタンIDが異なる場合は、実際のID（例: 'adventure-btn' 等）に書き換えてください
+    const adventureBtn = document.getElementById('adventure-button');
+    if (adventureBtn) {
+        adventureBtn.onclick = startAdventure; // セーブデータを見て通常/裏を自動分岐
     }
 };

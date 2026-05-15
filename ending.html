@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Ending</title>
+    <style>
+        body {
+            margin: 0;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: "MS明朝", serif;
+            transition: background 2s ease;
+        }
+
+        /* 🔥裏クリア時に画面を神聖な黒・金デザインにするための特殊クラス */
+        body.true-clear-style {
+            background: #000000 !important;
+        }
+        body.true-clear-style #ending-text {
+            color: #ffea00 !important; /* 金色の文字 */
+        }
+        body.true-clear-style #next-stage-popup {
+            background: rgba(0, 20, 0, 0.9) !important; /* 深緑・聖なるシールド */
+            border: 2px solid #ffea00 !important;
+            box-shadow: 0 0 20px rgba(255, 234, 0, 0.6) !important;
+        }
+        body.true-clear-style .go-extra-btn {
+            color: #ffea00 !important;
+            border: 1px solid #ffea00 !important;
+        }
+        body.true-clear-style .go-extra-btn:hover {
+            background: #ffea00 !important;
+            color: #000 !important;
+        }
+
+        .noise-bg {
+            position: fixed;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: url('https://transparenttextures.com');
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes noise-anim {
+            0% { transform: translate(0,0); }
+            10% { transform: translate(-2px,-2px); }
+            20% { transform: translate(2px,2px); }
+            30% { transform: translate(-2px,4px); }
+            100% { transform: translate(0,0); }
+        }
+
+        .noise-active {
+            opacity: 0.2;
+            animation: noise-anim 0.1s infinite;
+        }
+
+        #ending-text {
+            text-align: center;
+            z-index: 10;
+            color: #333;
+            transition: color 2s ease;
+        }
+
+        h1, p { opacity: 0; transition: opacity 1.5s ease; }
+
+        #fion-text {
+            display: block;
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: #ff4444;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+
+        /* 画面下のポップアップ設定 */
+        #next-stage-popup {
+            position: fixed;
+            bottom: -150px; /* 最初は隠しておく */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 400px;
+            background: rgba(40, 0, 0, 0.9);
+            border: 2px solid #ff4444;
+            padding: 20px;
+            text-align: center;
+            z-index: 100;
+            transition: bottom 1s ease-out;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+        }
+
+        #next-stage-popup.show {
+            bottom: 50px; /* 浮かび上がる位置 */
+        }
+
+        .go-extra-btn {
+            background: #000;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            margin-top: 10px;
+        }
+
+        .go-extra-btn:hover {
+            background: #ff4444;
+            color: #000;
+        }
+
+        ruby rt { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+    <div class="noise-bg" id="noise"></div>
+
+    <!-- ここをJSで通常・裏に応じてテキスト動的書き換えします -->
+    <div id="ending-text">
+        <h1 id="t1">ラスボスを倒し、</h1>
+        <p id="t2">冒険はこれで終わった……</p>
+        <span id="fion-text">
+            しかし、何やら<ruby>不穏<rt>ふおん</rt></ruby>な雰囲気が漂い始める…
+        </span>
+    </div>
+
+    <!-- ポップアップ枠 -->
+    <div id="next-stage-popup">
+        <div id="popup-title" style="color: #fff; margin-bottom: 10px; font-size: 14px;">未知の領域への扉が開かれた…</div>
+        <button class="go-extra-btn" id="popup-btn" onclick="goToExtra()">本当の戦いへ向かう</button>
+    </div>
+
+<script>
+// グローバル変数として定義し、HTML側のonclickから呼び出せるように連動
+let goToExtra = function() {}; 
+
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. セーブデータを読み込む（現在のステージIDを取得）
+    const savedData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
+    const stageId = Number(savedData.currentStageId) || 5;
+
+    // 操作するHTML要素を取得
+    const t1 = document.getElementById('t1');
+    const t2 = document.getElementById('t2');
+    const fionText = document.getElementById('fion-text');
+    const noise = document.getElementById('noise');
+    const popup = document.getElementById('next-stage-popup');
+    const popupTitle = document.getElementById('popup-title');
+    const popupBtn = document.getElementById('popup-btn');
+
+    // ⏳ 共通の時間差フェードイン演出（タイムライン）
+    setTimeout(() => { if(t1) t1.style.opacity = 1; }, 500);
+    setTimeout(() => { if(t2) t2.style.opacity = 1; }, 2000);
+
+    // 2. 【裏ステージ（ステージ8）クリアの演出】
+    if (stageId === 8) {
+        // 画面デザインを真クリア仕様（黒＋金）に反転
+        document.body.classList.add('true-clear-style');
+
+        // テキストを真クリアの内容に変更
+        if (t1) t1.innerText = "✨ TRUE CLEAR ✨";
+        if (t2) t2.innerHTML = "あなたは世界の深淵に潜む『異界の支配者』を完全に討ち果たした！<br>世界を蝕んでいた怪しい赤暗い霧は晴れ、真の平和が訪れた。";
+        
+        // 3.5秒後に、不穏ではなく「祝福」のメッセージをフェードイン
+        setTimeout(() => {
+            if (fionText) {
+                fionText.style.color = "#ffea00"; // 金色
+                fionText.innerHTML = "🎉 ハクスラRPG・裏モード、完全制覇おめでとうございます！！";
+                fionText.style.opacity = 1;
+            }
+        }, 3500);
+
+        // 6秒後に、クリア祝いのポップアップをせり上げる
+        setTimeout(() => {
+            if (popupTitle) popupTitle.innerText = "異界の脅威は去った。凱旋しよう！";
+            if (popupBtn) popupBtn.innerText = "真の英雄として拠点へ戻る";
+            if (popup) popup.classList.add('show');
+        }, 6000);
+
+        // ボタンを押したときの挙動を「拠点へ戻る」に設定
+        goToExtra = function() {
+            // ステージIDを6に戻し、再度「冒険に出る」を押した時は裏ステージの1番目から遊べるようにする
+            savedData.currentStageId = 6;
+            localStorage.setItem('hacksla_data', JSON.stringify(savedData));
+            location.href = 'home.html';
+        };
+
+    // 3. 【通常ステージ（ステージ5）クリアの演出】
+    } else {
+        // 元からあった不穏なノイズ演出タイムラインをそのまま実行
+        setTimeout(() => {
+            if (fionText) fionText.style.opacity = 1;
+        }, 3500);
+
+        // 5.5秒後に画面がバグるノイズを発動
+        setTimeout(() => {
+            if (noise) noise.classList.add('noise-active');
+            document.body.style.background = "#200000"; // 薄暗い赤に変色
+            if (t1) t1.style.color = "#ff4444";
+            if (t2) t2.style.color = "#ff4444";
+        }, 5500);
+
+        // 7.5秒後に、異界ゲート解放のポップアップをせり上げる
+        setTimeout(() => {
+            if (popup) popup.classList.add('show');
+        }, 7500);
+
+        // ボタンを押したときの挙調を「裏ステージ解放」に設定
+        goToExtra = function() {
+            // 裏ステージの解放フラグを立てて、裏の選択画面へ導く
+            savedData.isExtraUnlocked = true;
+            savedData.currentStageId = 6; // 初期値をステージ6にする
+            localStorage.setItem('hacksla_data', JSON.stringify(savedData));
+            location.href = 'extra_stage_select.html';
+        };
+    }
+});
+</script>
+
+</body>
+</html>

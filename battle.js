@@ -47,7 +47,7 @@ const stageMonsterData = {
     2: { name: "青い湖", color: "#1e3a8a", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "なにこれ？", exp: 60, hp: 50, damage: 15, def: 5, sprite: "assets/marisaku03.png", speed: 700 }, { name: "手のようかい", exp: 90, hp: 150, damage: 35, def: 5, sprite: "assets/marisaku04.png", speed: 500 }, { name: "おばけかな？", exp: 100, hp: 200, damage: 25, def: 5, sprite: "assets/marisaku05.png", speed: 1000 }], boss: { name: "戦艦くん", exp: 1000, hp: 1200, damage: 60, def: 20, sprite: "assets/sorasaku01.png", speed: 2000 } },
     3: { name: "いなずまのとりで", color: "#854d0e", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "ネコもどき", exp: 120, hp: 120, damage: 30, def: 15, sprite: "assets/sorasaku02.png", speed: 1000 }, { name: "そっぽむき お化け", exp: 180, hp: 300, damage: 50, def: 15, sprite: "assets/sorasaku04.png", speed: 1600 }], boss: { name: "これでも船", exp: 2500, hp: 3000, damage: 100, def: 30, sprite: "assets/ship.png", speed: 2200 } },
     4: { name: "燃え盛る火山", color: "#7f1d1d", potionDropRate: 5, equipDropRate: 30, enemies: [{ name: "ニセ姫ブルー", exp: 350, hp: 800, damage: 90, def: 25, sprite: "assets/marisaku02blue.png", speed: 2500 }, { name: "ニセ姫グリーン", exp: 250, hp: 400, damage: 60, def: 25, sprite: "assets/marisaku02green.png", speed: 900 }, { name: "ニセ姫イエロー", exp: 300, hp: 600, damage: 70, def: 25, sprite: "assets/marisaku02yellow.png", speed: 1500 }], boss: { name: "ニセ姫BOSS", exp: 6000, hp: 7000, damage: 180, def: 40, sprite: "assets/marisaku02.png", speed: 3000 } },
-    5: { name: "最果ての地", color: "#000000", potionDropRate: 5, equipDropRate: 30, boss: { name: "ラスボス", exp: 20000, hp: 20000, damage: 500, def: 50, sprite: "assets/boss_image.png", speed: 3500 } }
+    5: { name: "最果ての地", color: "#000000", potionDropRate: 5, equipDropRate: 30, boss: { name: "ラスボス", exp: 20000, hp: 100, damage: 500, def: 50, sprite: "assets/boss_image.png", speed: 3500 } }
 };
 
 // --- 4. 要素の取得 ---
@@ -366,17 +366,35 @@ attackButton.onclick = function() {
             savedDataObj.potionCount = potionCount;
 
             if (isJustDefeatedBoss) {
-                // ボス撃破：新エリア解放して帰還
+                // ボス撃破時の処理
                 let unlocked = Number(savedDataObj.unlockedStage) || 1;
                 if (Number(currentStageId) >= unlocked) {
                     savedDataObj.unlockedStage = Number(currentStageId) + 1;
                 }
-                savedDataObj.currentStageId = Number(currentStageId) + 1; 
-                localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
-                messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
-                setTimeout(() => { window.location.href = 'home.html'; }, 3000);
+
+                // ★ここから分岐
+                if (Number(currentStageId) === 5) {
+                    // ラスボス(ステージ5)撃破の場合
+                    savedDataObj.isCleared = true; // ★クリアフラグを立てる
+                    localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
+                    
+                    messageText.innerHTML = `<span style="color:gold; font-weight:bold;">ラスボス撃破！！<br>世界が光に包まれる...</span>`;
+                    
+                    setTimeout(() => { 
+                        window.location.href = 'ending.html'; 
+                    }, 3000);
+                } else {
+                    // ステージ1〜4のボス撃破の場合
+                    savedDataObj.currentStageId = Number(currentStageId) + 1; 
+                    localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
+                    messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
+                    
+                    setTimeout(() => { 
+                        window.location.href = 'home.html'; 
+                    }, 3000);
+                }
             } else {
-                // ザコ撃破：次の敵へ
+                // ザコ撃破：次の敵へ（ここは変更なし）
                 localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
                 const rem = BOSS_INTERVAL - (defeatCount % BOSS_INTERVAL);
                 messageText.innerHTML = `Bossまであと ${rem} 体${dropMsg}`;
