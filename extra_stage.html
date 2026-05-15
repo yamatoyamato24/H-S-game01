@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>バトル画面</title>
-    <link rel="stylesheet" href="battle_style.css">
+    <link rel="stylesheet" href="battle_style.css?v=2">
     <!-- ★裏ステージ専用：壁と地面の間を含め、すべての境界線を一括で赤く上書き明滅★ -->
     <style>
         /* 1. 【壁と地面の間の境界線をピンポイントで狙い撃ち＋全背景線を赤く染める】 */
@@ -39,21 +39,20 @@
             box-sizing: border-box !important;
         }
 
-        /* 3. 💥 【超強化・完全点火】敵キャラの攻撃時ブルブル揺れモーション */
-        /* 画像単体をピンポイントで狙い撃ちし、親要素の明滅アニメーションと100%完全に独立させて揺らします */
+        /* 💥 【最重要修正】親要素の座標に干渉せず、その場で綺麗にブルブル震わせる設定 */
         img#monster-sprite.shake-animation {
-            display: block !important;
-            animation: enemy-attack-shake 0.4s ease-in-out !important;
+            /* 元のbattle_style.cssの配置を完全に維持したまま、見た目（描画位置）だけをその場で安全に揺らします */
+            animation: enemy-perfect-shake 0.4s ease-in-out !important;
         }
 
-        @keyframes enemy-attack-shake {
-            0% { transform: scale(1) translateX(0) rotate(0deg); }
-            15% { transform: scale(1.05) translateX(-15px) rotate(-4deg); }
-            30% { transform: scale(1.05) translateX(15px) rotate(4deg); }
-            45% { transform: scale(1) translateX(-10px) rotate(-2deg); }
-            60% { transform: scale(1) translateX(8px) rotate(2deg); }
-            80% { transform: scale(1) translateX(-4px) rotate(-1deg); }
-            100% { transform: scale(1) translateX(0) rotate(0deg); }
+        @keyframes enemy-perfect-shake {
+            0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+            15% { transform: scale(1.05) translate(-10px, 0) rotate(-2deg); }
+            30% { transform: scale(1.05) translate(10px, 0) rotate(2deg); }
+            45% { transform: scale(1) translate(-6px, 0) rotate(-1deg); }
+            60% { transform: scale(1) translate(6px, 0) rotate(1deg); }
+            80% { transform: scale(1) translate(-3px, 0) rotate(0deg); }
+            100% { transform: scale(1) translate(0, 0) rotate(0deg); }
         }
 
         /* 背景色と「壁と地面の境界線」を含めたすべての赤線を同時に禍々しく呼吸させる明滅アニメーション */
@@ -153,6 +152,6 @@
 </div>
     <script src="items.js"></script>
     <script src="extra_monsters.js"></script>
-    <script src="extra_battle.js"></script>
+    <script src="extra_battle.js?v=2"></script>
 </body>
 </html>
