@@ -190,18 +190,32 @@ function spawnMonster() {
     
     clearInterval(enemyAttackTimer);
     enemyAttackTimer = setInterval(enemyAttack, currentMonster.speed);
+
+        // 💥【超重要：左スライドバグ完全消滅コード】
+    // 敵が登場し終わる1秒後（1000ms）に、出現用のクラスを綺麗に削除して残さないようにします
+    setTimeout(() => {
+        if (monsterSprite) monsterSprite.classList.remove('enemy-appear');
+    }, 1000);
 }
 
-// --- 敵の攻撃（通常互換・裏ステージ補正計算版） ---
+// --- 敵の攻撃（通常互換・裏ステージ補正計算版・エラー完全解消仕様） ---
 function enemyAttack() {
     if (monsterHP <= 0 || playerHP <= 0 || isProcessingDefeat) return;
     
-    if (monsterSprite && !monsterSprite.classList.contains('enemy-appear')) {
+    // 💡【確実な揺らし方】一度クラスを完全に消去し、わずか1ミリ秒後に再付与して点火
+    if (monsterSprite) {
         monsterSprite.classList.remove('shake-animation');
-        void monsterSprite.offsetWidth; 
-        monsterSprite.classList.add('shake-animation');
+        setTimeout(() => {
+            monsterSprite.classList.add('shake-animation');
+        }, 1);
+        
+        // 攻撃アニメーションが終わる0.4秒後にクラスを綺麗に掃除しておく
+        setTimeout(() => {
+            monsterSprite.classList.remove('shake-animation');
+        }, 400);
     }
 
+    // （以下、レベル防御の計算やプレイヤーへのダメージ処理）
     let levelDef = (level - 1) * 2;
     let totalDef = defensePower + levelDef + equipDef;
     
@@ -226,7 +240,6 @@ function enemyAttack() {
         messageText.innerText = "敗北してしまった…";
         attackButton.disabled = true;
         clearInterval(enemyAttackTimer);
-
 
         // 🛡️ 装備保護ロジック：既存のセーブデータを丸ごと読み込む
         let currentData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
@@ -382,7 +395,7 @@ attackButton.onclick = function() {
                     messageText.innerHTML = `<span style="color:gold; font-weight:bold;">異界の支配者 撃破！！<br>世界に真の平和が訪れる...</span>`;
                     
                     setTimeout(() => { 
-                        window.location.href = 'ending.html'; 
+                        window.location.href = 'ending.html?v=2'; 
                     }, 3000);
                 } else {
                     // 裏ステージ6, 7のボス撃破の場合：次の裏エリアを解放して一度拠点へ帰還

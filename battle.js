@@ -215,18 +215,28 @@ function spawnMonster() {
     homeReturnButton.style.display = "none";
     clearInterval(enemyAttackTimer);
     enemyAttackTimer = setInterval(enemyAttack, currentMonster.speed);
+        // 💥【超重要：通常ステージ側も左スライドバグ完全消滅】
+    setTimeout(() => {
+        if (monsterSprite) monsterSprite.classList.remove('enemy-appear');
+    }, 1000);
 }
 
-// --- 敵の攻撃（敗北時のセーブ処理を修正） ---
+// --- 敵の攻撃（敗北時の装備保護＆揺れ演出完全修正版） ---
 function enemyAttack() {
     if (monsterHP <= 0 || playerHP <= 0) return;
     
-    // --- 修正ポイント：出現アニメーション中は揺らさない ---
-    // もし敵がまだスライド登場中（enemy-appearクラスがある間）なら、揺れ演出をスキップする
+    // --- 修正ポイント：出現アニメーション中（スライド中）は揺らさない制御を維持 ---
     if (!monsterSprite.classList.contains('enemy-appear')) {
+        // 💡【確実な揺らし方】一度クラスを完全に消去し、わずか1ミリ秒後に再付与してブラウザに再認識させます
         monsterSprite.classList.remove('shake-animation');
-        void monsterSprite.offsetWidth; // 揺れのための再描画
-        monsterSprite.classList.add('shake-animation');
+        setTimeout(() => {
+            monsterSprite.classList.add('shake-animation');
+        }, 1);
+        
+        // 攻撃アニメーションが終わる0.4秒後にクラスを綺麗に掃除しておく
+        setTimeout(() => {
+            monsterSprite.classList.remove('shake-animation');
+        }, 400);
     }
 
     let levelDef = (level - 1) * 2;
@@ -253,13 +263,28 @@ function enemyAttack() {
         attackButton.disabled = true;
         clearInterval(enemyAttackTimer);
 
+        // 🛡️【最重要：装備保護ロジック】既存のセーブデータを丸ごと読み込む
         let currentData = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
+
+        // 基本ステータスやポーション数を安全に更新（現在の装備やカバンの中身はそのまま完全に維持される）
+        currentData.level = level;
+        currentData.exp = exp;
+        currentData.attackPower = attackPower;
+        currentData.defensePower = defensePower;
         currentData.potionCount = potionCount;
+        
+        // 通常ステージ用のかばん（inventory）データが変数にあれば同期する
+        if (typeof inventory !== 'undefined') {
+            currentData.inventory = inventory;
+        }
+
+        // データを破壊せずに確実に保存
         localStorage.setItem('hacksla_data', JSON.stringify(currentData));
 
         setTimeout(() => { document.getElementById('gameover-modal').style.display = "flex"; }, 1000);
     }
 }
+
 
 // --- 攻撃ボタンクリック（完全修正版） ---
 attackButton.onclick = function() {
@@ -381,7 +406,7 @@ attackButton.onclick = function() {
                     messageText.innerHTML = `<span style="color:gold; font-weight:bold;">ラスボス撃破！！<br>世界が光に包まれる...</span>`;
                     
                     setTimeout(() => { 
-                        window.location.href = 'ending.html'; 
+                        window.location.href = 'ending.html?v=2'; 
                     }, 3000);
                 } else {
                     // ステージ1〜4のボス撃破の場合

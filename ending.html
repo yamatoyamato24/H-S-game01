@@ -16,7 +16,7 @@
             transition: background 2s ease;
         }
 
-        /* 🔥裏クリア時に画面を神聖な黒・金デザインにするための特殊クラス */
+        /* 裏クリア時に画面を神聖な黒・金デザインにするための特殊クラス */
         body.true-clear-style {
             background: #000000 !important;
         }
@@ -64,6 +64,10 @@
             z-index: 10;
             color: #333;
             transition: color 2s ease;
+            box-sizing: border-box;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px; /* スマホサイズ内包 */
         }
 
         h1, p { opacity: 0; transition: opacity 1.5s ease; }
@@ -83,7 +87,7 @@
             bottom: -150px; /* 最初は隠しておく */
             left: 50%;
             transform: translateX(-50%);
-            width: 80%;
+            width: 85%;
             max-width: 400px;
             background: rgba(40, 0, 0, 0.9);
             border: 2px solid #ff4444;
@@ -116,13 +120,64 @@
         }
 
         ruby rt { font-size: 0.6em; }
+
+        /* 📱 【新規追加】スマホ画面（縦持ち最大450px以下）のときだけ文字をガツンと大きく見やすくする設定 */
+        @media screen and (max-width: 450px) {
+            #ending-text h1, body.true-clear-style #t1 {
+                font-size: 26px !important;  /* 「ラスボスを倒し」等の見出しを大きく */
+                margin-bottom: 20px !important;
+            }
+            #ending-text p {
+                font-size: 17px !important;  /* 「冒険は終わった…」等の本文をクッキリ */
+                line-height: 1.6 !important;
+                margin: 12px 0 !important;
+            }
+            #fion-text {
+                font-size: 17px !important;  /* 「しかし不穏な雰囲気が…」の赤文字を読みやすく */
+                margin-top: 35px !important;
+                line-height: 1.5 !important;
+            }
+            #next-stage-popup {
+                width: 90% !important;     /* スマホ枠の横幅いっぱいに広げる */
+                padding: 15px !important;
+            }
+            #popup-title {
+                font-size: 15px !important;  /* ポップアップ内の通知文字 */
+                line-height: 1.4 !important;
+            }
+            .go-extra-btn {
+                font-size: 15px !important;  /* 突入ボタンを太くて押しやすい大きさに */
+                padding: 12px 24px !important;
+                width: 100% !important;      /* スマホの親指で100%誤タップなく押せるサイズ */
+                box-sizing: border-box;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="noise-bg" id="noise"></div>
 
-    <!-- ここをJSで通常・裏に応じてテキスト動的書き換えします -->
+    <!-- 💡 【新規追加】スキップボタン（最初は非表示、スマホ枠の右上に固定されます） -->
+    <button id="manual-skip-btn" style="
+        display: none; 
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        z-index: 200; 
+        background: rgba(0, 0, 0, 0.7); 
+        color: #fff; 
+        border: 1px solid #555; 
+        padding: 6px 14px; 
+        font-size: 13px; 
+        font-weight: bold; 
+        border-radius: 20px; 
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    ">
+        ▶ スキップ
+    </button>
+
     <div id="ending-text">
         <h1 id="t1">ラスボスを倒し、</h1>
         <p id="t2">冒険はこれで終わった……</p>
@@ -154,6 +209,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('next-stage-popup');
     const popupTitle = document.getElementById('popup-title');
     const popupBtn = document.getElementById('popup-btn');
+    const skipBtn = document.getElementById('manual-skip-btn'); // スキップボタン
 
     // ⏳ 共通の時間差フェードイン演出（タイムライン）
     setTimeout(() => { if(t1) t1.style.opacity = 1; }, 500);
@@ -178,19 +234,30 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 3500);
 
         // 6秒後に、クリア祝いのポップアップをせり上げる
-        setTimeout(() => {
+        const bossTimer = setTimeout(() => {
             if (popupTitle) popupTitle.innerText = "異界の脅威は去った。凱旋しよう！";
             if (popupBtn) popupBtn.innerText = "真の英雄として拠点へ戻る";
             if (popup) popup.classList.add('show');
+            if (skipBtn) skipBtn.style.display = "none"; // ポップアップが出たらスキップは消す
         }, 6000);
 
         // ボタンを押したときの挙動を「拠点へ戻る」に設定
         goToExtra = function() {
-            // ステージIDを6に戻し、再度「冒険に出る」を押した時は裏ステージの1番目から遊べるようにする
+            // ⭐ 1回見た記憶（フラグ）をセーブデータに刻む
+            savedData.hasSeenTrueEnding = true;
             savedData.currentStageId = 6;
             localStorage.setItem('hacksla_data', JSON.stringify(savedData));
             location.href = 'home.html';
         };
+
+        // 💡 既読プレイヤーへのスキップ処理のバインド
+        if (skipBtn && savedData.hasSeenTrueEnding === true) {
+            skipBtn.style.display = "block"; // 過去に見ていればスキップボタンを表示！
+            skipBtn.onclick = () => {
+                clearTimeout(bossTimer); // 演出タイマーをすべて停止
+                goToExtra(); // 即座にデータを保存して拠点へワープ
+            };
+        }
 
     // 3. 【通常ステージ（ステージ5）クリアの演出】
     } else {
@@ -208,18 +275,29 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 5500);
 
         // 7.5秒後に、異界ゲート解放のポップアップをせり上げる
-        setTimeout(() => {
+        const normalTimer = setTimeout(() => {
             if (popup) popup.classList.add('show');
+            if (skipBtn) skipBtn.style.display = "none"; // ポップアップが出たらスキップは消す
         }, 7500);
 
         // ボタンを押したときの挙調を「裏ステージ解放」に設定
         goToExtra = function() {
-            // 裏ステージの解放フラグを立てて、裏の選択画面へ導く
+            // ⭐ 1回見た記憶（フラグ）をセーブデータに刻む
+            savedData.hasSeenNormalEnding = true;
             savedData.isExtraUnlocked = true;
             savedData.currentStageId = 6; // 初期値をステージ6にする
             localStorage.setItem('hacksla_data', JSON.stringify(savedData));
             location.href = 'extra_stage_select.html';
         };
+
+        // 💡 既読プレイヤーへのスキップ処理のバインド
+        if (skipBtn && savedData.hasSeenNormalEnding === true) {
+            skipBtn.style.display = "block"; // 過去に見ていればスキップボタンを表示！
+            skipBtn.onclick = () => {
+                clearTimeout(normalTimer); // 演出タイマーをすべて停止
+                goToExtra(); // 即座にデータを保存して裏の選択画面へワープ
+            };
+        }
     }
 });
 </script>
