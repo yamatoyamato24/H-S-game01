@@ -11,7 +11,7 @@ let monsterHP = 100;
 let currentMaxHP = 100;
 let enemyAttackTimer = null;
 let defeatCount = 0;
-const BOSS_INTERVAL = 10; // 通常ロジックに合わせた10体ボス仕様
+const BOSS_INTERVAL = 5; // 通常ロジックに合わせた5体ボス仕様
 let currentStageId = 6; // 裏ステージ初期値（6, 7, 8）
 let unlockedStage = 1;
 let currentMonster;
