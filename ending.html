@@ -2,6 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <!-- 📱 【超重要：スマホ文字縮小バグ完全解決コード】 -->
+    <!-- これを1行入れるだけで、スマホの画面サイズに文字やボタンが等倍でクッキリ大きくフィットします -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ending</title>
     <style>
         body {
@@ -70,12 +73,14 @@
             max-width: 450px; /* スマホサイズ内包 */
         }
 
-        h1, p { opacity: 0; transition: opacity 1.5s ease; }
+        /* 💡 パソコン表示時のベース文字サイズを調整 */
+        #ending-text h1 { font-size: 2.2rem; opacity: 0; transition: opacity 1.5s ease; margin-bottom: 25px; }
+        #ending-text p { font-size: 1.4rem; opacity: 0; transition: opacity 1.5s ease; line-height: 1.8; }
 
         #fion-text {
             display: block;
-            margin-top: 30px;
-            font-size: 1.2rem;
+            margin-top: 35px;
+            font-size: 1.3rem;
             color: #ff4444;
             opacity: 0;
             transition: opacity 3s ease;
@@ -91,7 +96,7 @@
             max-width: 400px;
             background: rgba(40, 0, 0, 0.9);
             border: 2px solid #ff4444;
-            padding: 20px;
+            padding: 25px 20px;
             text-align: center;
             z-index: 100;
             transition: bottom 1s ease-out;
@@ -100,18 +105,20 @@
         }
 
         #next-stage-popup.show {
-            bottom: 50px; /* 浮かび上がる位置 */
+            bottom: 60px; /* 浮かび上がる位置 */
         }
 
         .go-extra-btn {
             background: #000;
             color: #ff4444;
             border: 1px solid #ff4444;
-            padding: 10px 20px;
+            padding: 12px 24px;
             cursor: pointer;
             font-weight: bold;
             font-family: inherit;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-size: 16px;
+            border-radius: 5px;
         }
 
         .go-extra-btn:hover {
@@ -121,39 +128,49 @@
 
         ruby rt { font-size: 0.6em; }
 
-        /* 📱 【新規追加】スマホ画面（縦持ち最大450px以下）のときだけ文字をガツンと大きく見やすくする設定 */
+        /* 📱 【レスポンシブ拡張】スマホ画面（450px以下）の時、文字とスキップボタンをガツンと巨大化させる */
         @media screen and (max-width: 450px) {
             #ending-text h1, body.true-clear-style #t1 {
-                font-size: 26px !important;  /* 「ラスボスを倒し」等の見出しを大きく */
-                margin-bottom: 20px !important;
+                font-size: 32px !important;  /* 「ラスボスを倒し、」を非常に大きく */
+                margin-bottom: 25px !important;
             }
             #ending-text p {
-                font-size: 17px !important;  /* 「冒険は終わった…」等の本文をクッキリ */
-                line-height: 1.6 !important;
-                margin: 12px 0 !important;
+                font-size: 20px !important;  /* 「冒険はこれで終わった…」を読みやすく */
+                line-height: 1.7 !important;
+                margin: 15px 0 !important;
             }
             #fion-text {
-                font-size: 17px !important;  /* 「しかし不穏な雰囲気が…」の赤文字を読みやすく */
-                margin-top: 35px !important;
-                line-height: 1.5 !important;
+                font-size: 18px !important;  /* 不穏な赤文字をクッキリ */
+                margin-top: 45px !important;
+                line-height: 1.6 !important;
             }
             #next-stage-popup {
-                width: 90% !important;     /* スマホ枠の横幅いっぱいに広げる */
-                padding: 15px !important;
+                width: 90% !important;     
+                padding: 20px !important;
             }
             #popup-title {
-                font-size: 15px !important;  /* ポップアップ内の通知文字 */
-                line-height: 1.4 !important;
+                font-size: 16px !important;  
+                line-height: 1.5 !important;
             }
             .go-extra-btn {
-                font-size: 15px !important;  /* 突入ボタンを太くて押しやすい大きさに */
-                padding: 12px 24px !important;
-                width: 100% !important;      /* スマホの親指で100%誤タップなく押せるサイズ */
+                font-size: 16px !important;  
+                padding: 14px 28px !important;
+                width: 100% !important;      
                 box-sizing: border-box;
+            }
+            /* 💡 右上の「▶ スキップ」ボタンをスマホの親指で確実にタップできる超快適サイズに巨大化 */
+            #manual-skip-btn {
+                top: 15px !important;
+                right: 15px !important;
+                padding: 10px 22px !important; /* ボタン自体の厚み（押しやすさ）をアップ */
+                font-size: 16px !important;    /* 「▶ スキップ」の文字自体を大きく */
+                border-radius: 25px !important;
+                background: rgba(0, 0, 0, 0.85) !important; /* よりクッキリ見やすく */
             }
         }
     </style>
 </head>
+
 <body>
 
     <div class="noise-bg" id="noise"></div>
