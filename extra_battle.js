@@ -138,8 +138,7 @@ function saveGameData() {
         isExtraUnlocked: true // 裏拠点への動線固定フラグ
     }));
 }
-
-// 敵の出現（スライド登場・裏ステージ最適化版）
+// 敵の出現（スライド登場・真ボス専用背景＆赤いオーラ完全対応版）
 function spawnMonster() {
     if (isProcessingDefeat || !stageMonsterData || !stageMonsterData[currentStageId]) return;
 
@@ -157,18 +156,42 @@ function spawnMonster() {
         curtain.style.display = "none"; 
     }
 
-    // ボス・雑魚の出現分岐
+    // 🔥【修正：if文の復活】ボス・雑魚の出現分岐を正しく稼働させます
     if (isBoss) {
         currentMonster = stage.boss;
         monsterNameText.innerText = currentMonster.name;
-        messageText.innerHTML = "<span style='color:#ff4444;'>真の支配者が姿を現した！</span>";
+        messageText.innerHTML = "<span style='color:#ff4444;'>最深部の闇から、真の支配者が姿を現した...！</span>";
         if (monsterSprite) monsterSprite.classList.add('boss-giant-mode');
+
+        // 🔥 【新規追加】ステージ8（真ボス）の時だけ、特別な背景画像と赤いオーラをまとう
+        if (Number(currentStageId) === 8) {
+            // ① 真ボスのグラフィックに「赤い脈動オーラ」のCSSクラスを付与
+            if (monsterSprite) monsterSprite.classList.add('true-boss-aura');
+            
+            // ② 真ボスのステージ背景を、お好みの専用背景画像へ強制変更
+            // 💡 "extra/true_boss_bg.png" の部分を、実際のあなたの背景画像パスに書き換えてください
+            if (battleField) {
+                battleField.style.backgroundImage = "url('extra/true_boss_bg.png')";
+            }
+        } else {
+            // ステージ6や7のボスは、オーラを消して背景画像もなし（通常状態）にする
+            if (monsterSprite) monsterSprite.classList.remove('true-boss-aura');
+            if (battleField) battleField.style.backgroundImage = "none";
+        }
+
     } else {
-        // ステージ6・7の雑魚敵選出（ステージ8の時はこのルートに入らないため安全です）
+        // ステージ6・7の雑魚敵選出
         const enemyList = stage.enemies;
         currentMonster = enemyList[Math.floor(Math.random() * enemyList.length)];
         monsterNameText.innerText = currentMonster.name;
         if (monsterSprite) monsterSprite.classList.remove('boss-giant-mode');
+        
+        // 雑魚敵の時はオーラと専用背景を解除
+        if (monsterSprite) {
+            monsterSprite.classList.remove('true-boss-aura');
+            monsterSprite.classList.remove('boss-giant-mode');
+        }
+        if (battleField) battleField.style.backgroundImage = "none";
         
         const rem = BOSS_INTERVAL - ((defeatCount + 1) % BOSS_INTERVAL);
         messageText.innerText = `Bossまであと ${rem} 体`;
@@ -200,6 +223,7 @@ function spawnMonster() {
     clearInterval(enemyAttackTimer);
     enemyAttackTimer = setInterval(enemyAttack, currentMonster.speed);
 }
+
 
 // --- 敵の攻撃（通常互換・裏ステージ補正計算版・エラー完全解消仕様） ---
 function enemyAttack() {
