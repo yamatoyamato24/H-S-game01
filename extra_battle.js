@@ -156,27 +156,26 @@ function spawnMonster() {
         curtain.style.display = "none"; 
     }
 
-    // 🔥【修正：if文の復活】ボス・雑魚の出現分岐を正しく稼働させます
+    // （spawnMonster関数内の、ボス・雑魚の出現分岐の箇所を以下に上書きアップデート）
     if (isBoss) {
         currentMonster = stage.boss;
         monsterNameText.innerText = currentMonster.name;
-        messageText.innerHTML = "<span style='color:#ff4444;'>最深部の闇から、真の支配者が姿を現した...！</span>";
         if (monsterSprite) monsterSprite.classList.add('boss-giant-mode');
 
-        // 🔥 【新規追加】ステージ8（真ボス）の時だけ、特別な背景画像と赤いオーラをまとう
+        // 🔥【最重要】ステージ8（真ボス）の時だけ、時空の歪みエフェクトを点火！
+        const distortionContainer = document.getElementById('extra-distortion-bg');
         if (Number(currentStageId) === 8) {
-            // ① 真ボスのグラフィックに「赤い脈動オーラ」のCSSクラスを付与
+            // ① 真ボスの体に赤い脈動オーラをまとわせる
             if (monsterSprite) monsterSprite.classList.add('true-boss-aura');
             
-            // ② 真ボスのステージ背景を、お好みの専用背景画像へ強制変更
-            // 💡 "extra/true_boss_bg.png" の部分を、実際のあなたの背景画像パスに書き換えてください
-            if (battleField) {
-                battleField.style.backgroundImage = "url('extra/true_boss_bg.png')";
+            // ② 疑似的に「クロノトリガー魔王戦」の吸い込み歪み背景レイヤーをHTMLへ動的追加！
+            if (distortionContainer) {
+                distortionContainer.innerHTML = '<div class="chrono-magus-distortion"></div>';
             }
         } else {
-            // ステージ6や7のボスは、オーラを消して背景画像もなし（通常状態）にする
+            // ステージ6や7のボスは通常通り（オーラなし・歪み背景も消去）
             if (monsterSprite) monsterSprite.classList.remove('true-boss-aura');
-            if (battleField) battleField.style.backgroundImage = "none";
+            if (distortionContainer) distortionContainer.innerHTML = '';
         }
 
     } else {
@@ -186,16 +185,15 @@ function spawnMonster() {
         monsterNameText.innerText = currentMonster.name;
         if (monsterSprite) monsterSprite.classList.remove('boss-giant-mode');
         
-        // 雑魚敵の時はオーラと専用背景を解除
-        if (monsterSprite) {
-            monsterSprite.classList.remove('true-boss-aura');
-            monsterSprite.classList.remove('boss-giant-mode');
-        }
-        if (battleField) battleField.style.backgroundImage = "none";
+        // 雑魚敵の時もオーラと歪み背景を完全に消去
+        if (monsterSprite) monsterSprite.classList.remove('true-boss-aura');
+        const distortionContainer = document.getElementById('extra-distortion-bg');
+        if (distortionContainer) distortionContainer.innerHTML = '';
         
         const rem = BOSS_INTERVAL - ((defeatCount + 1) % BOSS_INTERVAL);
         messageText.innerText = `Bossまであと ${rem} 体`;
     }
+
 
     // --- 演出リセット：スライド登場制御 ---
     if (monsterSprite) {
@@ -448,15 +446,23 @@ attackButton.onclick = function() {
                 messageText.innerHTML = `Bossまであと ${rem} 体${dropMsg}`;
                 if (homeReturnButton) homeReturnButton.style.display = "block";
                 
+                // 敵の画像を右へ動かさず、不透明度（opacity）を0にして「その場でフワッと消滅」させます
                 if (monsterSprite) {
-                    monsterSprite.style.transform = "translateX(200px)"; // 右へ退場
+                    monsterSprite.style.transition = "opacity 0.5s ease-out"; // 0.5秒かけて消える滑らかさ
+                    monsterSprite.style.opacity = "0"; 
                 }
 
                 setTimeout(() => {
                     isProcessingDefeat = false;
                     if (playerSprite) playerSprite.classList.remove('player-lvup-flash');
-                    if (monsterSprite) monsterSprite.style.transform = "translateX(0)";
-                    spawnMonster(); 
+
+                    // 💡 次の敵が出る前に、消した透明度（opacity）と滑らかさを元通り（1）に戻しておく
+                    if (monsterSprite) {
+                        monsterSprite.style.transition = "none"; 
+                        monsterSprite.style.opacity = "1";
+                    }
+
+                    spawnMonster(); // 次の敵が出現
                 }, 2000);
             }
         }, 1000);

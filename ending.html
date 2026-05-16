@@ -238,14 +238,14 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('true-clear-style');
 
         // テキストを真クリアの内容に変更
-        if (t1) t1.innerText = "✨ 本当のゲームクリア ✨";
-        if (t2) t2.innerHTML = "あなたは『異界の支配者』を完全に討ち果たした！<br>世界を蝕んでいた怪しい赤暗い霧は晴れ、<br>真の平和が訪れた。";
+        if (t1) t1.innerText = "✨ GAME CLEAR ✨";
+        if (t2) t2.innerHTML = "あなたは『異界の支配者』を<br>完全に討ち果たした！<br>世界を包んでいた赤暗い霧は晴れ、<br>真の平和が訪れた。";
         
         // 3.5秒後に、不穏ではなく「祝福」のメッセージをフェードイン
         setTimeout(() => {
             if (fionText) {
                 fionText.style.color = "#ffea00"; // 金色
-                fionText.innerHTML = "🎉 裏ステージ、完全制覇おめでとうございます";
+                fionText.innerHTML = "🎉 裏ステージ、制覇おめでとうございます";
                 fionText.style.opacity = 1;
             }
         }, 3500);
