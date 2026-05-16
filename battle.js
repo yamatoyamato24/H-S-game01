@@ -101,7 +101,7 @@ healButton.onclick = function() {
     const healAmount = potionInfo.heal;
 
     // 1. 【正常に回復できる場合】
-if (potionCount > 0 && playerHP < maxPlayerHP) {
+    if (potionCount > 0 && playerHP < maxPlayerHP) {
     potionCount--; // 1個消費
     
     playerHP += healAmount;
@@ -148,8 +148,8 @@ function updateExpUI() {
     if (nextText) nextText.innerText = (nextExp - exp);
 }
 
-// データ保存
-function saveGameData() {
+    // データ保存
+    function saveGameData() {
     localStorage.setItem('hacksla_data', JSON.stringify({ 
         level, exp, attackPower, defensePower, currentStageId, unlockedStage, potionCount,
         inventory // これを追加！
@@ -189,7 +189,7 @@ function spawnMonster() {
     if (isBoss) {
         currentMonster = stage.boss;
         monsterNameText.innerText = (currentStageId === 5 ? "【ラスボス】" : "【ボス】") + currentMonster.name;
-        messageText.innerHTML = "<span style='color:#ff4444;'>強大な気配を感じる...！</span>";
+        messageText.innerHTML = "<span style='color:#ff4444;'>強大な気配...！</span>";
     } else {
         currentMonster = stage.enemies[Math.floor(Math.random() * stage.enemies.length)];
         monsterNameText.innerText = currentMonster.name;
