@@ -22,11 +22,11 @@ const extraMonsterData = {
         potionDropRate: 5, 
         equipDropRate: 30, 
         enemies: [
-            { name: "血ぞめのマミー", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku05.png", speed: 800 },
-            { name: "血ぞめのシャイムチュイド", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku06.png", speed: 800 }
+            { name: "血ぞめのマミー", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku08.png", speed: 800 },
+            { name: "血ぞめのシャイムチュイド", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku09.png", speed: 800 }
         ], 
         boss: { 
-            name: "最恐タッグ", exp: 10000, hp: 15000, damage: 500, def: 200, sprite: "extra/sorasaku07.png", speed: 1500 
+            name: "最恐タッグ", exp: 10000, hp: 15000, damage: 500, def: 200, sprite: "extra/sorasaku11.png", speed: 1500 
         } 
     },
 
