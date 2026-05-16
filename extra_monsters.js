@@ -34,10 +34,8 @@ const extraMonsterData = {
     8: { 
         name: "深淵なる闇", 
         color: "#000", 
-        potionDropRate: 5, 
-        equipDropRate: 30, 
         boss: { 
-            name: "異界の支配者", exp: 10000, hp: 20000, damage: 500, def: 200, sprite: "extra/sorasaku10.png", speed: 1500 
+            name: "異界の支配者", exp: 10000, hp: 30000, damage: 500, def: 200, sprite: "extra/sorasaku10.png", speed: 1500 
         } 
     }
     

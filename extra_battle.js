@@ -160,9 +160,8 @@ function spawnMonster() {
     // ボス・雑魚の出現分岐
     if (isBoss) {
         currentMonster = stage.boss;
-        // ステージ8なら【真の支配者】、ステージ6・7なら【異界ボス】と表記を分ける演出
-        monsterNameText.innerText = (Number(currentStageId) === 8 ? "【真の支配者】" : "【異界ボス】") + currentMonster.name;
-        messageText.innerHTML = "<span style='color:#ff4444;'>最深部の闇から、真の支配者が姿を現した...！</span>";
+        monsterNameText.innerText = currentMonster.name;
+        messageText.innerHTML = "<span style='color:#ff4444;'>真の支配者が姿を現した！</span>";
         if (monsterSprite) monsterSprite.classList.add('boss-giant-mode');
     } else {
         // ステージ6・7の雑魚敵選出（ステージ8の時はこのルートに入らないため安全です）
@@ -270,9 +269,11 @@ function enemyAttack() {
 }
 
 // --- 攻撃ボタンクリック（演出・ドロップ全合流完全版） ---
+// --- 攻撃ボタンクリック（演出・通常互換・裏ステージ完全対応版） ---
 attackButton.onclick = function() {
     if (monsterHP <= 0 || playerHP <= 0 || isProcessingDefeat) return;
 
+    // 通常ステージと同じ攻撃・与ダメ補正計算（ランダム幅11）
     let levelAtk = (level - 1) * 2;
     let totalAtk = attackPower + levelAtk + equipAtk;
     let enemyDef = currentMonster.def || 0;
@@ -283,7 +284,7 @@ attackButton.onclick = function() {
     monsterHP -= damage;
     if (monsterHP < 0) monsterHP = 0;
 
-    // 演出：ダメージ数字
+    // 演出：ダメージ数字ポップアップ
     const dEffect = document.getElementById('damage-effect');
     if (dEffect) {
         dEffect.innerText = "-" + damage;
@@ -312,35 +313,31 @@ attackButton.onclick = function() {
         hpBarFill.style.width = (monsterHP / currentMaxHP) * 100 + "%";
     }
     
-    // --- 敵のHPが0になった時の処理（裏ステージ完全最適化） ---
+    // ==========================================================
+    // 🏆 【ここが心臓部】敵のHPが0になった時の撃破判定とクリア処理
+    // ==========================================================
     if (monsterHP === 0) {
         isProcessingDefeat = true; 
         clearInterval(enemyAttackTimer);
         attackButton.disabled = true;
 
         setTimeout(() => {
-            // 経験値・レベルアップ処理
+            // 経験値・レベルアップ処理（大量獲得時のマイナスバグをループで解決）
             exp += currentMonster.exp;
             let lvUpTriggered = false;
-
-            // 💡 【修正ポイント】獲得経験値が次のレベルの基準値を下回るまで何回もループさせる
+            
             let nextExp = level * 50;
             while (exp >= nextExp) {
                 exp -= nextExp;
                 level++;
-
-                // レベルが1上がるごとに通常ステージの仕様に合わせてステータスを加算
                 attackPower += 3;
                 defensePower += 1; 
-
                 lvUpTriggered = true;
-                nextExp = level * 50; // 次のレベルの基準値を更新してループを継続
+                nextExp = level * 50;
             }
-
-            // UIの数字表記やバーを正しい数値で更新
             updateExpUI();
 
-            // ドロップ判定（裏ステージ6, 7および回復薬の制御）
+            // ドロップ判定（回復薬）
             let dropMsg = "";
             const currentStage = stageMonsterData[currentStageId];
 
@@ -352,8 +349,8 @@ attackButton.onclick = function() {
                 }
             }
 
-            // 裏ステージ（6・7）限定のドロップ抽選（ステージ8は不要のためスキップ）
-            if (currentStageId !== 8 && (Math.random() * 100 < (currentStage.equipDropRate || 30))) {
+            // 裏ステージ（6・7）限定の装備ドロップ抽選
+            if (Number(currentStageId) !== 8 && (Math.random() * 100 < (currentStage.equipDropRate || 30))) {
                 const possibleItems = typeof dropTable !== 'undefined' ? dropTable[currentStageId] : null;
                 if (possibleItems) {
                     const equipPool = possibleItems.filter(id => id.startsWith('w') || id.startsWith('a'));
@@ -378,11 +375,10 @@ attackButton.onclick = function() {
                 setTimeout(() => lvDisplay.remove(), 1200);
             }
 
-            // カウント更新とボス・クリア判定
+            // 撃破数をカウント
             defeatCount++; 
-            const isJustDefeatedBoss = (defeatCount % BOSS_INTERVAL === 0);
 
-            // ローカルストレージ用のデータ同期
+            // セーブデータの読み込みと基本情報の同期
             let savedDataObj = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
             savedDataObj.level = level;
             savedDataObj.exp = exp;
@@ -392,41 +388,50 @@ attackButton.onclick = function() {
             savedDataObj.inventory = inventory;
             savedDataObj.isExtraUnlocked = true;
 
+            // 🎬【最重要：ステージ8真クリア判定・1体完結仕様】
+            // ステージ8であれば、撃破数に関係なく、この1体を倒した時点で即座に世界クリア！
+            if (Number(currentStageId) === 8) {
+                savedDataObj.isTrueCleared = true; 
+                localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
+                
+                messageText.innerHTML = `<span style="color:gold; font-weight:bold;">真ボス撃破！！！<br>世界に真の夜明けが訪れる……！</span>`;
+                
+                // 2.5秒後にキャッシュクリアURL付きの真エンディング画面へ移動
+                setTimeout(() => { 
+                    window.location.href = 'ending.html?v=3'; 
+                }, 2500);
+                return; // ここで完全に終了させ、下の「次のザコ敵の出現」を確実にストップ
+            }
+
+            // --- 以下、ステージ6・7のボス撃破・雑魚ループ処理 ---
+            const isJustDefeatedBoss = (defeatCount % BOSS_INTERVAL === 0);
+
             if (isJustDefeatedBoss) {
-                // 🎬【最重要】裏の最終ボス（ステージ8）撃破の場合
-                if (Number(currentStageId) === 8) {
-                    localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
-                    messageText.innerHTML = `<span style="color:gold; font-weight:bold;">異界の支配者 撃破！！<br>世界に真の平和が訪れる...</span>`;
-                    
-                    setTimeout(() => { 
-                        window.location.href = 'ending.html?v=3'; 
-                    }, 3000);
-                } else {
-                    // 裏ステージ6, 7のボス撃破の場合：次の裏エリアを解放して一度拠点へ帰還
-                    let unlocked = Number(savedDataObj.unlockedStage) || 1;
-                    if (Number(currentStageId) >= unlocked) {
-                        savedDataObj.unlockedStage = Number(currentStageId) + 1;
-                    }
-                    // 次回冒険時に次の裏ステージが選択初期値になるようIDを進める
-                    savedDataObj.currentStageId = Number(currentStageId) + 1; 
-                    localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
-                    
-                    messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
-                    
-                    setTimeout(() => { 
-                        window.location.href = 'home.html'; 
-                    }, 3000);
+                // ステージ6, 7のボスを倒した場合：次のエリアを解放して拠点へ帰還
+                let unlocked = Number(savedDataObj.unlockedStage) || 1;
+                if (Number(currentStageId) >= unlocked) {
+                    savedDataObj.unlockedStage = Number(currentStageId) + 1;
                 }
+                savedDataObj.currentStageId = Number(currentStageId) + 1; 
+                localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
+                
+                messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
+                setTimeout(() => { window.location.href = 'home.html'; }, 3000);
             } else {
-                // ザコ撃破：次の敵へ（変更なし）
+                // ステージ6, 7の通常雑魚撃破時：2秒後に次のモンスターへ
                 localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
                 const rem = BOSS_INTERVAL - (defeatCount % BOSS_INTERVAL);
                 messageText.innerHTML = `Bossまであと ${rem} 体${dropMsg}`;
                 if (homeReturnButton) homeReturnButton.style.display = "block";
                 
+                if (monsterSprite) {
+                    monsterSprite.style.transform = "translateX(200px)"; // 右へ退場
+                }
+
                 setTimeout(() => {
                     isProcessingDefeat = false;
                     if (playerSprite) playerSprite.classList.remove('player-lvup-flash');
+                    if (monsterSprite) monsterSprite.style.transform = "translateX(0)";
                     spawnMonster(); 
                 }, 2000);
             }
@@ -434,6 +439,6 @@ attackButton.onclick = function() {
     }
 };
 
-// --- 6. 最初に実行命令を出す ---
+// --- 6. 最後に実行命令を出して点火 ---
 updateExpUI();
 spawnMonster();
