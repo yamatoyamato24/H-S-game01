@@ -333,25 +333,34 @@ attackButton.onclick = function() {
         attackButton.disabled = true;
 
         setTimeout(() => {
-            // 経験値・レベルアップ処理
+            // 経験値・レベルアップ処理（大量獲得時のマイナスバグをループで解決）
             exp += currentMonster.exp;
             let lvUpTriggered = false;
-            const nextExp = level * 50;
-            if (exp >= nextExp) {
-                level++;
+            
+            // 💡【修正ポイント】獲得経験値が次のレベルの基準値を下回るまで何回もループさせる
+            let nextExp = level * 50;
+            while (exp >= nextExp) {
                 exp -= nextExp;
+                level++;
+                
+                // レベルが1上がるごとに通常ステージの仕様（3ずつ加算）に合わせてステータスを上昇
                 attackPower += 3;
                 defensePower += 1; 
+                
                 lvUpTriggered = true;
+                nextExp = level * 50; // 基準値を更新してループを継続
             }
             updateExpUI();
 
             // ドロップ判定
             let dropMsg = "";
             const currentStage = stageMonsterData[currentStageId];
+            
+            // 🛡️【最重要：データ保護】既存のセーブデータを丸ごと読み込む
             let savedDataObj = JSON.parse(localStorage.getItem('hacksla_data') || '{}');
             if (!savedDataObj.inventory) savedDataObj.inventory = { weapons: [], armors: [] };
 
+            // 回復薬ドロップ
             if (Math.random() * 100 < (currentStage.potionDropRate || 5)) {
                 if (potionCount < 9) {
                     potionCount++;
@@ -359,6 +368,7 @@ attackButton.onclick = function() {
                     dropMsg += `<br><span style="color:#00ff88;">★回復薬を拾った！</span>`;
                 }
             }
+            // 装備ドロップ
             if (Math.random() * 100 < (currentStage.equipDropRate || 30)) {
                 const possibleItems = dropTable[currentStageId];
                 const equipPool = possibleItems.filter(id => id.startsWith('w') || id.startsWith('a'));
@@ -371,12 +381,13 @@ attackButton.onclick = function() {
             }
 
             // レベルアップ演出
-            if (lvUpTriggered) {
+            if (lvUpTriggered && playerSprite) {
                 playerSprite.classList.add('player-lvup-flash');
                 const lvDisplay = document.createElement('div');
                 lvDisplay.className = 'lvup-float';
                 lvDisplay.innerText = "LEVEL UP!";
-                document.getElementById('game-container').appendChild(lvDisplay);
+                const gameContainer = document.getElementById('game-container') || document.getElementById('game-container');
+                if (gameContainer) gameContainer.appendChild(lvDisplay);
                 setTimeout(() => lvDisplay.remove(), 1200);
             }
 
@@ -384,6 +395,7 @@ attackButton.onclick = function() {
             defeatCount++; 
             const isJustDefeatedBoss = (defeatCount % BOSS_INTERVAL === 0) || (currentStageId === 5);
 
+            // 🛡️【最重要：装備を消さない】既存の equipment や進行度を壊さずに基本値を同期
             savedDataObj.level = level;
             savedDataObj.exp = exp;
             savedDataObj.attackPower = attackPower;
@@ -397,14 +409,12 @@ attackButton.onclick = function() {
                     savedDataObj.unlockedStage = Number(currentStageId) + 1;
                 }
 
-                // ★ここから分岐
                 if (Number(currentStageId) === 5) {
-                    // ラスボス(ステージ5)撃破の場合
-                    savedDataObj.isCleared = true; // ★クリアフラグを立てる
+                    // ラスボス(ステージ5)撃破の場合（キャッシュクリアURL付きにアップデート！）
+                    savedDataObj.isCleared = true; 
                     localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
                     
                     messageText.innerHTML = `<span style="color:gold; font-weight:bold;">ラスボス撃破！！<br>世界が光に包まれる...</span>`;
-                    
                     setTimeout(() => { 
                         window.location.href = 'ending.html?v=3'; 
                     }, 3000);
@@ -413,19 +423,19 @@ attackButton.onclick = function() {
                     savedDataObj.currentStageId = Number(currentStageId) + 1; 
                     localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
                     messageText.innerHTML = `${currentMonster.name}撃破！<br>新エリア解放！帰還します...`;
-                    
                     setTimeout(() => { 
                         window.location.href = 'home.html'; 
                     }, 3000);
                 }
             } else {
-                // ザコ撃破：次の敵へ（ここは変更なし）
+                // ザコ撃破：次の敵へ
                 localStorage.setItem('hacksla_data', JSON.stringify(savedDataObj));
                 const rem = BOSS_INTERVAL - (defeatCount % BOSS_INTERVAL);
                 messageText.innerHTML = `Bossまであと ${rem} 体${dropMsg}`;
-                homeReturnButton.style.display = "block";
+                if (homeReturnButton) homeReturnButton.style.display = "block";
                 setTimeout(() => {
                     isProcessingDefeat = false;
+                    if (playerSprite) playerSprite.classList.remove('player-lvup-flash');
                     spawnMonster(); 
                 }, 2000);
             }

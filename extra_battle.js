@@ -144,7 +144,9 @@ function spawnMonster() {
     if (isProcessingDefeat || !stageMonsterData || !stageMonsterData[currentStageId]) return;
 
     const stage = stageMonsterData[currentStageId];
-    const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0);
+    
+    // 💡【修正ポイント】10体目（BOSS_INTERVAL）のタイミング、または「ステージ8」である場合はボスを出す
+    const isBoss = ((defeatCount + 1) % BOSS_INTERVAL === 0) || (Number(currentStageId) === 8);
     const battleField = document.getElementById('battle-field');
     const curtain = document.getElementById('boss-curtain');
 
@@ -155,12 +157,15 @@ function spawnMonster() {
         curtain.style.display = "none"; 
     }
 
+    // ボス・雑魚の出現分岐
     if (isBoss) {
         currentMonster = stage.boss;
-        monsterNameText.innerText = "【異界ボス】" + currentMonster.name;
-        messageText.innerHTML = "<span style='color:#ff4444;'>強大な気配を感じる...！</span>";
+        // ステージ8なら【真の支配者】、ステージ6・7なら【異界ボス】と表記を分ける演出
+        monsterNameText.innerText = (Number(currentStageId) === 8 ? "【真の支配者】" : "【異界ボス】") + currentMonster.name;
+        messageText.innerHTML = "<span style='color:#ff4444;'>最深部の闇から、真の支配者が姿を現した...！</span>";
         if (monsterSprite) monsterSprite.classList.add('boss-giant-mode');
     } else {
+        // ステージ6・7の雑魚敵選出（ステージ8の時はこのルートに入らないため安全です）
         const enemyList = stage.enemies;
         currentMonster = enemyList[Math.floor(Math.random() * enemyList.length)];
         monsterNameText.innerText = currentMonster.name;
@@ -182,6 +187,11 @@ function spawnMonster() {
         monsterSprite.classList.add('enemy-appear');
     }
 
+    // 登場クラスを1秒後に消去して攻撃時の左スライドバグを完全に防止
+    setTimeout(() => {
+        if (monsterSprite) monsterSprite.classList.remove('enemy-appear');
+    }, 1000);
+
     monsterHP = currentMonster.hp;
     currentMaxHP = currentMonster.hp;
     if (hpBarFill) hpBarFill.style.width = "100%";
@@ -190,12 +200,6 @@ function spawnMonster() {
     
     clearInterval(enemyAttackTimer);
     enemyAttackTimer = setInterval(enemyAttack, currentMonster.speed);
-
-        // 💥【超重要：左スライドバグ完全消滅コード】
-    // 敵が登場し終わる1秒後（1000ms）に、出現用のクラスを綺麗に削除して残さないようにします
-    setTimeout(() => {
-        if (monsterSprite) monsterSprite.classList.remove('enemy-appear');
-    }, 1000);
 }
 
 // --- 敵の攻撃（通常互換・裏ステージ補正計算版・エラー完全解消仕様） ---
