@@ -437,3 +437,17 @@ img#monster-sprite.shake-animation {
     80% { transform: scale(1) translate(-3px, 0) rotate(0deg); }
     100% { transform: scale(1) translate(0, 0) rotate(0deg); }
 }
+
+/* 💥 通常ラスボス用：巨大化した状態のままその場で激しく揺らす設定 */
+img#monster-sprite.boss-giant-mode.shake-animation {
+    animation: true-boss-giant-shake 0.4s ease-in-out !important;
+}
+
+@keyframes true-boss-giant-shake {
+    0% { transform: scale(1.8) translate(0, 0) rotate(0deg); }
+    15% { transform: scale(1.85) translate(-15px, 0) rotate(-3deg); }
+    30% { transform: scale(1.85) translate(15px, 0) rotate(3deg); }
+    45% { transform: scale(1.8) translate(-10px, 0) rotate(-1deg); }
+    60% { transform: scale(1.8) translate(8px, 0) rotate(1deg); }
+    100% { transform: scale(1.8) translate(0, 0) rotate(0deg); }
+}

@@ -233,48 +233,50 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { if(t2) t2.style.opacity = 1; }, 2000);
 
     // 2. 【裏ステージ（ステージ8）クリアの演出】
+    // 2. 【裏ステージ（ステージ8）クリアの演出】
     if (stageId === 8) {
-        // 画面デザインを真クリア仕様（黒＋金）に反転
-        document.body.classList.add('true-clear-style');
-
-        // テキストを真クリアの内容に変更
-        if (t1) t1.innerText = "✨ GAME CLEAR ✨";
-        if (t2) t2.innerHTML = "あなたは『異界の支配者』を<br>完全に討ち果たした！<br>世界を包んでいた赤暗い霧は晴れ、<br>真の平和が訪れた。";
+        // 💡【修正】最初は白い背景をキープし、文字だけをゴールドに変更！
+        if (t1) t1.innerText = "✨ TRUE CLEAR ✨";
+        if (t2) t2.innerHTML = "あなたは世界の深淵に潜む『異界の支配者』を完全に討ち果たした！<br>世界を蝕んでいた怪しい赤暗い霧は晴れ、真の平和が訪れた。";
         
-        // 3.5秒後に、不穏ではなく「祝福」のメッセージをフェードイン
+        // 3.5秒後に、祝福のメッセージをフェードイン
         setTimeout(() => {
             if (fionText) {
                 fionText.style.color = "#ffea00"; // 金色
-                fionText.innerHTML = "🎉 裏ステージ、制覇おめでとうございます";
+                fionText.innerHTML = "🎉 ハクスラRPG・裏モード、完全制覇おめでとうございます！！";
                 fionText.style.opacity = 1;
             }
         }, 3500);
 
-        // 6秒後に、クリア祝いのポップアップをせり上げる
+        // 💥【新規追加】4.5秒後に、画面全体が「ゆっくりと神聖な漆黒（黒＋金デザイン）」へ変化するドラマチック演出！
+        setTimeout(() => {
+            document.body.classList.add('true-clear-style');
+        }, 4500);
+
+        // 6.5秒後に、クリア祝いのポップアップをせり上げる
         const bossTimer = setTimeout(() => {
-            if (popupTitle) popupTitle.innerText = "さぁ戻ろう";
-            if (popupBtn) popupBtn.innerText = "拠点へ戻る";
+            if (popupTitle) popupTitle.innerText = "異界の脅威は去った。凱旋しよう！";
+            if (popupBtn) popupBtn.innerText = "真の英雄として拠点へ戻る";
             if (popup) popup.classList.add('show');
-            if (skipBtn) skipBtn.style.display = "none"; // ポップアップが出たらスキップは消す
-        }, 6000);
+            if (skipBtn) skipBtn.style.display = "none";
+        }, 6500);
 
         // ボタンを押したときの挙動を「拠点へ戻る」に設定
         goToExtra = function() {
-            // ⭐ 1回見た記憶（フラグ）をセーブデータに刻む
             savedData.hasSeenTrueEnding = true;
             savedData.currentStageId = 6;
             localStorage.setItem('hacksla_data', JSON.stringify(savedData));
             location.href = 'home.html';
         };
 
-        // 💡 既読プレイヤーへのスキップ処理のバインド
         if (skipBtn && savedData.hasSeenTrueEnding === true) {
-            skipBtn.style.display = "block"; // 過去に見ていればスキップボタンを表示！
+            skipBtn.style.display = "block";
             skipBtn.onclick = () => {
-                clearTimeout(bossTimer); // 演出タイマーをすべて停止
-                goToExtra(); // 即座にデータを保存して拠点へワープ
+                clearTimeout(bossTimer);
+                goToExtra();
             };
         }
+
 
     // 3. 【通常ステージ（ステージ5）クリアの演出】
     } else {
