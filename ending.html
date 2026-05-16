@@ -237,13 +237,13 @@ window.addEventListener('DOMContentLoaded', () => {
     if (stageId === 8) {
         // 💡【修正】最初は白い背景をキープし、文字だけをゴールドに変更！
         if (t1) t1.innerText = "✨ TRUE CLEAR ✨";
-        if (t2) t2.innerHTML = "あなたは世界の深淵に潜む『異界の支配者』を完全に討ち果たした！<br>世界を蝕んでいた怪しい赤暗い霧は晴れ、真の平和が訪れた。";
+        if (t2) t2.innerHTML = "あなたは『異界の支配者』を<br>完全に討ち果たした！<br>蠢く赤暗い霧は晴れ、<br>真の平和が訪れた。";
         
         // 3.5秒後に、祝福のメッセージをフェードイン
         setTimeout(() => {
             if (fionText) {
                 fionText.style.color = "#ffea00"; // 金色
-                fionText.innerHTML = "🎉 ハクスラRPG・裏モード、完全制覇おめでとうございます！！";
+                fionText.innerHTML = "🎉 裏ステージ、制覇おめでとうございます！！";
                 fionText.style.opacity = 1;
             }
         }, 3500);
@@ -255,8 +255,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
         // 6.5秒後に、クリア祝いのポップアップをせり上げる
         const bossTimer = setTimeout(() => {
-            if (popupTitle) popupTitle.innerText = "異界の脅威は去った。凱旋しよう！";
-            if (popupBtn) popupBtn.innerText = "真の英雄として拠点へ戻る";
+            if (popupTitle) popupTitle.innerText = "異界の脅威は去った。さぁ戻ろう！";
+            if (popupBtn) popupBtn.innerText = "拠点へ戻る";
             if (popup) popup.classList.add('show');
             if (skipBtn) skipBtn.style.display = "none";
         }, 6500);

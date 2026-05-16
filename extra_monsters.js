@@ -23,7 +23,7 @@ const extraMonsterData = {
         equipDropRate: 30, 
         enemies: [
             { name: "血ぞめのマミー", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku08.png", speed: 800 },
-            { name: "血ぞめのシャイムチュイド", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku09.png", speed: 800 }
+            { name: "血ぞめのシャイン", exp: 800, hp: 2000, damage: 200, def: 80, sprite: "extra/sorasaku09.png", speed: 800 }
         ], 
         boss: { 
             name: "カチコチテール２", exp: 10000, hp: 15000, damage: 500, def: 200, sprite: "extra/sorasaku11.png", speed: 1500 
@@ -35,7 +35,7 @@ const extraMonsterData = {
         name: "深淵なる闇", 
         color: "#000", 
         boss: { 
-            name: "異界の支配者", exp: 10000, hp: 30000, damage: 500, def: 200, sprite: "extra/sorasaku10.png", speed: 1500 
+            name: "異界の支配者", exp: 10000, hp: 40000, damage: 500, def: 250, sprite: "extra/sorasaku10.png", speed: 1500 
         } 
     }
     
